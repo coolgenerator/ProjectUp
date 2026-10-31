@@ -10,7 +10,7 @@ ProjectUp is a full-stack project collaboration platform with three main compone
 - **Frontend** (`/frontend`): React/TypeScript SPA with Vite, Redux state management, Material UI
 - **AI Service** (`/ai-service`): Python FastAPI service with LangGraph workflows for AI-powered project assistance
 
-Each of `backend/`, `frontend/`, `ai-service/` is its own git repository; the top-level folder is not.
+The whole folder is one git repository (monorepo, `github.com/coolgenerator/ProjectUp`); commit backend, frontend, ai-service, docs and demo changes together from the top level. The old per-service repos under `project-up-hub` are no longer updated.
 
 ### Key Components
 

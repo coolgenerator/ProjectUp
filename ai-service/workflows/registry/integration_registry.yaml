@@ -1,0 +1,408 @@
+# Integration Registry - 3rd Party Service Definitions
+# Defines available integrations and their configurations
+# Version: 1.0
+
+version: "1.0"
+
+# ============================================================================
+# INTEGRATION CATEGORIES
+# ============================================================================
+categories:
+  - id: project_management
+    name: Project Management
+    description: Project and task management tools
+    icon: "kanban"
+
+  - id: version_control
+    name: Version Control
+    description: Git and code repository services
+    icon: "git-branch"
+
+  - id: documentation
+    name: Documentation
+    description: Knowledge base and documentation tools
+    icon: "file-text"
+
+  - id: communication
+    name: Communication
+    description: Team communication and notification services
+    icon: "message-square"
+
+  - id: custom
+    name: Custom APIs
+    description: User-defined API integrations
+    icon: "code"
+
+# ============================================================================
+# BUILT-IN INTEGRATIONS
+# ============================================================================
+integrations:
+  # --------------------------------------------------------------------------
+  # PROJECT MANAGEMENT
+  # --------------------------------------------------------------------------
+  github_issues:
+    name: "GitHub Issues"
+    description: "Sync with GitHub Issues and Projects"
+    category: project_management
+    icon: "github"
+    auth_type: oauth
+    oauth_scopes:
+      - repo
+      - read:org
+    base_url: "https://api.github.com"
+    endpoints:
+      list_issues:
+        method: GET
+        path: "/repos/{owner}/{repo}/issues"
+        params:
+          state: string
+          labels: string
+          per_page: number
+      create_issue:
+        method: POST
+        path: "/repos/{owner}/{repo}/issues"
+        body:
+          title: string
+          body: string
+          labels: array
+          assignees: array
+      update_issue:
+        method: PATCH
+        path: "/repos/{owner}/{repo}/issues/{issue_number}"
+        body:
+          title: string
+          body: string
+          state: string
+      list_projects:
+        method: GET
+        path: "/repos/{owner}/{repo}/projects"
+    field_mapping:
+      title: title
+      description: body
+      status: state
+      labels: labels
+      assignee: assignees[0]
+    webhook_events:
+      - issues
+      - issue_comment
+      - project_card
+
+  jira:
+    name: "Jira"
+    description: "Sync with Atlassian Jira"
+    category: project_management
+    icon: "jira"
+    auth_type: oauth
+    oauth_scopes:
+      - read:jira-work
+      - write:jira-work
+    base_url: "https://{domain}.atlassian.net/rest/api/3"
+    config_fields:
+      - name: domain
+        type: string
+        required: true
+        description: "Your Jira domain (e.g., 'mycompany' for mycompany.atlassian.net)"
+    endpoints:
+      list_issues:
+        method: GET
+        path: "/search"
+        params:
+          jql: string
+          maxResults: number
+          startAt: number
+      create_issue:
+        method: POST
+        path: "/issue"
+        body:
+          fields:
+            project:
+              key: string
+            summary: string
+            description: object
+            issuetype:
+              name: string
+      update_issue:
+        method: PUT
+        path: "/issue/{issueIdOrKey}"
+        body:
+          fields: object
+      get_projects:
+        method: GET
+        path: "/project"
+    field_mapping:
+      title: fields.summary
+      description: fields.description.content
+      status: fields.status.name
+      priority: fields.priority.name
+      assignee: fields.assignee.displayName
+    webhook_events:
+      - jira:issue_created
+      - jira:issue_updated
+
+  linear:
+    name: "Linear"
+    description: "Sync with Linear issues"
+    category: project_management
+    icon: "linear"
+    auth_type: api_key
+    base_url: "https://api.linear.app/graphql"
+    graphql: true
+    endpoints:
+      list_issues:
+        query: |
+          query Issues($first: Int, $filter: IssueFilter) {
+            issues(first: $first, filter: $filter) {
+              nodes {
+                id
+                title
+                description
+                state { name }
+                priority
+                assignee { name }
+              }
+            }
+          }
+      create_issue:
+        mutation: |
+          mutation CreateIssue($input: IssueCreateInput!) {
+            issueCreate(input: $input) {
+              success
+              issue { id title }
+            }
+          }
+    field_mapping:
+      title: title
+      description: description
+      status: state.name
+      priority: priority
+      assignee: assignee.name
+
+  notion:
+    name: "Notion"
+    description: "Sync with Notion databases"
+    category: documentation
+    icon: "notion"
+    auth_type: oauth
+    oauth_scopes:
+      - read_content
+      - update_content
+      - insert_content
+    base_url: "https://api.notion.com/v1"
+    headers:
+      Notion-Version: "2022-06-28"
+    endpoints:
+      query_database:
+        method: POST
+        path: "/databases/{database_id}/query"
+        body:
+          filter: object
+          sorts: array
+      create_page:
+        method: POST
+        path: "/pages"
+        body:
+          parent:
+            database_id: string
+          properties: object
+      update_page:
+        method: PATCH
+        path: "/pages/{page_id}"
+        body:
+          properties: object
+    field_mapping:
+      title: properties.Name.title[0].text.content
+      description: properties.Description.rich_text[0].text.content
+      status: properties.Status.select.name
+
+  # --------------------------------------------------------------------------
+  # VERSION CONTROL
+  # --------------------------------------------------------------------------
+  github_repos:
+    name: "GitHub Repositories"
+    description: "Access GitHub repository data"
+    category: version_control
+    icon: "github"
+    auth_type: oauth
+    oauth_scopes:
+      - repo
+    base_url: "https://api.github.com"
+    endpoints:
+      list_repos:
+        method: GET
+        path: "/user/repos"
+      get_repo:
+        method: GET
+        path: "/repos/{owner}/{repo}"
+      list_commits:
+        method: GET
+        path: "/repos/{owner}/{repo}/commits"
+      list_pull_requests:
+        method: GET
+        path: "/repos/{owner}/{repo}/pulls"
+
+  gitlab:
+    name: "GitLab"
+    description: "Sync with GitLab issues and projects"
+    category: version_control
+    icon: "gitlab"
+    auth_type: oauth
+    base_url: "https://gitlab.com/api/v4"
+    config_fields:
+      - name: base_url
+        type: string
+        required: false
+        default: "https://gitlab.com/api/v4"
+        description: "GitLab API URL (for self-hosted instances)"
+    endpoints:
+      list_issues:
+        method: GET
+        path: "/projects/{project_id}/issues"
+      create_issue:
+        method: POST
+        path: "/projects/{project_id}/issues"
+        body:
+          title: string
+          description: string
+          labels: string
+      list_projects:
+        method: GET
+        path: "/projects"
+
+  # --------------------------------------------------------------------------
+  # COMMUNICATION
+  # --------------------------------------------------------------------------
+  slack:
+    name: "Slack"
+    description: "Send notifications to Slack"
+    category: communication
+    icon: "slack"
+    auth_type: oauth
+    oauth_scopes:
+      - chat:write
+      - channels:read
+    base_url: "https://slack.com/api"
+    endpoints:
+      send_message:
+        method: POST
+        path: "/chat.postMessage"
+        body:
+          channel: string
+          text: string
+          blocks: array
+      list_channels:
+        method: GET
+        path: "/conversations.list"
+
+  discord:
+    name: "Discord"
+    description: "Send notifications to Discord"
+    category: communication
+    icon: "discord"
+    auth_type: webhook
+    config_fields:
+      - name: webhook_url
+        type: string
+        required: true
+        description: "Discord webhook URL"
+    endpoints:
+      send_message:
+        method: POST
+        path: ""  # Uses webhook URL directly
+        body:
+          content: string
+          embeds: array
+
+# ============================================================================
+# CUSTOM API SCHEMA
+# ============================================================================
+custom_api_schema:
+  description: "Schema for user-defined API configurations"
+  fields:
+    name:
+      type: string
+      required: true
+      description: "Display name for this API"
+
+    description:
+      type: string
+      required: false
+      description: "What this API does"
+
+    base_url:
+      type: string
+      required: true
+      description: "Base URL for the API"
+      example: "https://api.example.com/v1"
+
+    auth_type:
+      type: string
+      required: true
+      enum: [none, api_key, bearer_token, basic, oauth, custom_header]
+      description: "Authentication method"
+
+    auth_config:
+      type: object
+      required: false
+      description: "Authentication configuration"
+      properties:
+        header_name:
+          type: string
+          description: "Header name for API key/token"
+          default: "Authorization"
+        prefix:
+          type: string
+          description: "Token prefix (e.g., 'Bearer', 'Token')"
+        api_key_param:
+          type: string
+          description: "Query param name for API key"
+
+    default_headers:
+      type: object
+      required: false
+      description: "Headers to include in all requests"
+      example:
+        Content-Type: "application/json"
+        Accept: "application/json"
+
+    endpoints:
+      type: object
+      required: true
+      description: "Defined API endpoints"
+      items:
+        method:
+          type: string
+          enum: [GET, POST, PUT, PATCH, DELETE]
+        path:
+          type: string
+          description: "URL path (can include {params})"
+        params:
+          type: object
+          description: "Query parameters schema"
+        body:
+          type: object
+          description: "Request body schema"
+        response_mapping:
+          type: object
+          description: "Map response fields to standard format"
+
+    rate_limit:
+      type: object
+      required: false
+      properties:
+        requests_per_minute:
+          type: number
+          default: 60
+        retry_after_header:
+          type: string
+          description: "Header containing retry-after value"
+
+    error_handling:
+      type: object
+      required: false
+      properties:
+        error_field:
+          type: string
+          description: "Field containing error message"
+        status_codes:
+          type: object
+          description: "Custom handling for status codes"

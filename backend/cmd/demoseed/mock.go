@@ -140,8 +140,8 @@ func seedMockAccount(email string) {
 	removeMockData(user.ID)
 
 	fillMockProfile(user.ID)
-	postSID := seedMockProject(user.ID, demo)
-	seedMockDrafts(user.ID, postSID)
+	postSID, projectID := seedMockProject(user.ID, demo)
+	seedMockDrafts(user.ID, postSID, projectID)
 	seedMockOwnApplications(user.ID)
 	seedMockNotifications(user.ID, postSID)
 	seedMockCommunityPost(user.ID)
@@ -166,7 +166,7 @@ func demoUserIDs() map[string]uint {
 func removeMockData(userID uint) {
 	var projectIDs []uint
 	database.DB.Model(&models.Project{}).
-		Where("owner_id = ? AND onboarding_metadata->>'source' = ?", userID, mockMarker).
+		Where("owner_id = ? AND onboarding_metadata->>'seed' = ?", userID, mockMarker).
 		Pluck("project_id", &projectIDs)
 	ideas := make([]string, 0, len(mockDrafts))
 	for _, d := range mockDrafts {
@@ -228,10 +228,17 @@ func fillMockProfile(userID uint) {
 
 // seedMockProject publishes the account's own project with applicants at each
 // stage, one teammate, and the team's chat, check-in and decision.
-func seedMockProject(userID uint, demo map[string]uint) string {
+func seedMockProject(userID uint, demo map[string]uint) (string, uint) {
 	title := mockBrief["title"].(string)
 	topics, _ := json.Marshal(mockBrief["topics"])
-	metadata, _ := json.Marshal(map[string]interface{}{"source": mockMarker, "brief": mockBrief})
+	// Tagged as a workbench project so its brief shows like a real one; "seed" marks it for cleanup
+	metadata, _ := json.Marshal(map[string]interface{}{"source": "idea_workbench", "seed": mockMarker})
+	// The project keeps the brief without the title (its own) and roles (on the post)
+	projectBrief := map[string]interface{}{}
+	for _, key := range []string{"one_liner", "vision", "problem", "target_users", "blockers", "next_steps", "topics"} {
+		projectBrief[key] = mockBrief[key]
+	}
+	briefJSON, _ := json.Marshal(projectBrief)
 	kickoff, _ := json.Marshal(map[string]bool{"team": true, "roles": true})
 	description := mockBrief["vision"].(string) + "\n\n" + mockBrief["problem"].(string)
 	location, projectType, scenario := "Remote", "Idea", "personal"
@@ -241,6 +248,7 @@ func seedMockProject(userID uint, demo map[string]uint) string {
 		ShortID: helper.GenerateShortID(8), OwnerID: userID, Title: &title, Description: &description,
 		ProjectType: &projectType, ProjectScenario: &scenario, Location: &location, StartTime: &started,
 		Topic: datatypes.JSON(topics), OnboardingMetadata: datatypes.JSON(metadata), Kickoff: datatypes.JSON(kickoff),
+		Brief: datatypes.JSON(briefJSON), BriefUpdatedAt: &started, BriefUpdatedBy: &userID,
 		Status: 1, IsPublished: true,
 	}
 	must(repositories.GenerateSlug(&project, title), "mock slug")
@@ -315,7 +323,7 @@ func seedMockProject(userID uint, demo map[string]uint) string {
 	must(database.DB.Create(&models.ProjectDecision{
 		ProjectID: project.ProjectID, UserID: userID, Text: "第一版只做预约和取消，不做在线咨询和聊天，避免隐私风险。", CreatedAt: now.AddDate(0, 0, -5),
 	}).Error, "mock decision")
-	return post.ShortID
+	return post.ShortID, project.ProjectID
 }
 
 func mondayOf(t time.Time) time.Time {
@@ -324,7 +332,7 @@ func mondayOf(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day()-offset, 0, 0, 0, 0, time.Local)
 }
 
-func seedMockDrafts(userID uint, postSID string) {
+func seedMockDrafts(userID uint, postSID string, projectID uint) {
 	for i, d := range mockDrafts {
 		rounds, _ := json.Marshal(d.rounds)
 		draft := models.IdeaDraft{UserID: userID, Idea: d.idea, Rounds: datatypes.JSON(rounds)}
@@ -336,6 +344,7 @@ func seedMockDrafts(userID uint, postSID string) {
 			brief, _ := json.Marshal(mockBrief)
 			draft.Brief = datatypes.JSON(brief)
 			draft.PostSID = &postSID
+			draft.ProjectID = &projectID
 		}
 		must(database.DB.Create(&draft).Error, fmt.Sprintf("mock draft %d", i+1))
 	}

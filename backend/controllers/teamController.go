@@ -155,6 +155,22 @@ func projectForMember(c *gin.Context) (*models.Project, int, bool) {
 	return &project, permissions, true
 }
 
+// projectRecruiting returns the project's latest recruiting post with its
+// roles and how many of each are filled, or nil when it has none. The post's
+// spots are the one source of a project's roles. The post id is returned for
+// callers that look up more about it.
+func projectRecruiting(projectID uint) (gin.H, uint) {
+	var post models.ProjectPost
+	if err := database.DB.Where("project_id = ? AND status <> ?", projectID, 4).Order("created_at DESC").Take(&post).Error; err != nil {
+		return nil, 0
+	}
+	fill := roleFills([]uint{post.PostID})[post.PostID]
+	if fill == nil {
+		fill = map[string]int{}
+	}
+	return gin.H{"post_sid": post.ShortID, "status": post.Status, "roles": parseRoles(post.Spots), "role_fills": fill, "updated_at": post.UpdatedAt}, post.PostID
+}
+
 // GetProjectPulse returns the team's open roles and this week's check-ins.
 func GetProjectPulse() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -164,15 +180,7 @@ func GetProjectPulse() gin.HandlerFunc {
 		}
 		week := weekStart(time.Now())
 
-		var recruiting gin.H
-		var post models.ProjectPost
-		if err := database.DB.Where("project_id = ? AND status <> ?", project.ProjectID, 4).Order("created_at DESC").Take(&post).Error; err == nil {
-			fill := roleFills([]uint{post.PostID})[post.PostID]
-			if fill == nil {
-				fill = map[string]int{}
-			}
-			recruiting = gin.H{"post_sid": post.ShortID, "status": post.Status, "roles": parseRoles(post.Spots), "role_fills": fill, "updated_at": post.UpdatedAt}
-		}
+		recruiting, postID := projectRecruiting(project.ProjectID)
 
 		var memberIDs []uint
 		database.DB.Model(&models.ProjectMember{}).Where("project_id = ? AND user_id <> ? AND removed_at IS NULL AND NOT COALESCE(is_placeholder, false)", project.ProjectID, project.OwnerID).
@@ -181,7 +189,7 @@ func GetProjectPulse() gin.HandlerFunc {
 		cards := loadPersonCards(teamIDs)
 		var roles map[uint]string
 		if recruiting != nil {
-			roles = joinedRoles([]uint{post.PostID})[post.PostID]
+			roles = joinedRoles([]uint{postID})[postID]
 		}
 
 		var checkins []models.ProjectCheckin

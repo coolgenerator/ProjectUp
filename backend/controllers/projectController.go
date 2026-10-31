@@ -2189,6 +2189,10 @@ func GetProjects() gin.HandlerFunc {
 				// Add post information to project map
 				projectMap["post_id"] = projectPost.PostID
 				projectMap["post_sid"] = projectPost.ShortID
+				// Covers are usually set on the recruiting post
+				if (project.Cover == nil || *project.Cover == "") && projectPost.Cover != nil && *projectPost.Cover != "" {
+					projectMap["cover"] = *projectPost.Cover
+				}
 
 				// Get interaction data using the new generic interaction service
 				interactions, _ := services.GetEntityInteractions(userID.(uint), models.EntityTypeProjectPost, projectPost.PostID)
@@ -2552,6 +2556,7 @@ func DeleteProjectHandler(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Project not found or already deleted"})
 		return
 	}
+	services.UnlinkIdeaDraft(database.DB, projectID)
 
 	log.Printf("DeleteProject: Successfully deleted project %d (sid: %s) by user %d\n", projectID, sid, userID)
 	c.JSON(http.StatusOK, gin.H{

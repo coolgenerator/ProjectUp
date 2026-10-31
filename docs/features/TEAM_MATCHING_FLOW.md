@@ -18,7 +18,8 @@ ProjectUp 登录后的核心流程。每个页面只服务主线上的一步。
 - 空状态的示例想法；草稿自动保存到服务器（`idea_drafts` 表），URL 带 `?draft=id`，刷新可恢复；左侧「我的想法」列表。
 - AI 每轮提 3 个问题，进度条显示已覆盖的思考维度（共 6 个）。
 - 成型后的 brief 每段都能直接编辑，或点 ↻ 让 AI 只重写这一段（`POST /api/ideas/regenerate`）；角色卡可编辑、增删。
-- 发布前可「预览招募页」；Agent 提示词收在「高级」里；发布后草稿锁定并显示「查看招募页」。
+- 发布前可「预览招募页」；Agent 提示词收在「高级」里。
+- 发布后草稿和项目绑定（`idea_drafts.project_id`），变为只读的思考记录：顶部显示「已成为项目」及进入项目、看推荐人选、查看招募页、以此为起点开新想法；之后的简介和角色在项目里维护。详见 [IDEA_PROJECT_LINK](./IDEA_PROJECT_LINK.md)。
 
 **招募中的项目**：按关键词、角色或技能、每周最多投入时间、只看还缺人筛选（`role`、`max_hours`、`open` 参数）；卡片显示每个角色还缺几人、已有几人加入；匹配资料不完整时提示补全。
 
@@ -69,6 +70,8 @@ ProjectUp 登录后的核心流程。每个页面只服务主线上的一步。
 - `project_application`：`first_step`、`stage`、`trial_task`、`trial_due`、`ai_summary`、`reminded_at`
 - `notifications.type`
 - `projects.kickoff`
+- `projects`：`brief`、`brief_updated_at`、`brief_updated_by`（项目简介，见 [IDEA_PROJECT_LINK](./IDEA_PROJECT_LINK.md)）
+- `idea_drafts`：`project_id`（唯一）、`target_project_sid`
 - `profiles`：`timezone`、`desired_roles`
 
 Demo 环境由 `demo/start.sh` 自动补上这些表和列；全新库则由 `backend/migrate/migrate.go` 创建。

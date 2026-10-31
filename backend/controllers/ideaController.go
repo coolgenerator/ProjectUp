@@ -16,6 +16,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/datatypes"
+	"gorm.io/gorm/clause"
 )
 
 // IdeaQuestion is one guided question in a thinking round.
@@ -180,26 +181,88 @@ func ShapeIdea() gin.HandlerFunc {
 	}
 }
 
-// MaterializeIdea creates a project and a public recruiting post from a brief.
+// ProjectBrief is the brief a project keeps after it is published: the
+// IdeaBrief without roles (those live on the recruiting post's spots), the
+// title (the project's own) and the private agent prompt.
+type ProjectBrief struct {
+	OneLiner    string   `json:"one_liner"`
+	Vision      string   `json:"vision"`
+	Problem     string   `json:"problem"`
+	TargetUsers string   `json:"target_users"`
+	Blockers    []string `json:"blockers"`
+	NextSteps   []string `json:"next_steps"`
+	Topics      []string `json:"topics"`
+}
+
+func (b IdeaBrief) projectBrief() ProjectBrief {
+	return ProjectBrief{OneLiner: b.OneLiner, Vision: b.Vision, Problem: b.Problem, TargetUsers: b.TargetUsers,
+		Blockers: b.Blockers, NextSteps: b.NextSteps, Topics: b.Topics}
+}
+
+type materializeRequest struct {
+	DraftID uint      `json:"draft_id"`
+	Brief   IdeaBrief `json:"brief"`
+}
+
+// MaterializeIdea turns a shaped brief into a project with an open recruiting
+// post. With a draft_id the draft is linked to the project in the same
+// transaction, and publishing an already published draft returns its project
+// instead of creating another. A bare brief (no draft) is still accepted.
 func MaterializeIdea() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID := c.GetUint("userID")
 
-		var brief IdeaBrief
-		if err := c.ShouldBindJSON(&brief); err != nil || strings.TrimSpace(brief.Title) == "" {
+		var raw map[string]json.RawMessage
+		if err := c.ShouldBindJSON(&raw); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "brief with a title is required"})
+			return
+		}
+		var req materializeRequest
+		body, _ := json.Marshal(raw)
+		if _, wrapped := raw["brief"]; wrapped {
+			_ = json.Unmarshal(body, &req)
+		} else {
+			_ = json.Unmarshal(body, &req.Brief)
+		}
+		brief := req.Brief
+		if strings.TrimSpace(brief.Title) == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "brief with a title is required"})
 			return
 		}
 
+		tx := database.DB.Begin()
+
+		var draft *models.IdeaDraft
+		if req.DraftID != 0 {
+			var d models.IdeaDraft
+			// Lock the draft so two publishes of it can't both create a project
+			if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("id = ? AND user_id = ?", req.DraftID, userID).First(&d).Error; err != nil {
+				tx.Rollback()
+				c.JSON(http.StatusNotFound, gin.H{"error": "Draft not found"})
+				return
+			}
+			if d.ProjectID != nil {
+				tx.Rollback()
+				attachDraftProjects([]*models.IdeaDraft{&d})
+				if d.Project != nil {
+					c.JSON(http.StatusOK, gin.H{"project_sid": d.Project.SID, "post_sid": d.Project.PostSID, "draft": d})
+					return
+				}
+				c.JSON(http.StatusConflict, gin.H{"error": "This idea is already a project"})
+				return
+			}
+			draft = &d
+		}
+
 		topicJSON, _ := json.Marshal(brief.Topics)
-		metadataJSON, _ := json.Marshal(gin.H{"source": "idea_workbench", "brief": brief})
+		// The agent prompt is the founder's alone, so it stays out of the shared brief
+		metadataJSON, _ := json.Marshal(gin.H{"source": "idea_workbench", "agent_prompt": brief.AgentPrompt})
+		briefJSON, _ := json.Marshal(brief.projectBrief())
 		description := fmt.Sprintf("%s\n\n%s", brief.Vision, brief.Problem)
 		location := "Remote"
 		scenario := "personal"
 		projectType := "Idea"
 		now := time.Now()
-
-		tx := database.DB.Begin()
 
 		project := models.Project{
 			ShortID:            helper.GenerateShortID(8),
@@ -212,6 +275,9 @@ func MaterializeIdea() gin.HandlerFunc {
 			StartTime:          &now,
 			Topic:              datatypes.JSON(topicJSON),
 			OnboardingMetadata: datatypes.JSON(metadataJSON),
+			Brief:              datatypes.JSON(briefJSON),
+			BriefUpdatedAt:     &now,
+			BriefUpdatedBy:     &userID,
 			Status:             1,
 			IsPublished:        true,
 		}
@@ -257,6 +323,20 @@ func MaterializeIdea() gin.HandlerFunc {
 			return
 		}
 
+		if draft != nil {
+			// The draft keeps the brief exactly as published, as the start of its thinking record
+			fullBrief, _ := json.Marshal(brief)
+			draft.ProjectID = &project.ProjectID
+			draft.PostSID = &post.ShortID
+			draft.Brief = datatypes.JSON(fullBrief)
+			draft.Current = nil
+			if err := tx.Save(draft).Error; err != nil {
+				tx.Rollback()
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to link the draft"})
+				return
+			}
+		}
+
 		if err := tx.Commit().Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to commit transaction"})
 			return
@@ -266,26 +346,40 @@ func MaterializeIdea() gin.HandlerFunc {
 		invalidateMatchCache("posts:")
 		// The workbench shows the founder their candidates right after publishing
 		warmPostCandidates(post, replyLanguage(c, post.Title+strOrEmpty(post.Description)))
-		c.JSON(http.StatusOK, gin.H{"project_sid": project.ShortID, "post_sid": post.ShortID})
+		response := gin.H{"project_sid": project.ShortID, "post_sid": post.ShortID}
+		if draft != nil {
+			draft.Project = &models.IdeaDraftProject{SID: project.ShortID, Title: brief.Title, PostSID: post.ShortID, Status: project.Status}
+			response["draft"] = draft
+		}
+		c.JSON(http.StatusOK, response)
 	}
 }
 
-// workbenchBrief returns the brief a project was shaped from in the Idea
-// Workbench (without the private agent prompt), or nil for other projects.
-func workbenchBrief(projectID uint) *IdeaBrief {
-	var metadata datatypes.JSON
-	if err := database.DB.Model(&models.Project{}).Where("project_id = ?", projectID).Pluck("onboarding_metadata", &metadata).Error; err != nil || len(metadata) == 0 {
+// workbenchBrief returns a project's brief, or nil for projects that have none.
+// Projects published before the brief column existed keep it in onboarding_metadata.
+func workbenchBrief(projectID uint) *ProjectBrief {
+	var row struct {
+		Brief              []byte
+		OnboardingMetadata []byte
+	}
+	if err := database.DB.Model(&models.Project{}).Select("brief, onboarding_metadata").Where("project_id = ?", projectID).Scan(&row).Error; err != nil {
 		return nil
+	}
+	if len(row.Brief) > 0 && string(row.Brief) != "null" {
+		var brief ProjectBrief
+		if json.Unmarshal(row.Brief, &brief) == nil {
+			return &brief
+		}
 	}
 	var stored struct {
 		Source string     `json:"source"`
 		Brief  *IdeaBrief `json:"brief"`
 	}
-	if json.Unmarshal(metadata, &stored) != nil || stored.Source != "idea_workbench" || stored.Brief == nil {
+	if json.Unmarshal(row.OnboardingMetadata, &stored) != nil || stored.Source != "idea_workbench" || stored.Brief == nil {
 		return nil
 	}
-	stored.Brief.AgentPrompt = ""
-	return stored.Brief
+	brief := stored.Brief.projectBrief()
+	return &brief
 }
 
 // Brief fields the workbench can regenerate one at a time.

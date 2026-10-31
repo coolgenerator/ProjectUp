@@ -10,6 +10,8 @@ coverage/
 # Production builds
 build/
 dist/
+# ...but not source folders named build
+!frontend/src/**/build/
 *.pyc
 __pycache__/
 
@@ -88,3 +90,9 @@ backups/
 
 # Demo eval run outputs
 demo/eval/
+
+# Playwright MCP snapshots
+.playwright-mcp/
+
+# Pitch deck (kept local, not published)
+docs/strategy/bp/

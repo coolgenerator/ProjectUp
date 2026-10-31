@@ -51,7 +51,22 @@ PGPASSWORD=projectup psql -h localhost -p 5433 -U projectup projectup_demo -q -c
    CREATE INDEX IF NOT EXISTS idx_idea_drafts_user_id ON idea_drafts (user_id);
    ALTER TABLE group_chats ADD COLUMN IF NOT EXISTS project_id bigint;
    CREATE UNIQUE INDEX IF NOT EXISTS idx_group_chats_project_id ON group_chats (project_id);
-   ALTER TABLE group_messages ADD COLUMN IF NOT EXISTS system boolean DEFAULT false;"
+   ALTER TABLE group_messages ADD COLUMN IF NOT EXISTS system boolean DEFAULT false;
+   ALTER TABLE idea_drafts ADD COLUMN IF NOT EXISTS project_id bigint,
+     ADD COLUMN IF NOT EXISTS target_project_sid varchar(10);
+   CREATE UNIQUE INDEX IF NOT EXISTS idx_idea_drafts_project_id ON idea_drafts (project_id);
+   ALTER TABLE projects ADD COLUMN IF NOT EXISTS brief jsonb,
+     ADD COLUMN IF NOT EXISTS brief_updated_at timestamptz,
+     ADD COLUMN IF NOT EXISTS brief_updated_by bigint;
+   -- Link drafts published before project_id existed, through their post
+   UPDATE idea_drafts d SET project_id = pp.project_id FROM project_posts pp
+     WHERE d.project_id IS NULL AND d.post_sid = pp.sid
+       AND NOT EXISTS (SELECT 1 FROM idea_drafts o WHERE o.project_id = pp.project_id);
+   -- Move workbench briefs out of onboarding_metadata; roles stay on the post, the agent prompt in metadata
+   UPDATE projects SET brief = (onboarding_metadata->'brief') - 'roles' - 'agent_prompt' - 'title',
+       brief_updated_at = COALESCE(updated_at, created_at),
+       onboarding_metadata = jsonb_set(onboarding_metadata - 'brief', '{agent_prompt}', COALESCE(onboarding_metadata->'brief'->'agent_prompt', '\"\"'))
+     WHERE brief IS NULL AND onboarding_metadata->>'source' = 'idea_workbench' AND onboarding_metadata ? 'brief';"
 go run ./cmd/demoseed ${1:-} 2>&1 | grep -vE 'record not found|^[[:space:]]*$' || true
 
 mkdir -p "$DEMO/logs"

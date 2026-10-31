@@ -16,8 +16,21 @@ type IdeaDraft struct {
 	Current   datatypes.JSON `gorm:"type:jsonb" json:"current" swaggertype:"object"`             // Unanswered round: questions, answers so far, reflection
 	Brief     datatypes.JSON `gorm:"type:jsonb" json:"brief" swaggertype:"object"`               // Shaped project brief, once generated
 	PostSID   *string        `gorm:"type:varchar(10);column:post_sid" json:"post_sid"`           // Set once the brief is published
-	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
+	ProjectID *uint          `gorm:"uniqueIndex" json:"project_id"`                              // The project this idea became; read-only from then on
+	// Set when the draft is written for an existing project that has no brief yet
+	TargetProjectSID *string   `gorm:"type:varchar(10);column:target_project_sid" json:"target_project_sid"`
+	CreatedAt        time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt        time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+
+	Project *IdeaDraftProject `gorm:"-" json:"project,omitempty"` // Filled in by the API for published drafts
+}
+
+// IdeaDraftProject is what the workbench shows about the project a draft became.
+type IdeaDraftProject struct {
+	SID     string `json:"sid"`
+	Title   string `json:"title"`
+	PostSID string `json:"post_sid"`
+	Status  int    `json:"status"`
 }
 
 func (IdeaDraft) TableName() string {

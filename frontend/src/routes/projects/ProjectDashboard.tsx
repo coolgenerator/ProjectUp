@@ -7,7 +7,6 @@ import ScheduleMeeting from "../../components/projectDashboard/ScheduleMeeting";
 import TimeSlotSelector from "../../components/projectDashboard/TimeSlotSelector";
 import CreateProjectModal from "../../components/project/CreateProjectModal";
 import { useProject } from "../../hooks/useProject";
-import config from "../../config";
 import LoadingPage from "../../components/app/Loading";
 import { PERMISSIONS } from "../../services/projectService";
 import fetchWithAuth from "../../hooks/fetchWithAuth";
@@ -28,6 +27,10 @@ import ProjectDashboardComponent from "../../components/projectDashboard/Project
 import TeamPulse from "../../components/match/TeamPulse";
 import TeamChat from "../../components/match/TeamChat";
 import ProjectSharing from "../../components/projectSettings/ProjectSharing";
+import ProjectDetailsPanel, { DetailsProject } from "../../components/projectDashboard/ProjectDetailsPanel";
+import BriefPlanCard from "../../components/projectDashboard/BriefPlanCard";
+import { HelpCircle, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { Badge, cx } from "../../components/ui";
 
 // Import Idea Forest component
 import IdeaForest from "../../components/project/IdeaForest";
@@ -80,12 +83,6 @@ const ComputerIcon = () => (
     </svg>
 );
 
-const EditIcon = () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-    </svg>
-);
-
 const AccountTreeIcon = () => (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h11m0 0L7 3m7 7l-7 7m12-7v8a2 2 0 01-2 2h-3" />
@@ -98,37 +95,12 @@ const TaskIcon = () => (
     </svg>
 );
 
-const ViewModuleIcon = () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-    </svg>
-);
-
-const CloseIcon = () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-    </svg>
-);
-
-const MenuIcon = () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-);
-
-const ChevronRightIcon = () => (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-    </svg>
-);
-
 const ProposalsIcon = () => (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
     </svg>
 );
 
-const { AWS_BASE_URL } = config;
 
 // Define dashboard section types
 type DashboardSection = 'overview' | 'milestones' | 'resources' | 'workspaces' | 'meetings' | 'members' | 'settings' | string;
@@ -219,14 +191,8 @@ const ProjectDashboard: React.FC = () => {
     const [userPermissions, setUserPermissions] = useState<number>(0); // No permissions by default until loaded from backend
     const [error, setError] = useState<string | null>(null);
 
-    // Inline editing state
-    const [isEditMode, setIsEditMode] = useState(false);
-    const [editedProject, setEditedProject] = useState<any>(null);
-    const [isSaving, setIsSaving] = useState(false);
-
     // Post management modal state
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     // Overview sub-tab state (Dashboard vs Project Details)
     const [overviewSubTab, setOverviewSubTab] = useState<'dashboard' | 'details'>('dashboard');
@@ -347,9 +313,8 @@ const ProjectDashboard: React.FC = () => {
         const currentUser = members.find(member =>
             member.user_id != null && member.user_id.toString() === userId
         );
-        // Only check role - admin role is required for admin actions
-        const isAdmin = currentUser?.role === 'admin';
-        return !!isAdmin;
+        // Owners are stored with their own role and have every admin right
+        return currentUser?.role === 'admin' || currentUser?.role === 'owner';
     };
 
     // Update user permissions once members are loaded
@@ -381,14 +346,6 @@ const ProjectDashboard: React.FC = () => {
 
 
 
-
-    // Helper function to get media URL
-    const getMediaUrl = (file: string | File): string => {
-        if (typeof file === "string") {
-            return file.startsWith('http') ? file : `${AWS_BASE_URL}${file}`;
-        }
-        return URL.createObjectURL(file);
-    };
 
     // Update the section change handler to sync with URL
     const handleSectionChange = (section: DashboardSection) => {
@@ -500,7 +457,7 @@ const ProjectDashboard: React.FC = () => {
                     );
                 }
                 return (
-                    <div className="h-full overflow-hidden -m-6">
+                    <div className="h-full overflow-hidden">
                         <TaskManagement
                             projectId={String(project.id)}
                             projectSid={sid}
@@ -520,445 +477,66 @@ const ProjectDashboard: React.FC = () => {
         }
     };
 
-    // Inline editing helper functions
-    const startEditMode = () => {
-        setEditedProject({
-            name: project?.name || '',
-            type: project?.type || '',
-            otherType: project?.otherType || '',
-            location: project?.location || '',
-            startTime: project?.startTime || '',
-            deadline: project?.deadline || '',
-            communicationApp: project?.communicationApp || '',
-            otherApp: project?.otherApp || '',
-            school: project?.school || '',
-            class: project?.class || '',
-            description: project?.description || ''
-        });
-        setIsEditMode(true);
-    };
-
-    const cancelEditMode = () => {
-        setIsEditMode(false);
-        setEditedProject(null);
-    };
-
-    const saveAllFields = async () => {
-        if (isSaving || !project || !editedProject) return;
-
-        setIsSaving(true);
-        try {
-            const response = await fetchWithAuth(`/projects/${sid}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(editedProject)
-            });
-
-            if (response.ok) {
-                await fetchProjectData();
-                setIsEditMode(false);
-                setEditedProject(null);
-            } else {
-                alert('Failed to update project. Please try again.');
-            }
-        } catch (error) {
-            alert('Error updating project');
-        } finally {
-            setIsSaving(false);
-        }
-    };
-
     // Project overview section
     const renderOverviewSection = () => {
         return (
             <section>
                 {/* Overview Sub-tabs */}
-                <div className="border-b border-gray-200 mb-6">
-                    <nav className="-mb-px flex space-x-8">
+                <div className="mb-6 inline-flex rounded-lg bg-gray-100 p-1" role="tablist">
+                    {(['dashboard', 'details'] as const).map((tab) => (
                         <button
-                            data-tour="overview-dashboard-tab"
-                            onClick={() => setOverviewSubTab('dashboard')}
-                            className={`
-                                py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200
-                                ${overviewSubTab === 'dashboard'
-                                    ? 'border-purple-500 text-purple-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }
-                            `}
+                            key={tab}
+                            role="tab"
+                            aria-selected={overviewSubTab === tab}
+                            data-tour={tab === 'dashboard' ? 'overview-dashboard-tab' : 'overview-details-tab'}
+                            onClick={() => setOverviewSubTab(tab)}
+                            className={cx(
+                                "rounded-md px-4 py-1.5 text-sm font-medium transition-colors",
+                                overviewSubTab === tab ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+                            )}
                         >
-                            {t("match.overview.dashboardTab")}
+                            {t(tab === 'dashboard' ? "match.overview.dashboardTab" : "match.overview.detailsTab")}
                         </button>
-                        <button
-                            data-tour="overview-details-tab"
-                            onClick={() => setOverviewSubTab('details')}
-                            className={`
-                                py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200
-                                ${overviewSubTab === 'details'
-                                    ? 'border-purple-500 text-purple-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }
-                            `}
-                        >
-                            {t("match.overview.detailsTab")}
-                        </button>
-                    </nav>
+                    ))}
                 </div>
 
                 {/* Dashboard Sub-tab Content */}
                 {overviewSubTab === 'dashboard' && (
                     <>
-                        {sid && <TeamPulse projectSid={sid} />}
+                        {sid && (
+                            <TeamPulse
+                                projectSid={sid}
+                                beforeCheckin={project && (
+                                    <BriefPlanCard
+                                        sid={sid}
+                                        brief={(project as DetailsProject).brief || null}
+                                        briefUpdatedAt={(project as DetailsProject).brief_updated_at}
+                                        recruiting={(project as DetailsProject).recruiting?.status === 1}
+                                        isAdmin={isUserAdmin()}
+                                        onSaved={fetchProjectData}
+                                        onOpenDetails={() => setOverviewSubTab('details')}
+                                    />
+                                )}
+                            />
+                        )}
                         {sid && <TeamChat projectSid={sid} />}
                         <ProjectDashboardComponent projectId={sid} />
                     </>
                 )}
 
                 {/* Project Details Sub-tab Content */}
-                {overviewSubTab === 'details' && (
-                    <div>
-                        <div className="flex justify-end mb-6">
-                            {/* Combined Visibility and Publish Status Selector */}
-                            {project && (
-                            <select
-                                value={`${project.visibility}-${project?.isPublished ? '1' : '0'}`}
-                                onChange={async (e) => {
-                                    const [visibilityStr, publishStr] = e.target.value.split('-');
-                                    const newVisibility = parseInt(visibilityStr);
-                                    const newPublish = publishStr === '1';
-
-                                    try {
-                                        // Update both visibility and publish status in one call
-                                        const response = await fetchWithAuth(`/projects/${sid}`, {
-                                            method: 'PUT',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({
-                                                visibility: newVisibility,
-                                                isPublished: newPublish
-                                            })
-                                        });
-
-                                        if (!response.ok) {
-                                            const errorData = await response.json();
-                                            throw new Error(errorData.error || 'Failed to update project status');
-                                        }
-
-                                        // Refresh project data
-                                        await fetchProjectData();
-                                    } catch (error) {
-                                        alert(`Failed to update project status: ${error instanceof Error ? error.message : 'Please try again.'}`);
-                                    }
-                                }}
-                                className="flex items-center px-4 py-2 rounded-xl text-sm font-medium shadow-sm backdrop-blur-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 transition-all appearance-none pr-8 bg-no-repeat bg-right border"
-                                style={{
-                                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='currentColor' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-                                    backgroundPosition: 'right 0.5rem center',
-                                    backgroundSize: '12px',
-                                    backgroundColor: project.visibility !== 0 && !project?.isPublished ? '#fffbeb' : '#ffffff',
-                                    color: project.visibility !== 0 && !project?.isPublished ? '#b45309' : project.visibility === 0 ? '#475569' : project.visibility === 1 ? '#059669' : '#0284c7',
-                                    borderColor: project.visibility !== 0 && !project?.isPublished ? '#fed7aa' : project.visibility === 0 ? '#cbd5e1' : project.visibility === 1 ? '#a7f3d0' : '#bae6fd'
-                                }}
-                            >
-                                <option value="0-0">{t('projects.dashboard.visibility.private')}</option>
-                                <option value="1-0">{t('projects.dashboard.visibility.public')} (Draft)</option>
-                                <option value="1-1">{t('projects.dashboard.visibility.public')} (Published)</option>
-                                <option value="2-0">{t('projects.dashboard.visibility.unlisted')} (Draft)</option>
-                                <option value="2-1">{t('projects.dashboard.visibility.unlisted')} (Published)</option>
-                            </select>
-                        )}
-
-                        {/* Admin-only buttons */}
-                        {isUserAdmin() && (
-                            !isEditMode ? (
-                                <div className="flex gap-2">
-                                    <button
-                                        className="text-white flex items-center bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 shadow-md hover:shadow-lg px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
-                                        onClick={() => setIsPostModalOpen(true)}
-                                    >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        <span className="ml-1.5">{t('projects.dashboard.buttons.managePosts')}</span>
-                                    </button>
-                                    <button
-                                        className="text-white flex items-center bg-gradient-to-r from-blue-500 to-sky-600 hover:from-blue-600 hover:to-sky-700 shadow-md hover:shadow-lg px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
-                                        onClick={startEditMode}
-                                    >
-                                        <EditIcon />
-                                        <span className="ml-1.5">{t('projects.dashboard.buttons.editProject')}</span>
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={saveAllFields}
-                                        disabled={isSaving}
-                                        className="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50 font-medium shadow-md hover:shadow-lg transition-all"
-                                    >
-                                        {isSaving ? t('projects.dashboard.buttons.saving') : t('projects.dashboard.buttons.saveChanges')}
-                                    </button>
-                                    <button
-                                        onClick={cancelEditMode}
-                                        disabled={isSaving}
-                                        className="px-4 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 disabled:opacity-50 font-medium shadow-md hover:shadow-lg transition-all"
-                                    >
-                                        {t('projects.dashboard.buttons.cancel')}
-                                    </button>
-                                </div>
-                            )
-                        )}
-                        </div>
-
-                        {/* Project Name */}
-                <div className="mb-6">
-                    {isEditMode ? (
-                        <input
-                            type="text"
-                            value={editedProject?.name || ''}
-                            onChange={(e) => setEditedProject({ ...editedProject, name: e.target.value })}
-                            className="w-full text-3xl font-bold px-4 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                            placeholder="Project Name"
-                        />
-                    ) : (
-                        <h2 className="text-3xl font-bold text-slate-900">{project?.name || 'Untitled Project'}</h2>
-                    )}
-                </div>
-
-                {/* Cover Image */}
-                {project?.cover && (
-                    <div className="w-full mb-6 overflow-hidden rounded-2xl shadow-xl">
-                        <img
-                            src={typeof project.cover === "string" ?
-                                (project.cover.startsWith('http') ? project.cover : `${AWS_BASE_URL}${project.cover}`)
-                                : URL.createObjectURL(project.cover)}
-                            alt={project.name}
-                            className="w-full h-48 sm:h-72 object-cover transition-transform duration-500 hover:scale-105"
-                        />
-                    </div>
-                )}
-
-                {/* Project Details */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 sm:mb-8">
-                    {/* Type */}
-                    <div className="flex items-start p-4 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/50 hover:shadow-sm transition-all duration-200">
-                        <span className="font-semibold text-slate-800 min-w-[100px]">Type:</span>
-                        {isEditMode ? (
-                            <select
-                                value={editedProject?.type || ''}
-                                onChange={(e) => setEditedProject({ ...editedProject, type: e.target.value })}
-                                className="ml-3 flex-1 px-3 py-1 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600"
-                            >
-                                <option value="">Select Type</option>
-                                <option value="Research">Research</option>
-                                <option value="School Work">School Work</option>
-                                <option value="Personal Project">Personal Project</option>
-                                <option value="Others">Others</option>
-                            </select>
-                        ) : (
-                            <span className="ml-3 text-slate-600">{project?.otherType || project?.type || 'Not set'}</span>
-                        )}
-                    </div>
-
-                    {/* Location */}
-                    <div className="flex items-start p-4 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/50 hover:shadow-sm transition-all duration-200">
-                        <span className="font-semibold text-slate-800 min-w-[100px]">Location:</span>
-                        {isEditMode ? (
-                            <input
-                                type="text"
-                                value={editedProject?.location || ''}
-                                onChange={(e) => setEditedProject({ ...editedProject, location: e.target.value })}
-                                className="ml-3 flex-1 px-3 py-1 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600"
-                                placeholder="e.g., Remote, New York, etc."
-                            />
-                        ) : (
-                            <span className="ml-3 text-slate-600">{project?.location || 'Not set'}</span>
-                        )}
-                    </div>
-
-                    {/* Start Date */}
-                    <div className="flex items-start p-4 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/50 hover:shadow-sm transition-all duration-200">
-                        <span className="font-semibold text-slate-800 min-w-[100px]">Start Date:</span>
-                        {isEditMode ? (
-                            <input
-                                type="date"
-                                value={editedProject?.startTime || ''}
-                                onChange={(e) => setEditedProject({ ...editedProject, startTime: e.target.value })}
-                                className="ml-3 flex-1 px-3 py-1 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600"
-                            />
-                        ) : (
-                            <span className="ml-3 text-slate-600">
-                                {project?.startTime ? new Date(project.startTime).toLocaleDateString() : 'Not set'}
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Deadline */}
-                    <div className="flex items-start p-4 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/50 hover:shadow-sm transition-all duration-200">
-                        <span className="font-semibold text-slate-800 min-w-[100px]">Deadline:</span>
-                        {isEditMode ? (
-                            <input
-                                type="date"
-                                value={editedProject?.deadline || ''}
-                                onChange={(e) => setEditedProject({ ...editedProject, deadline: e.target.value })}
-                                className="ml-3 flex-1 px-3 py-1 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600"
-                            />
-                        ) : (
-                            <span className="ml-3 text-slate-600">
-                                {project?.deadline ? new Date(project.deadline).toLocaleDateString() : 'Not set'}
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Communication App */}
-                    <div className="flex items-start p-4 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/50 hover:shadow-sm transition-all duration-200">
-                        <span className="font-semibold text-slate-800 min-w-[100px]">Communication:</span>
-                        {isEditMode ? (
-                            <input
-                                type="text"
-                                list="communication-apps"
-                                value={editedProject?.communicationApp || ''}
-                                onChange={(e) => setEditedProject({ ...editedProject, communicationApp: e.target.value })}
-                                className="ml-3 flex-1 px-3 py-1 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600"
-                                placeholder="e.g., Discord, Slack, Teams"
-                            />
-                        ) : (
-                            <span className="ml-3 text-slate-600">{project?.communicationApp || 'Not set'}</span>
-                        )}
-                    </div>
-
-                    {/* Other Apps */}
-                    <div className="flex items-start p-4 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/50 hover:shadow-sm transition-all duration-200">
-                        <span className="font-semibold text-slate-800 min-w-[100px]">Other Apps:</span>
-                        {isEditMode ? (
-                            <input
-                                type="text"
-                                value={editedProject?.otherApp || ''}
-                                onChange={(e) => setEditedProject({ ...editedProject, otherApp: e.target.value })}
-                                className="ml-3 flex-1 px-3 py-1 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600"
-                                placeholder="Other tools or apps"
-                            />
-                        ) : (
-                            <span className="ml-3 text-slate-600">{project?.otherApp || 'Not set'}</span>
-                        )}
-                    </div>
-
-                    {/* School */}
-                    <div className="flex items-start p-4 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/50 hover:shadow-sm transition-all duration-200">
-                        <span className="font-semibold text-slate-800 min-w-[100px]">School:</span>
-                        {isEditMode ? (
-                            <input
-                                type="text"
-                                value={editedProject?.school || ''}
-                                onChange={(e) => setEditedProject({ ...editedProject, school: e.target.value })}
-                                className="ml-3 flex-1 px-3 py-1 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600"
-                                placeholder="School name"
-                            />
-                        ) : (
-                            <span className="ml-3 text-slate-600">{project?.school || 'Not set'}</span>
-                        )}
-                    </div>
-
-                    {/* Class */}
-                    <div className="flex items-start p-4 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl border border-slate-200/50 hover:shadow-sm transition-all duration-200">
-                        <span className="font-semibold text-slate-800 min-w-[100px]">Class:</span>
-                        {isEditMode ? (
-                            <input
-                                type="text"
-                                value={editedProject?.class || ''}
-                                onChange={(e) => setEditedProject({ ...editedProject, class: e.target.value })}
-                                className="ml-3 flex-1 px-3 py-1 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600"
-                                placeholder="Class name"
-                            />
-                        ) : (
-                            <span className="ml-3 text-slate-600">{project?.class || 'Not set'}</span>
-                        )}
-                    </div>
-                </div>
-
-                {/* Communication Apps Datalist */}
-                <datalist id="communication-apps">
-                    <option value="Discord" />
-                    <option value="Slack" />
-                    <option value="Microsoft Teams" />
-                    <option value="Zoom" />
-                    <option value="Email" />
-                    <option value="WhatsApp" />
-                </datalist>
-
-                {/* Topics */}
-                {((project?.topics && project.topics.length > 0) || (project?.topic && Object.keys(project.topic).length > 0)) && (
-                    <div className="mb-6 sm:mb-8">
-                        <h3 className="text-lg font-bold text-slate-800 mb-4">Topics</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {project?.topics && project.topics.length > 0
-                                ? (Array.isArray(project.topics)
-                                    ? project.topics
-                                    : [project.topics]).map((topic: string, index: number) => (
-                                        <span key={index} className="bg-gradient-to-r from-blue-500/10 to-sky-500/10 text-blue-700 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium border border-blue-200/50 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-105">
-                                            {topic}
-                                        </span>
-                                    ))
-                                : project?.topic && Object.keys(project.topic).length > 0 &&
-                                Object.keys(project.topic).map((key: string, index: number) => (
-                                    <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs sm:text-sm">
-                                        {String(project.topic[key as keyof typeof project.topic])}
-                                    </span>
-                                ))
-                            }
-                        </div>
-                    </div>
-                )}
-
-                {/* Description */}
-                <div className="mb-6 sm:mb-8 p-6 bg-gradient-to-br from-white to-slate-50 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-800 mb-3">Description</h3>
-                    {isEditMode ? (
-                        <textarea
-                            value={editedProject?.description || ''}
-                            onChange={(e) => setEditedProject({ ...editedProject, description: e.target.value })}
-                            rows={4}
-                            className="w-full px-4 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-600 resize-none"
-                            placeholder="Describe your project..."
-                        />
-                    ) : (
-                        <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                            {project?.description || 'No description provided.'}
-                        </p>
-                    )}
-                </div>
-
-                {/* Media Files */}
-                {renderMediaFiles()}
-                    </div>
+                {overviewSubTab === 'details' && project && (
+                    <ProjectDetailsPanel
+                        project={project}
+                        sid={sid}
+                        isAdmin={isUserAdmin()}
+                        onSaved={fetchProjectData}
+                        onManagePosts={() => setIsPostModalOpen(true)}
+                    />
                 )}
             </section>
         );
     };
-
-    // Fix for the media rendering
-    const renderMediaFiles = () => {
-        if (!project || !project.media || !Array.isArray(project.media) || project.media.length === 0) {
-            return null;
-        }
-
-        return (
-            <div>
-                <h3 className="text-lg font-bold text-slate-800 mb-4">Media Files</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-                    {project.media.map((file, index) => (
-                        <div key={index} className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                            <img
-                                src={getMediaUrl(file)}
-                                alt={`Media ${index}`}
-                                className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    };
-
 
     // Meetings section
     const renderMeetingsSection = () => {
@@ -1296,247 +874,104 @@ const ProjectDashboard: React.FC = () => {
         return <div className="p-4 text-red-500">{error || projectError}</div>;
     }
 
-    return (
-        <div className="flex flex-col min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-            {/* Mobile header - visible only on mobile */}
-            <div className="md:hidden bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-700 flex justify-between items-center p-4 sticky top-0 z-50">
-                <button
-                    onClick={toggleSidebar}
-                    className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-sky-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-                >
-                    <ViewModuleIcon />
+    const visibleSections = sections
+        // Members and settings are admin-only
+        .filter(section => section.visible && ((section.id !== 'members' && section.id !== 'settings') || isUserAdmin()))
+        // Settings always goes last
+        .sort((a, b) => (a.id === 'settings' ? 1 : b.id === 'settings' ? -1 : a.order - b.order));
+
+    const iconButton = "rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900";
+
+    // The sidebar is the same on desktop and in the mobile drawer
+    const renderSidebar = () => (
+        <div className="flex h-full min-w-[15rem] flex-col bg-white">
+            <div className="flex items-center gap-2 border-b border-gray-100 px-4 py-4">
+                <h2 className="min-w-0 flex-1 truncate text-base font-semibold text-gray-900" title={project?.name}>
+                    {project?.name || t('projects.dashboard.title')}
+                </h2>
+                <button onClick={() => startTutorial()} className={iconButton} title="Start Interactive Tutorial" aria-label="Start Interactive Tutorial">
+                    <HelpCircle className="h-4 w-4" />
                 </button>
-                <h1 className="text-lg font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent">
+                <button onClick={toggleSidebar} className={iconButton} aria-label="Close sidebar">
+                    {isMobileView ? <X className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+                </button>
+            </div>
+            <nav className="flex-1 space-y-0.5 overflow-y-auto p-2">
+                {visibleSections.map((section) => {
+                    const active = activeSection === section.id;
+                    return (
+                        <button
+                            key={section.id}
+                            data-tour={section.id === 'idea-forest' ? 'idea-forest-section' : undefined}
+                            onClick={() => {
+                                handleSectionChange(section.id);
+                                if (isMobileView) setIsSidebarOpen(false);
+                            }}
+                            aria-current={active ? 'page' : undefined}
+                            className={cx(
+                                "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors",
+                                active ? "bg-indigo-50 text-indigo-700" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                            )}
+                        >
+                            <span className={cx("flex shrink-0 [&_svg]:h-[18px] [&_svg]:w-[18px]", active ? "text-indigo-600" : "text-gray-400")}>{section.icon}</span>
+                            <span className="truncate">{section.label}</span>
+                            {section.id === 'meetings' && <Badge tone="amber" className="ml-auto">Soon</Badge>}
+                        </button>
+                    );
+                })}
+            </nav>
+        </div>
+    );
+
+    const fullBleed = activeSection === 'idea-forest' || activeSection === 'idea-tree' || activeSection === 'tasks';
+
+    return (
+        <div className="flex min-h-screen w-full flex-col bg-gray-50">
+            {/* Mobile header */}
+            <div className="sticky top-14 z-30 flex items-center gap-2 border-b border-gray-200 bg-white/90 px-4 py-3 backdrop-blur md:hidden">
+                <button onClick={toggleSidebar} className={iconButton} aria-label="Open sidebar">
+                    <Menu className="h-5 w-5" />
+                </button>
+                <h1 className="min-w-0 flex-1 truncate text-base font-semibold text-gray-900">
                     {project?.name || t('projects.dashboard.title')}
                 </h1>
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => startTutorial()}
-                        className="p-2.5 rounded-xl bg-white shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 border border-slate-100"
-                        title="Start Interactive Tutorial"
-                    >
-                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </button>
-                    <button
-                        onClick={() => setIsEditModalOpen(true)}
-                        className="p-2.5 rounded-xl bg-white shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 border border-slate-100"
-                    >
-                        <EditIcon />
-                    </button>
-                </div>
+                <button onClick={() => startTutorial()} className={iconButton} aria-label="Start Interactive Tutorial">
+                    <HelpCircle className="h-5 w-5" />
+                </button>
             </div>
 
-            {/* Main layout container */}
-            <div className="flex flex-1 relative overflow-hidden">
-
-
-                {/* Desktop Sidebar - Custom implementation without MUI Drawer */}
+            <div className="relative flex flex-1">
+                {/* Desktop sidebar */}
                 {!isMobileView && (
-                    <div className={`relative flex-shrink-0 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-[280px]' : 'w-0'}`}>
-                        <div className={`h-full bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-800 dark:to-slate-900/50 border-r border-slate-200/50 dark:border-slate-700/50 shadow-xl transition-all duration-300 ${!isSidebarOpen ? 'opacity-0 -translate-x-full' : 'opacity-100 translate-x-0'}`}>
-                            <div className="flex flex-col h-full">
-                                <div className="p-5 flex items-center justify-between bg-gradient-to-br from-blue-600 via-sky-600 to-blue-700 text-white shadow-xl relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-black/10"></div>
-                                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                                    <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-                                    <h2 className="text-xl font-bold truncate relative z-10">
-                                        {project?.name || t('projects.dashboard.title')}
-                                    </h2>
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() => startTutorial()}
-                                            className="p-1.5 text-white relative z-10 hover:bg-white/20 transition-colors rounded-lg"
-                                            title="Start Interactive Tutorial"
-                                        >
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </button>
-                                        <button onClick={toggleSidebar} className="p-1 text-white relative z-10 hover:bg-white/20 transition-colors rounded-lg">
-                                            <CloseIcon />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="py-2 overflow-hidden flex-1 overflow-y-auto">
-                                    {sections
-                                        .filter(section => {
-                                            // Filter based on role, not permissions
-                                            if (section.id === 'members' || section.id === 'settings') {
-                                                return section.visible && isUserAdmin();
-                                            }
-                                            return section.visible;
-                                        })
-                                        .sort((a, b) => {
-                                            // Always put settings at the bottom
-                                            if (a.id === 'settings') return 1;
-                                            if (b.id === 'settings') return -1;
-                                            // Sort by order for other sections
-                                            return a.order - b.order;
-                                        })
-                                        .map((section) => (
-                                            <div
-                                                key={section.id}
-                                                data-tour={section.id === 'idea-forest' ? 'idea-forest-section' : ''}
-                                                onClick={() => {
-                                                    handleSectionChange(section.id);
-                                                    // On mobile, automatically close the sidebar after selection
-                                                    if (isMobileView) {
-                                                        setIsSidebarOpen(false);
-                                                    }
-                                                }}
-                                                className={`flex items-center px-4 py-3 cursor-pointer transition-all duration-300 rounded-xl my-1.5 mx-2 group ${activeSection === section.id
-                                                    ? 'bg-gradient-to-r from-blue-500/10 to-sky-500/10 text-blue-700 font-semibold shadow-sm border border-blue-200/50'
-                                                    : 'hover:bg-slate-100/70 hover:shadow-sm text-slate-600 hover:text-slate-900'
-                                                    }`}
-                                            >
-                                                <div className={`min-w-[28px] flex justify-center p-1.5 rounded-lg transition-all duration-300 ${activeSection === section.id
-                                                        ? 'bg-gradient-to-br from-blue-500 to-sky-600 text-white shadow-md'
-                                                        : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700'
-                                                    }`}>
-                                                    {section.icon}
-                                                </div>
-                                                <div className="ml-3.5 text-sm font-medium">{section.label}</div>
-                                                {(section.id === 'meetings') && (
-                                                    <span className="ml-auto px-2 py-0.5 text-xs bg-gradient-to-r from-amber-400 to-orange-400 text-white rounded-full font-semibold shadow-sm">
-                                                        Soon
-                                                    </span>
-                                                )}
-                                            </div>
-                                        ))}
-                                </div>
-                                <div className="mt-auto border-t border-slate-100 p-4 bg-gradient-to-b from-transparent to-slate-50/50">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <aside className={cx("shrink-0 border-r border-gray-200 bg-white transition-[width] duration-200", isSidebarOpen ? "w-60" : "w-0 border-r-0")}>
+                        {/* Stays in view under the 56px nav bar while the content scrolls */}
+                        <div className={cx("sticky top-14 h-[calc(100vh-3.5rem)] overflow-hidden", isSidebarOpen ? "w-60" : "w-0")}>{renderSidebar()}</div>
+                    </aside>
                 )}
 
-                {/* Mobile Sidebar - Pure Tailwind implementation */}
+                {/* Mobile drawer */}
                 {isMobileView && isSidebarOpen && (
                     <>
-                        {/* Backdrop */}
-                        <div
-                            className="fixed inset-0 bg-black/50 z-40"
-                            onClick={() => setIsSidebarOpen(false)}
-                        />
-
-                        {/* Sidebar */}
-                        <div className={`fixed left-0 top-0 h-full w-[280px] bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-800 dark:to-slate-900/50 shadow-2xl z-50 transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                            <div className="flex flex-col h-full">
-                                <div className="p-5 flex items-center justify-between bg-gradient-to-br from-blue-600 via-sky-600 to-blue-700 text-white shadow-xl relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-black/10"></div>
-                                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                                    <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-                                    <h2 className="text-xl font-bold truncate relative z-10">
-                                        {project?.name || t('projects.dashboard.title')}
-                                    </h2>
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() => startTutorial()}
-                                            className="p-1.5 text-white relative z-10 hover:bg-white/20 transition-colors rounded-lg"
-                                            title="Start Interactive Tutorial"
-                                        >
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </button>
-                                        <button onClick={toggleSidebar} className="p-1 text-white relative z-10 hover:bg-white/20 transition-colors rounded-lg">
-                                            <ViewModuleIcon />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="py-2 overflow-hidden flex-1 overflow-y-auto">
-                                    {sections
-                                        .filter(section => {
-                                            // Filter based on role, not permissions
-                                            if (section.id === 'members' || section.id === 'settings') {
-                                                return section.visible && isUserAdmin();
-                                            }
-                                            return section.visible;
-                                        })
-                                        .sort((a, b) => {
-                                            if (a.id === 'settings') return 1;
-                                            if (b.id === 'settings') return -1;
-                                            return a.order - b.order;
-                                        })
-                                        .map((section) => (
-                                            <div
-                                                key={section.id}
-                                                data-tour={section.id === 'idea-forest' ? 'idea-forest-section' : ''}
-                                                onClick={() => {
-                                                    handleSectionChange(section.id);
-                                                    setIsSidebarOpen(false);
-                                                }}
-                                                className={`flex items-center px-4 py-3 cursor-pointer transition-all duration-300 rounded-xl my-1.5 mx-2 group ${activeSection === section.id
-                                                    ? 'bg-gradient-to-r from-blue-500/10 to-sky-500/10 text-blue-700 font-semibold shadow-sm border border-blue-200/50'
-                                                    : 'hover:bg-slate-100/70 hover:shadow-sm text-slate-600 hover:text-slate-900'
-                                                    }`}
-                                            >
-                                                <div className={`min-w-[28px] flex justify-center p-1.5 rounded-lg transition-all duration-300 ${activeSection === section.id
-                                                        ? 'bg-gradient-to-br from-blue-500 to-sky-600 text-white shadow-md'
-                                                        : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700'
-                                                    }`}>
-                                                    {section.icon}
-                                                </div>
-                                                <div className="ml-3.5 text-sm font-medium">{section.label}</div>
-                                                {(section.id === 'meetings') && (
-                                                    <span className="ml-auto px-2 py-0.5 text-xs bg-gradient-to-r from-amber-400 to-orange-400 text-white rounded-full font-semibold shadow-sm">
-                                                        Soon
-                                                    </span>
-                                                )}
-                                            </div>
-                                        ))}
-                                </div>
-                                <div className="mt-auto border-t border-slate-100 p-4 bg-gradient-to-b from-transparent to-slate-50/50">
-                                </div>
-                            </div>
-                        </div>
+                        <div className="fixed inset-0 z-[60] bg-gray-900/40" onClick={() => setIsSidebarOpen(false)} />
+                        <aside className="fixed left-0 top-0 z-[70] h-full w-64 shadow-xl">{renderSidebar()}</aside>
                     </>
                 )}
 
-
-
-                {/* Main content area - modernized with better spacing and card design */}
-                <div className="flex-1 transition-all duration-300 relative min-w-0 overflow-x-hidden">
-                    {/* Collapsed sidebar indicator for desktop */}
+                <main className={cx("relative min-w-0 flex-1 overflow-x-hidden", fullBleed && "bg-white")}>
                     {!isSidebarOpen && !isMobileView && (
-                        <div className="fixed left-0 top-1/2 -translate-y-1/2 z-30 transition-all duration-300 animate-slide-in-left">
-                            <button
-                                onClick={toggleSidebar}
-                                className="relative bg-white border-2 border-slate-200 text-slate-700 px-2 py-4 rounded-r-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 hover:border-blue-300 group overflow-hidden"
-                                aria-label="Open sidebar"
-                                title="Open menu"
-                            >
-                                {/* Animated background gradient on hover */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-sky-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-
-                                <div className="relative flex flex-col items-center space-y-3">
-                                    {/* Menu icon */}
-                                    <div className="group-hover:text-blue-600 transition-colors">
-                                        <MenuIcon />
-                                    </div>
-
-                                    {/* Animated chevron */}
-                                    <div className="group-hover:text-blue-600 group-hover:translate-x-1 transition-all">
-                                        <ChevronRightIcon />
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
+                        <button
+                            onClick={toggleSidebar}
+                            className="absolute left-3 top-4 z-20 rounded-lg border border-gray-200 bg-white p-1.5 text-gray-500 shadow-sm transition-colors hover:text-gray-900"
+                            aria-label="Open sidebar"
+                            title="Open menu"
+                        >
+                            <PanelLeftOpen className="h-4 w-4" />
+                        </button>
                     )}
-                    <div className="h-full">
-                        <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm overflow-hidden">
-                            {/* Main content area with sections */}
-                            <div className={activeSection === 'idea-forest' || activeSection === 'idea-tree' || activeSection === 'tasks' ? '' : 'p-6'}>
-                                {/* Render active section */}
-                                {renderActiveSection()}
-                            </div>
-                        </div>
+                    <div className={fullBleed ? "h-full" : cx("mx-auto max-w-6xl px-4 py-6 sm:px-6", !isSidebarOpen && !isMobileView && "pl-14 sm:pl-16")}>
+                        {renderActiveSection()}
                     </div>
-                </div>
-
+                </main>
             </div>
 
             {/* Manage Posts Modal */}

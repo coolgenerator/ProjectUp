@@ -18,7 +18,7 @@ interface TeamMessage {
     id: number;
     sender: Sender;
     text?: string;
-    event?: { event: string; role?: string };
+    event?: { event: string; role?: string; fields?: string[] };
     sent_at: string;
 }
 
@@ -116,9 +116,14 @@ const TeamChat: React.FC<{ projectSid: string }> = ({ projectSid }) => {
                         if (m.event) {
                             return (
                                 <p key={m.id} className="text-center text-xs text-gray-500">
-                                    {m.event.role
-                                        ? t("match.teamChat.joinedAs", { name: m.sender.name, role: m.event.role })
-                                        : t("match.teamChat.joined", { name: m.sender.name })}
+                                    {m.event.event === "brief_updated"
+                                        ? t("match.teamChat.briefUpdated", {
+                                            name: m.sender.name,
+                                            fields: (m.event.fields || []).map((f) => t(`match.projectBrief.fields.${f}`)).join(t("match.teamChat.listSeparator")),
+                                        })
+                                        : m.event.role
+                                            ? t("match.teamChat.joinedAs", { name: m.sender.name, role: m.event.role })
+                                            : t("match.teamChat.joined", { name: m.sender.name })}
                                     <span className="ml-1.5 text-gray-400">{time(m.sent_at)}</span>
                                 </p>
                             );

@@ -17,8 +17,11 @@ import (
 // read and post is decided by project membership, so the chat follows the
 // team as people join and leave.
 
-// TeamChatEventJoined is the system event posted when someone joins the team.
-const TeamChatEventJoined = "joined"
+// System events posted to the team chat.
+const (
+	TeamChatEventJoined       = "joined"        // someone joined the team
+	TeamChatEventBriefUpdated = "brief_updated" // the brief's next steps or blockers changed
+)
 
 // EnsureTeamChat returns the project's team chat, creating it on first use.
 func EnsureTeamChat(projectID uint, name string) (*models.GroupChat, error) {
@@ -55,6 +58,23 @@ func PostTeamJoined(projectID uint, projectName string, userID uint, role string
 	message := models.GroupMessage{ChatID: chat.ID, SenderID: userID, Content: string(content), System: true}
 	if err := database.DB.Create(&message).Error; err != nil {
 		log.Printf("team chat join message for project %d: %v", projectID, err)
+		return
+	}
+	database.DB.Model(chat).Update("updated_at", time.Now())
+}
+
+// PostTeamBriefUpdated records in the team chat that userID changed the
+// given fields of the project's brief. Failures are logged: the save already happened.
+func PostTeamBriefUpdated(projectID uint, projectName string, userID uint, fields []string) {
+	chat, err := EnsureTeamChat(projectID, projectName)
+	if err != nil {
+		log.Printf("team chat for project %d: %v", projectID, err)
+		return
+	}
+	content, _ := json.Marshal(map[string]interface{}{"event": TeamChatEventBriefUpdated, "fields": fields})
+	message := models.GroupMessage{ChatID: chat.ID, SenderID: userID, Content: string(content), System: true}
+	if err := database.DB.Create(&message).Error; err != nil {
+		log.Printf("team chat brief message for project %d: %v", projectID, err)
 		return
 	}
 	database.DB.Model(chat).Update("updated_at", time.Now())

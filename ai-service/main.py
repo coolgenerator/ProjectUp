@@ -57,6 +57,7 @@ from routes.personalized_suggestions_routes import router as personalized_sugges
 from routes.action_expand_routes import router as action_expand_router
 from routes.project_roadmap_routes import router as project_roadmap_router
 from routes.onboarding_routes import router as onboarding_router
+from routes.workflow_registry_routes import router as workflow_registry_router
 from storage.checkpointer import SessionManager
 from workflows import ChatWorkflow, ProjectWorkflow, ResearchWorkflow
 
@@ -529,6 +530,14 @@ app.include_router(
     responses={
         404: {"description": "Resource not found"},
         500: {"description": "AI generation error"}
+    }
+)
+app.include_router(
+    workflow_registry_router,
+    tags=["workflow-registry"],
+    responses={
+        404: {"description": "Workflow or integration not found"},
+        500: {"description": "Registry service error"}
     }
 )
 

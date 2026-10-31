@@ -67,11 +67,24 @@ func GetProjectDetails() gin.HandlerFunc {
 		}
 
 
+		recruiting, _ := projectRecruiting(project.ProjectID)
+
+		// Covers are usually set on the recruiting post
+		cover := project.Cover
+		if cover == nil || *cover == "" {
+			var postCover string
+			database.DB.Model(&models.ProjectPost{}).Where("project_id = ? AND cover <> ''", project.ProjectID).
+				Order("post_id").Limit(1).Pluck("cover", &postCover)
+			if postCover != "" {
+				cover = &postCover
+			}
+		}
+
 		// Convert to frontend-compatible format
 		response := gin.H{
 			"id":               project.ProjectID,
 			"sid":              project.ShortID,
-			"cover":            project.Cover,
+			"cover":            cover,
 			"media":            media,
 			"type":             project.ProjectType,
 			"topics":           topics, // Changed from "topic" to "topics" for consistency
@@ -87,6 +100,17 @@ func GetProjectDetails() gin.HandlerFunc {
 			"otherType":        "", // If necessary, update this in the backend model
 			"is_published":     project.IsPublished,
 			"visibility":       project.Status,
+			"brief":            workbenchBrief(project.ProjectID),
+			"brief_updated_at": project.BriefUpdatedAt,
+			"recruiting":       recruiting,
+		}
+		// Only the founder sees the idea the project came from: its Q&A is their private thinking
+		if project.OwnerID == userID {
+			var draftID uint
+			database.DB.Model(&models.IdeaDraft{}).Where("project_id = ?", project.ProjectID).Select("id").Scan(&draftID)
+			if draftID != 0 {
+				response["idea_draft_id"] = draftID
+			}
 		}
 
 		c.JSON(http.StatusOK, response)

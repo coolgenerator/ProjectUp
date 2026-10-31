@@ -1,346 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Paper, Typography, Grid, Card, CardContent, LinearProgress, Chip, Avatar, AvatarGroup } from '@mui/material';
-import {
-  CheckCircle,
-  Schedule,
-  Assignment,
-  TrendingUp,
-  People,
-  Folder,
-} from '@mui/icons-material';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ListChecks } from 'lucide-react';
 import fetchWithAuth from '../../hooks/fetchWithAuth';
 import { TaskStats } from '../../types/task';
 import { Milestone } from '../../types/project/milestone';
+import { Badge, Card, ProgressBar, Skeleton, cx } from '../ui';
 
 interface ProjectDashboardProps {
   projectId: string;
 }
 
-interface DashboardStats {
-  tasks: TaskStats;
-  milestones: {
-    total: number;
-    completed: number;
-    inProgress: number;
-    pending: number;
-  };
-  meetings: {
-    upcoming: number;
-    past: number;
-  };
-  resources: {
-    total: number;
-  };
+interface MilestoneStats {
+  total: number;
+  completed: number;
+  inProgress: number;
+  pending: number;
 }
 
-interface RecentActivity {
-  id: string;
-  type: 'task' | 'milestone' | 'meeting' | 'resource';
-  title: string;
-  timestamp: string;
-  user?: {
-    name: string;
-    avatar?: string;
-  };
-}
+const EMPTY_TASKS: TaskStats = { total: 0, todo: 0, in_progress: 0, done: 0, blocked: 0, completion_rate: 0 };
+const EMPTY_MILESTONES: MilestoneStats = { total: 0, completed: 0, inProgress: 0, pending: 0 };
 
+const Stat: React.FC<{ label: string; value: React.ReactNode; hint?: string; tone?: string }> = ({ label, value, hint, tone }) => (
+  <div className="min-w-0">
+    <p className="text-xs font-medium text-gray-500">{label}</p>
+    <p className={cx('mt-1 text-2xl font-semibold tabular-nums', tone || 'text-gray-900')}>{value}</p>
+    {hint && <p className="mt-0.5 text-xs text-gray-400">{hint}</p>}
+  </div>
+);
+
+// ProjectDashboard summarizes task and milestone progress on the overview tab.
 const ProjectDashboard: React.FC<ProjectDashboardProps> = ({ projectId }) => {
   const { t } = useTranslation();
-  const [stats, setStats] = useState<DashboardStats>({
-    tasks: {
-      total: 0,
-      todo: 0,
-      in_progress: 0,
-      done: 0,
-      blocked: 0,
-      completion_rate: 0,
-    },
-    milestones: {
-      total: 0,
-      completed: 0,
-      inProgress: 0,
-      pending: 0,
-    },
-    meetings: {
-      upcoming: 0,
-      past: 0,
-    },
-    resources: {
-      total: 0,
-    },
-  });
-  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
+  const [tasks, setTasks] = useState<TaskStats>(EMPTY_TASKS);
+  const [milestones, setMilestones] = useState<MilestoneStats>(EMPTY_MILESTONES);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (projectId) {
-      fetchDashboardData();
-    }
+    if (!projectId) return;
+    let cancelled = false;
+    const load = async () => {
+      setLoading(true);
+      try {
+        const [taskResponse, milestoneResponse] = await Promise.all([
+          fetchWithAuth(`/api/tasks/project/${projectId}/stats`),
+          fetchWithAuth(`/api/projects/${projectId}/milestones`),
+        ]);
+        if (cancelled) return;
+        if (taskResponse.ok) {
+          const data = await taskResponse.json();
+          setTasks(data.stats || EMPTY_TASKS);
+        }
+        if (milestoneResponse.ok) {
+          const data = await milestoneResponse.json();
+          const list: Milestone[] = data.milestones || [];
+          setMilestones({
+            total: list.length,
+            completed: list.filter(m => m.completed).length,
+            inProgress: list.filter(m => m.status === 'in_progress').length,
+            pending: list.filter(m => m.status === 'pending').length,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [projectId]);
 
-  const fetchDashboardData = async () => {
-    setLoading(true);
-    try {
-      // Fetch task stats
-      const taskStatsResponse = await fetchWithAuth(`/api/tasks/project/${projectId}/stats`);
-      let taskStats = stats.tasks;
-      if (taskStatsResponse.ok) {
-        const data = await taskStatsResponse.json();
-        taskStats = data.stats || stats.tasks;
-      }
-
-      // Fetch milestones
-      const milestonesResponse = await fetchWithAuth(`/api/projects/${projectId}/milestones`);
-      let milestoneStats = stats.milestones;
-      if (milestonesResponse.ok) {
-        const data = await milestonesResponse.json();
-        const milestones: Milestone[] = data.milestones || [];
-        milestoneStats = {
-          total: milestones.length,
-          completed: milestones.filter(m => m.completed).length,
-          inProgress: milestones.filter(m => m.status === 'in_progress').length,
-          pending: milestones.filter(m => m.status === 'pending').length,
-        };
-      }
-
-      setStats({
-        ...stats,
-        tasks: taskStats,
-        milestones: milestoneStats,
-      });
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const StatCard = ({ title, value, subtitle, icon, color }: {
-    title: string;
-    value: number | string;
-    subtitle?: string;
-    icon: React.ReactNode;
-    color: string;
-  }) => (
-    <Card elevation={0} sx={{ border: '1px solid', borderColor: 'divider', height: '100%' }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 2 }}>
-          <Box>
-            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
-              {title}
-            </Typography>
-            <Typography variant="h4" sx={{ fontWeight: 600, color }}>
-              {value}
-            </Typography>
-            {subtitle && (
-              <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
-                {subtitle}
-              </Typography>
-            )}
-          </Box>
-          <Box
-            sx={{
-              width: 48,
-              height: 48,
-              borderRadius: 2,
-              bgcolor: `${color}15`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color,
-            }}
-          >
-            {icon}
-          </Box>
-        </Box>
-      </CardContent>
-    </Card>
-  );
-
   return (
-    <Box sx={{ p: 4 }}>
+    <Card className="mt-6">
+      <h2 className="mb-5 flex items-center gap-2 text-lg font-semibold text-gray-900">
+        <ListChecks className="h-5 w-5 text-indigo-600" aria-hidden />
+        {t('match.overview.taskProgress')}
+      </h2>
+
       {loading ? (
-        <Box sx={{ width: '100%', mt: 4 }}>
-          <LinearProgress />
-        </Box>
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-14" />)}
+          </div>
+          <Skeleton className="h-2" />
+        </div>
       ) : (
         <>
-          {/* Stats Grid */}
-          <Grid container spacing={4} sx={{ mb: 4 }}>
-            {/* Total Tasks */}
-            <Grid item xs={12} sm={6} md={3}>
-              <StatCard
-                title={t("match.overview.totalTasks")}
-                value={stats.tasks.total}
-                subtitle={t("match.overview.completedN", { n: stats.tasks.done })}
-                icon={<Assignment fontSize="large" />}
-                color="#3b82f6"
-              />
-            </Grid>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
+            <Stat label={t('match.overview.totalTasks')} value={tasks.total} hint={t('match.overview.completedN', { n: tasks.done })} />
+            <Stat label={t('match.overview.completionRate')} value={`${Math.round(tasks.completion_rate)}%`} hint={t('match.overview.inProgressN', { n: tasks.in_progress })} tone="text-emerald-600" />
+            <Stat label={t('match.overview.milestones')} value={milestones.total} hint={t('match.overview.completedN', { n: milestones.completed })} />
+            <Stat label={t('match.overview.blocked')} value={tasks.blocked} hint={t('match.overview.needsAttention')} tone={tasks.blocked > 0 ? 'text-red-600' : undefined} />
+          </div>
 
-            {/* Task Completion Rate */}
-            <Grid item xs={12} sm={6} md={3}>
-              <StatCard
-                title={t("match.overview.completionRate")}
-                value={`${Math.round(stats.tasks.completion_rate)}%`}
-                subtitle={t("match.overview.inProgressN", { n: stats.tasks.in_progress })}
-                icon={<TrendingUp fontSize="large" />}
-                color="#10b981"
-              />
-            </Grid>
+          <div className="mt-6 border-t border-gray-100 pt-5">
+            <div className="mb-2 flex items-center justify-between text-sm">
+              <span className="text-gray-600">{t('match.overview.overallProgress')}</span>
+              <span className="font-medium tabular-nums text-gray-900">{t('match.overview.doneOfTotal', { done: tasks.done, total: tasks.total })}</span>
+            </div>
+            <ProgressBar value={tasks.done} max={tasks.total} />
+            {tasks.total === 0 ? (
+              <p className="mt-3 text-sm text-gray-500">{t('match.overview.noTasks')}</p>
+            ) : (
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Badge>{t('match.overview.pending')} {tasks.todo}</Badge>
+                <Badge tone="blue">{t('match.overview.inProgress')} {tasks.in_progress}</Badge>
+                <Badge tone="green">{t('match.overview.completed')} {tasks.done}</Badge>
+                {tasks.blocked > 0 && <Badge tone="red">{t('match.overview.blocked')} {tasks.blocked}</Badge>}
+              </div>
+            )}
+          </div>
 
-            {/* Milestones */}
-            <Grid item xs={12} sm={6} md={3}>
-              <StatCard
-                title={t("match.overview.milestones")}
-                value={stats.milestones.total}
-                subtitle={t("match.overview.completedN", { n: stats.milestones.completed })}
-                icon={<CheckCircle fontSize="large" />}
-                color="#8b5cf6"
-              />
-            </Grid>
-
-            {/* Blocked Tasks */}
-            <Grid item xs={12} sm={6} md={3}>
-              <StatCard
-                title={t("match.overview.blocked")}
-                value={stats.tasks.blocked}
-                subtitle={t("match.overview.needsAttention")}
-                icon={<Schedule fontSize="large" />}
-                color="#ef4444"
-              />
-            </Grid>
-          </Grid>
-
-          {/* Task Progress Breakdown */}
-          <Paper elevation={0} sx={{ p: 3, mb: 4, border: '1px solid', borderColor: 'divider' }}>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-              {t("match.overview.taskProgress")}
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={8}>
-                <Box sx={{ mb: 2 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      {t("match.overview.overallProgress")}
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                      {stats.tasks.done} / {stats.tasks.total} tasks
-                    </Typography>
-                  </Box>
-                  <LinearProgress
-                    variant="determinate"
-                    value={stats.tasks.completion_rate}
-                    sx={{
-                      height: 8,
-                      borderRadius: 4,
-                      bgcolor: '#f1f5f9',
-                      '& .MuiLinearProgress-bar': {
-                        bgcolor: '#10b981',
-                      },
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  <Chip
-                    label={`To Do: ${stats.tasks.todo}`}
-                    size="small"
-                    sx={{ bgcolor: '#f3f4f6', color: '#6b7280' }}
-                  />
-                  <Chip
-                    label={`In Progress: ${stats.tasks.in_progress}`}
-                    size="small"
-                    sx={{ bgcolor: '#dbeafe', color: '#3b82f6' }}
-                  />
-                  <Chip
-                    label={`Done: ${stats.tasks.done}`}
-                    size="small"
-                    sx={{ bgcolor: '#d1fae5', color: '#10b981' }}
-                  />
-                  {stats.tasks.blocked > 0 && (
-                    <Chip
-                      label={`Blocked: ${stats.tasks.blocked}`}
-                      size="small"
-                      sx={{ bgcolor: '#fee2e2', color: '#ef4444' }}
-                    />
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Paper>
-
-          {/* Milestones Progress */}
-          {stats.milestones.total > 0 && (
-            <Paper elevation={0} sx={{ p: 3, mb: 4, border: '1px solid', borderColor: 'divider' }}>
-              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                {t("match.overview.milestones")}
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h3" sx={{ fontWeight: 600, color: '#10b981', mb: 1 }}>
-                      {stats.milestones.completed}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {t("match.overview.completed")}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={4}>
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h3" sx={{ fontWeight: 600, color: '#3b82f6', mb: 1 }}>
-                      {stats.milestones.inProgress}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {t("match.overview.inProgress")}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={4}>
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h3" sx={{ fontWeight: 600, color: '#6b7280', mb: 1 }}>
-                      {stats.milestones.pending}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {t("match.overview.pending")}
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Paper>
+          {milestones.total > 0 && (
+            <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-5 text-sm">
+              <span className="mr-1 text-gray-600">{t('match.overview.milestones')}</span>
+              <Badge tone="green">{t('match.overview.completed')} {milestones.completed}</Badge>
+              <Badge tone="blue">{t('match.overview.inProgress')} {milestones.inProgress}</Badge>
+              <Badge>{t('match.overview.pending')} {milestones.pending}</Badge>
+            </div>
           )}
-
-          {/* Quick Actions Grid */}
-          <Grid container spacing={3}>
-            {/* Resources */}
-            <Grid item xs={12} sm={6} md={4}>
-              <Card elevation={0} sx={{ border: '1px solid', borderColor: 'divider', height: '100%' }}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Folder sx={{ mr: 1, color: '#06b6d4' }} />
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                      {t("match.overview.resources")}
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    {t("match.overview.resourcesHint")}
-                  </Typography>
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("match.overview.resourcesN", { n: stats.resources.total })}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-
-          </Grid>
         </>
       )}
-    </Box>
+    </Card>
   );
 };
 

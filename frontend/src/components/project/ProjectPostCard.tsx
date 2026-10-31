@@ -31,7 +31,7 @@ const COVER_GRADIENTS = [
     "from-cyan-500 to-blue-500",
 ];
 
-const coverGradient = (seed: string) => {
+export const coverGradient = (seed: string) => {
     let hash = 0;
     for (const ch of seed) hash = (hash * 31 + ch.charCodeAt(0)) | 0;
     return COVER_GRADIENTS[Math.abs(hash) % COVER_GRADIENTS.length];

@@ -6,6 +6,14 @@ import fetchWithAuth from "../../hooks/fetchWithAuth";
 export const MIN_IDEA_LENGTH = 10;
 const AUTOSAVE_DELAY_MS = 700;
 
+// DraftProject is the project a published draft became.
+export interface DraftProject {
+    sid: string;
+    title: string;
+    post_sid: string;
+    status: number;
+}
+
 // DraftState is everything needed to restore the workbench exactly where the user left it.
 export interface DraftState {
     idea: string;
@@ -13,10 +21,15 @@ export interface DraftState {
     current: { questions: unknown[]; answers: string[]; reflection: string } | null;
     brief: unknown | null;
     post_sid: string | null;
+    // Set by the server once published; the draft is read-only from then on
+    project?: DraftProject | null;
+    // The existing project this draft writes a brief for, if any
+    target_project_sid?: string | null;
 }
 
 export interface IdeaDraft extends DraftState {
     id: number;
+    project_id: number | null;
     updated_at: string;
 }
 
@@ -58,6 +71,8 @@ export function useIdeaDrafts(state: DraftState, onOpen: (state: DraftState) => 
                 current: draft.current,
                 brief: draft.brief,
                 post_sid: draft.post_sid,
+                project: draft.project || null,
+                target_project_sid: draft.target_project_sid || null,
             });
         },
         [setUrlDraft]
@@ -119,7 +134,8 @@ export function useIdeaDrafts(state: DraftState, onOpen: (state: DraftState) => 
             lastSavedRef.current = payload;
             return;
         }
-        if (state.idea.trim().length < MIN_IDEA_LENGTH || payload === lastSavedRef.current) return;
+        // A published draft is the project's record; the server refuses edits to it
+        if (state.project || state.idea.trim().length < MIN_IDEA_LENGTH || payload === lastSavedRef.current) return;
         const timer = setTimeout(() => save(state), AUTOSAVE_DELAY_MS);
         return () => clearTimeout(timer);
         // payload captures every field of state
@@ -150,6 +166,20 @@ export function useIdeaDrafts(state: DraftState, onOpen: (state: DraftState) => 
         [startNew]
     );
 
+    // ensureSaved saves pending changes and returns the draft's id, creating the draft if needed
+    const ensureSaved = useCallback(
+        async (next: DraftState) => {
+            await save(next);
+            return draftIdRef.current;
+        },
+        [save]
+    );
+
+    // published records a draft the server just turned into a project
+    const published = useCallback((draft: IdeaDraft) => {
+        setDrafts((list) => [draft, ...list.filter((d) => d.id !== draft.id)]);
+    }, []);
+
     const activeId = Number(searchParams.get("draft")) || null;
-    return { drafts, saveState, activeId, open, save, startNew, remove };
+    return { drafts, saveState, activeId, open, save, ensureSaved, published, startNew, remove };
 }

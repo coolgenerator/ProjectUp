@@ -1,292 +1,160 @@
-# ProjectUp - AI-Powered Project Collaboration Platform
+# ProjectUp
 
-A full-stack project collaboration platform with AI assistance, real-time features, and comprehensive project management capabilities.
+[中文](README.zh-CN.md) | **English**
 
-## 🚀 Features
+**Turn an idea into a small team that actually gets it done.**
 
-- **AI-Powered Assistance**: Integrated AI workflows for project planning, research, and content generation
-- **Real-time Collaboration**: WebSocket-based live updates and notifications
-- **Rich Content Editor**: EditorJS integration for dynamic content creation
-- **Authentication & Security**: JWT-based auth with automatic token refresh
-- **File Management**: AWS S3 integration for secure file storage
-- **Caching Layer**: Redis caching for improved performance
-- **Dark Mode Support**: Full dark mode across the application
-- **Internationalization**: Multi-language support
+ProjectUp covers the steps where small projects most often fail on the way from 0 to 1: figuring out what to build and who's missing, finding partners who will commit, and keeping the team together after work starts. We start with the hardest step: **forming the team**.
 
-## 🏗️ Architecture
+AI helps you break a fuzzy idea into concrete roles, then recommends the few people who can actually fill the project's gaps. Applicants state how many hours a week they can give and what they'll do in their first week, and they do a trial task before joining.
+
+**Built for**: student projects, cross-disciplinary research collaborations, competition and hackathon teams, and early-stage startups looking for co-founders.
+
+![ProjectUp landing page](docs/images/readme/landing.png)
+
+---
+
+## The problem
+
+**Finding people isn't hard. Finding reliable people is.** Posts and group chats already get you people, but the most common reason small teams fail is that someone disappears halfway through.
+
+The problem runs through the whole team-building process, not just the "finding people" step:
+
+| Stage | Problem | Why current approaches fall short |
+|---|---|---|
+| **Before forming** | **The idea is vague; you don't know who you need** | A recruiting post says only "looking for frontend, looking for design". Readers can't tell whether they'd be a fit, and the founder hasn't thought through what to build either. |
+| **Finding people** | **You can't find people who fill the gap** | Most channels rely on posts and personal networks, with no matching at all. The ones that do match mostly find "people like you" by tags. But a project needs people who cover its weak spots: an algorithms team needs someone who knows clinical work, not another algorithm writer. |
+| **Screening** | **You can't tell who's reliable** | Expressing interest costs nothing. One person can apply to ten projects at once, and every application just says "I'd like to join". Facing a pile of profiles and chat logs, founders go on gut feeling. |
+| **After forming** | **People slack off and the team falls apart** | Once someone joins, nobody is clear on how much they'll put in each week. There are no commitments and no records, and vanishing midway costs nothing. |
+
+So ProjectUp isn't trying to have a smarter matching algorithm. It does two things: **match by gap**, which answers "who to look for"; and **turn "claimed interest" into "verifiable commitment"**, which answers "are they reliable". AI is just the means: it asks, organizes and recommends, and people make the calls.
+
+---
+
+## The solution: one path from idea to kickoff
+
+| Stage | Step | How it works in the product |
+|---|---|---|
+| Before forming | ① Think it through | Each round, AI asks just 3 key questions that you must answer in your own words; AI points out gaps but doesn't think for you |
+| Before forming | ② Shape it | One click generates a project brief, current blockers, a two-week plan, and role cards for "who's still missing" (skills, weekly hours, first-week task) |
+| Finding people | ③ Two-way, gap-based recommendations | Find people who fill each role card: can they do the role, do they have the time, are their interests relevant; every recommendation states its reasons and main risk |
+| Screening | ④ Apply with commitment | Applications must include weekly hours and a "first-step proposal"; each person can have at most 3 pending applications |
+| Screening | ⑤ Screen and trial | An application board moves candidates through stages, with an AI quick read of each application; assign a trial task first, and join formally once both sides agree |
+| After forming | ⑥ Kick off and keep going | Kickoff checklist, weekly check-ins, decision log; completion records build up into personal reliability, your credibility for the next team |
+
+### ① Think it through: AI asks, you do the thinking
+
+After you write a one-line idea, AI asks 3 questions per round from different angles (target users and scenarios, minimum validation, key assumptions and risks…). You must answer each question in your own words to continue, and you can go one more round so AI digs deeper based on your answers. Drafts save automatically.
+
+![Idea workspace: AI follow-up questions](docs/images/readme/idea-questions.png)
+
+### ② Shape it: from idea to project and role cards
+
+Once it's clear, click "Shape this into a project" to generate the vision, the problem to solve, target users, current blockers, a plan for the next two weeks, and role cards for **who's still missing**. Each role card lists the skills needed, roughly how many hours a week, and what to do in the first week after joining. You can edit any section directly, or have AI rewrite just that section.
+
+![Shaped project brief and role cards](docs/images/readme/idea-brief.png)
+
+### ③ Two-way, gap-based recommendations: match the gap, not the similarity
+
+Once a project is public, the system searches role by role against the role cards, looking for people who **can fill that gap**, not people with backgrounds similar to the founder's:
+- **Pre-filter**: checks whether a candidate's skills overlap with the role's requirements, whether the roles they want line up, and whether their interests relate to the project's topic, counting adjacent fields too (e.g. "clinical" and "public health");
+- **Ranking**: an LLM scores on "can they do this specific role, do they have enough weekly time, are their interests relevant". Whether weekly hours are sufficient is computed by the backend before being passed to the model, so the model doesn't compare numbers wrong;
+- **Few but good**: each role gets only a handful of recommendations, each with **why they fit** and **the main risk** (e.g. "can only give 4 hours a week").
+
+![Candidates recommended to the founder](docs/images/readme/candidates.png)
+
+People looking for a team see the reverse on the "Recruiting projects" page: which role on which project suits you best, also with reasons and risks.
+
+![Projects recommended to you](docs/images/readme/recommended-projects.png)
+
+### ④ Apply with commitment
+
+An application is no longer just "I'd like to join":
+- Pick a specific role and **you must enter how many hours a week you can commit**;
+- **You must write a "first-step proposal"**: what you plan to deliver in your first week. The founder's suggested first-week task is shown on the page for reference;
+- Each person can have at most 3 pending applications at a time, so expressing interest has a cost.
+
+![Applying with commitment](docs/images/readme/apply.png)
+
+### ⑤ Screen and trial: the application board
+
+Founders handle every application on one board: New → In conversation → On trial → Joined / Declined.
+- Each card shows the role, committed hours and first-step proposal at a glance;
+- **AI quick read** summarizes each application's fit and risks;
+- Moving someone to "On trial" requires a trial task and a due date, and the applicant is notified;
+- If an application sits unhandled for 48 hours, the founder gets a reminder.
+
+![Application board with AI quick read](docs/images/readme/review-board.png)
+
+### ⑥ Kick off and keep going: keep the team together
+
+Once the team is formed, the project overview page offers a kickoff checklist, role gaps with "Reopen recruiting", weekly check-ins and a decision log. How many projects you've joined, how many you've finished, and whether you've written check-ins on time in recent weeks all show up as "Reliability" on your profile, becoming your credibility for the next team.
+
+---
+
+## Common concerns
+
+**Will my idea get copied?**
+Ideas are cheap; execution is what counts. Over-protecting makes it harder for the right people to discover your project. A project's creation time is recorded when it's published, which can serve as evidence of who proposed it first. Tiered visibility, where "core details are visible only to accepted applicants", is planned.
+
+**What if popular projects get swamped and niche ones get ignored?**
+Each person can have at most 3 pending applications at a time, so popular projects don't get flooded with casual applications. Niche projects don't have to wait: the system recommends people who fill the role cards directly to the founder, who can message them with an invite.
+
+---
+
+## Current limitations
+
+The following are planned but not yet implemented:
+
+- **Tiered visibility**: core ideas visible only to accepted applicants. Today, project briefs are fully public.
+- **Team-level complementarity**: "complementary" is currently computed against role cards; it doesn't yet analyze the skill mix of members who've joined to find people who round out the team.
+- **Vector retrieval**: matching currently uses skill and interest overlap for pre-filtering plus LLM ranking; pgvector will come once data volume grows.
+- **Composite reliability score**: only raw records are shown today (projects joined, projects completed, check-in weeks); they're not yet combined into a score used in ranking.
+
+For background and trade-offs, see [AI project matching strategy](docs/strategy/AI_PROJECT_MATCHING_STRATEGY.md) and [Team-building flow design](docs/features/TEAM_MATCHING_FLOW.md).
+
+---
+
+## Try it out
+
+Requirements: Docker, Go, Node.js, `psql`, and an [OpenRouter](https://openrouter.ai) API key.
+
+```bash
+cp demo/openrouter.env.example demo/openrouter.env   # add your OPENROUTER_API_KEY
+./demo/start.sh                                      # first run creates tables and loads sample data
+```
+
+Open http://localhost:5173 and sign in with a demo account (password for both is `demo1234`):
+
+| Account | Persona | Demonstrates |
+|---|---|---|
+| `founder@demo.projectup.local` | Founder: 2nd-year biomedical engineering master's student | Idea workspace → shaping → recommended candidates → application board |
+| `seeker@demo.projectup.local` | Team seeker: 3rd-year CS undergrad who knows React | Projects recommended to you → applying with commitment |
+
+The database, Redis and file storage all run in local Docker and never connect to any live resources. For the full 5-minute demo script, see [demo/README.md](demo/README.md).
+
+---
+
+## Architecture
 
 ```
 ProjectUp/
-├── backend/          # Go/Gin REST API
-├── frontend/         # React/TypeScript SPA
-├── ai-service/       # Python/FastAPI AI service
-├── nginx/            # Nginx configuration
-├── deployment/       # systemd, nginx and deploy scripts
-├── docs/             # Project documentation (index: docs/README.md)
-└── docker-compose.yml
+├── frontend/     # React + TypeScript + Vite, Tailwind, Redux Toolkit
+├── backend/      # Go + Gin + GORM, PostgreSQL, Redis; idea shaping and matching live here (via OpenRouter)
+├── ai-service/   # Python + FastAPI + LangGraph: node chat, RAG, roadmaps and other earlier AI features
+├── demo/         # One-command local demo environment (Postgres, Redis, MinIO, sample data)
+├── deployment/   # systemd, nginx and deployment scripts
+└── docs/         # Architecture, feature design, how-to guides and product strategy
 ```
 
-## 🛠️ Tech Stack
+The team-building flow (idea workspace, recommendations, applications, board) needs only frontend and backend; it doesn't depend on ai-service.
 
-### Backend
-- **Language**: Go 1.21+
-- **Framework**: Gin Web Framework
-- **Database**: PostgreSQL (AWS RDS)
-- **Cache**: Redis
-- **ORM**: GORM
-- **Storage**: AWS S3
-- **Authentication**: JWT
-
-### Frontend
-- **Framework**: React 18 with TypeScript
-- **Build Tool**: Vite
-- **State Management**: Redux Toolkit
-- **UI Library**: Material-UI + Tailwind CSS
-- **Editor**: EditorJS
-- **Animations**: Framer Motion
-
-### AI Service
-- **Language**: Python 3.11+
-- **Framework**: FastAPI
-- **AI Workflow**: LangGraph
-- **AI Providers**: OpenAI, Google Vertex AI
-
-## 📋 Prerequisites
-
-- Go 1.21 or higher
-- Node.js 18 or higher
-- Python 3.11 or higher
-- PostgreSQL 15
-- Redis 7
-- Docker & Docker Compose (optional)
-
-## 🚀 Quick Start
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/ProjectUp.git
-cd ProjectUp
-```
-
-### 2. Environment Setup
-
-#### Backend Configuration
-```bash
-cd backend
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-#### Frontend Configuration
-```bash
-cd ../frontend
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-#### AI Service Configuration
-```bash
-cd ../ai-service
-cp .env.example .env
-# Edit .env with your API keys
-```
-
-### 3. Install Dependencies
-
-#### Backend
-```bash
-cd backend
-go mod download
-```
-
-#### Frontend
-```bash
-cd frontend
-npm install
-```
-
-#### AI Service
-```bash
-cd ai-service
-pip install -r requirements.txt
-```
-
-### 4. Database Setup
+**Start each service separately** (against your own database):
 
 ```bash
-# Start PostgreSQL and Redis
-docker-compose up -d postgres redis
-
-# Run migrations
-cd backend
-go run migrate/migrate.go
+cd backend && cp .env.example .env && go run main.go               # :8080, Swagger at /swagger/index.html
+cd frontend && cp .env.example .env && npm install && npm run dev  # :5173
+cd ai-service && cp .env.example .env && pip install -r requirements.txt && python main.py serve --reload   # :8000
 ```
 
-### 5. Start Services
-
-#### Backend (Terminal 1)
-```bash
-cd backend
-go run main.go
-# API runs on http://localhost:8080
-# Swagger docs at http://localhost:8080/swagger/index.html
-```
-
-#### Frontend (Terminal 2)
-```bash
-cd frontend
-npm run dev
-# App runs on http://localhost:5173
-```
-
-#### AI Service (Terminal 3)
-```bash
-cd ai-service
-python main.py serve --reload
-# API runs on http://localhost:8000
-# Docs at http://localhost:8000/docs
-```
-
-## 🐳 Docker Deployment
-
-### Development
-```bash
-docker-compose up
-```
-
-### Full stack (with SearXNG)
-```bash
-docker-compose -f docker-compose.full.yml up
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-See `.env.example` files in each directory for required environment variables.
-
-Key configurations:
-- **JWT_SECRET**: Secret key for JWT tokens
-- **AWS_ACCESS_KEY_ID/SECRET**: AWS credentials for S3
-- **REDIS_HOST/PORT**: Redis connection details
-- **OPENAI_API_KEY**: OpenAI API key for AI features
-- **Database URLs**: PostgreSQL connection strings
-
-### Redis Cache
-
-Redis is optional but recommended for production:
-- Caches user sessions, project data, and API responses
-- Automatic fallback if Redis is unavailable
-- Configurable expiration times
-
-### Nginx Setup
-
-For production deployment with Nginx:
-```bash
-cp nginx/nginx.conf /etc/nginx/sites-available/projectup
-ln -s /etc/nginx/sites-available/projectup /etc/nginx/sites-enabled/
-nginx -s reload
-```
-
-## 📚 Documentation
-
-Design notes, guides and architecture docs are in [`docs/`](./docs/README.md).
-
-## 📝 API Documentation
-
-- **Backend API**: http://localhost:8080/swagger/index.html
-- **AI Service API**: http://localhost:8000/docs
-
-## 🧪 Testing
-
-### Backend Tests
-```bash
-cd backend
-go test ./...
-```
-
-### Frontend Lint
-```bash
-cd frontend
-npm run lint
-```
-
-### AI Service Tests
-```bash
-cd ai-service
-pytest tests/
-```
-
-## 📦 Building for Production
-
-### Backend
-```bash
-cd backend
-GOOS=linux GOARCH=amd64 go build -o server main.go
-```
-
-### Frontend
-```bash
-cd frontend
-npm run build
-# Output in dist/ directory
-```
-
-## 🚀 Deployment
-
-### AWS EC2 Deployment
-
-1. **Instance Requirements**:
-   - Minimum: t3.medium (2 vCPU, 4GB RAM)
-   - Recommended: t3.large or higher for production
-
-2. **Services Setup**:
-   - PostgreSQL on RDS
-   - Redis on ElastiCache
-   - S3 for file storage
-   - CloudFront for CDN
-
-3. **SSL/TLS**:
-   - Use Let's Encrypt with Certbot
-   - Configure in Nginx
-
-## 🔍 Monitoring
-
-- **Application Logs**: Check `logs/` directory
-- **Redis Monitoring**: `redis-cli monitor`
-- **Database**: Use pgAdmin or DBeaver
-- **Performance**: New Relic or DataDog integration
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👥 Team
-
-- Your Name - Full Stack Developer
-
-## 🙏 Acknowledgments
-
-- EditorJS for the rich text editor
-- Material-UI for React components
-- LangGraph for AI workflow orchestration
-
-## 📞 Support
-
-For support, email support@projectup.me or open an issue in the GitHub repository.
-
-## 🔄 Recent Updates
-
-- Added Redis caching layer for improved performance
-- Implemented comprehensive dark mode support
-- Enhanced AI workflow capabilities
-- Improved WebSocket handling for real-time features
-- Added Nginx configuration for production deployment
+See each service's `.env.example` for the environment variables it needs. For production deployment, see the [Deployment guide](docs/architecture/DEPLOYMENT.md); for all docs, see [docs/README.md](docs/README.md).

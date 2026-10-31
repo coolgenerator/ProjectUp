@@ -43,7 +43,8 @@ const FIELDS = ["done", "next", "blockers"] as const;
 
 // TeamPulse keeps a small team moving: kickoff steps, open roles, a weekly
 // one-line-each check-in, and a log of what was decided.
-const TeamPulse: React.FC<{ projectSid: string }> = ({ projectSid }) => {
+// beforeCheckin is shown right above the check-in, e.g. the plan it reports against
+const TeamPulse: React.FC<{ projectSid: string; beforeCheckin?: React.ReactNode }> = ({ projectSid, beforeCheckin }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [pulse, setPulse] = useState<Pulse | null>(null);
@@ -212,6 +213,8 @@ const TeamPulse: React.FC<{ projectSid: string }> = ({ projectSid }) => {
                     )}
                 </Card>
             </div>
+
+            {beforeCheckin}
 
             {/* Weekly check-in */}
             <Card>

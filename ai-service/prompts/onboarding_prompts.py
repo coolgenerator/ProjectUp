@@ -599,6 +599,163 @@ Return JSON format:
 }}"""
 
 # ============================================================================
+# RESEARCH PROJECT CHUNKED PROMPTS (for handling token limits)
+# ============================================================================
+
+RESEARCH_ELABORATION_CHUNK1_PROMPT = """The user selected the research project: "{topic_name}"
+
+Project Description: {topic_description}
+
+Research Context:
+- Research Area: {research_area}
+- Institution: {institution}
+- Advisor: {advisor_name}
+- Duration: {duration_months} months
+- Team Size: {team_size} people
+- Funding: {funding_available}
+- Ethics Approval: {requires_ethics_approval}
+
+Create the CORE RESEARCH PLAN (excluding timeline - that will be generated separately).
+
+Return JSON format containing:
+1. **Research Background and Literature Review** (field_overview, gap_analysis, theoretical_foundation, related_work)
+2. **Research Questions and Hypotheses** (primary_question, sub_questions, hypotheses, expected_findings)
+3. **Research Methodology** (research_design, data_collection, analysis_methods, validation_approach)
+4. **Technical Implementation** (tools, technologies, computational_requirements, infrastructure)
+5. **Expected Contributions** (theoretical_contributions, practical_applications, publications)
+6. **Success Criteria** (research_quality, publication_readiness, reproducibility, impact)
+7. **Risk Management** (methodology_risks, data_risks, timeline_risks, mitigation_strategies)
+
+Output JSON only, no explanations."""
+
+RESEARCH_ELABORATION_CHUNK2_PROMPT = """The user selected the research project: "{topic_name}"
+
+Project Description: {topic_description}
+
+Research Context:
+- Duration: {duration_months} months
+- Team Size: {team_size} people
+- Team Members: {team_members}
+
+Create a DETAILED RESEARCH TIMELINE with milestone-based task breakdown.
+
+**STRUCTURE: Section → Milestones → Tasks**
+- Each PHASE (section) contains multiple MILESTONES
+- Each MILESTONE contains multiple TASKS
+- Tasks are grouped under their parent milestone
+
+**IMPORTANT - Assignment Rules:**
+1. **Only tasks have assignees** - milestones are project-level items
+2. **EQUAL WORKLOAD DISTRIBUTION**: Distribute hours EVENLY across all team members within each phase
+3. Use ACTUAL team member names from team_members list
+
+**Task Details**: Each task MUST include:
+- name: Clear task name
+- description: What needs to be accomplished
+- estimated_hours: Realistic hours (20-80 hours per task)
+- assigned_to: Use ACTUAL team member name
+- priority: "high", "medium", or "low"
+- subtasks: Array of 2-3 subtasks (optional)
+
+Return JSON format:
+{{
+  "Research Timeline": {{
+    "phases": [
+      {{
+        "name": "Phase 1: Literature Review and Proposal",
+        "duration": "1-2 months",
+        "objectives": "Complete literature review and finalize research proposal",
+        "milestones": [
+          {{
+            "name": "Literature Review Complete",
+            "description": "Comprehensive review of existing research",
+            "tasks": [
+              {{
+                "name": "Review RAG Pipeline Literature",
+                "description": "Survey papers on RAG architectures and implementations",
+                "estimated_hours": 40,
+                "assigned_to": "Member A",
+                "priority": "high",
+                "subtasks": [
+                  {{"name": "Search academic databases", "estimated_hours": 10, "assigned_to": "Member A"}},
+                  {{"name": "Analyze methodologies", "estimated_hours": 20, "assigned_to": "Member A"}},
+                  {{"name": "Document findings", "estimated_hours": 10, "assigned_to": "Member A"}}
+                ]
+              }},
+              {{
+                "name": "Review Rank Fusion Algorithms",
+                "description": "Study different rank fusion techniques",
+                "estimated_hours": 40,
+                "assigned_to": "Member B",
+                "priority": "high",
+                "subtasks": [...]
+              }}
+            ]
+          }},
+          {{
+            "name": "Research Proposal Approved",
+            "description": "Formal proposal document reviewed and approved",
+            "tasks": [
+              {{
+                "name": "Draft Research Proposal",
+                "description": "Write initial proposal document",
+                "estimated_hours": 30,
+                "assigned_to": "Member A",
+                "priority": "high"
+              }},
+              {{
+                "name": "Proposal Review and Revision",
+                "description": "Incorporate feedback and finalize",
+                "estimated_hours": 20,
+                "assigned_to": "Member B",
+                "priority": "medium"
+              }}
+            ]
+          }}
+        ]
+      }},
+      {{
+        "name": "Phase 2: Methodology Development",
+        "duration": "1-2 months",
+        "objectives": "Design and validate research methodology",
+        "milestones": [
+          {{
+            "name": "Methodology Defined",
+            "description": "...",
+            "tasks": [...]
+          }},
+          {{
+            "name": "Baseline Implementation",
+            "description": "...",
+            "tasks": [...]
+          }}
+        ]
+      }},
+      {{
+        "name": "Phase 3: Data Collection and Experiments",
+        "duration": "2-3 months",
+        "objectives": "...",
+        "milestones": [...]
+      }},
+      {{
+        "name": "Phase 4: Analysis and Validation",
+        "duration": "1-2 months",
+        "objectives": "...",
+        "milestones": [...]
+      }},
+      {{
+        "name": "Phase 5: Writing and Submission",
+        "duration": "1-2 months",
+        "objectives": "...",
+        "milestones": [...]
+      }}
+    ]
+  }}
+}}
+
+Output JSON only, no explanations."""
+
+# ============================================================================
 # COMPETITION PROJECT PROMPTS
 # ============================================================================
 
@@ -1496,6 +1653,17 @@ def get_topic_elaboration_prompt(project_type: str) -> str:
         "examprep": EXAMPREP_TOPIC_ELABORATION_PROMPT,
     }
     return prompts.get(project_type, COURSE_TOPIC_ELABORATION_PROMPT)
+
+
+def get_research_elaboration_chunked_prompts() -> tuple:
+    """Get the chunked prompts for research elaboration to handle token limits.
+
+    Returns:
+        tuple: (chunk1_prompt, chunk2_prompt)
+            - chunk1: Core research plan (background, methodology, etc.)
+            - chunk2: Timeline with detailed tasks
+    """
+    return (RESEARCH_ELABORATION_CHUNK1_PROMPT, RESEARCH_ELABORATION_CHUNK2_PROMPT)
 
 
 def get_project_details_prompt(project_type: str) -> str:

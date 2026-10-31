@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, Check, Copy, Eye, Lightbulb, Pencil, Plus, RefreshCw, Rocket, Trash2, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Copy, Eye, GitBranch, Lightbulb, Pencil, Plus, RefreshCw, Rocket, Trash2, Users } from "lucide-react";
 import i18n from "../../i18n/i18n";
 import fetchWithAuth from "../../hooks/fetchWithAuth";
 import withAuth from "../../hooks/withAuth";
 import { Alert, Badge, Button, Card, Dialog, FadeIn, Input, Label, PAGE_WIDTH, PageHeader, ProgressBar, Tag, TextArea, cx } from "../../components/ui";
 import { ProfileNudge } from "../../components/match/MatchProfile";
-import { DraftState, IdeaDraft, MIN_IDEA_LENGTH, useIdeaDrafts } from "./useIdeaDrafts";
+import { DraftProject, DraftState, IdeaDraft, MIN_IDEA_LENGTH, useIdeaDrafts } from "./useIdeaDrafts";
 import MatchReveal from "./MatchReveal";
 
 interface IdeaQuestion {
@@ -73,6 +73,11 @@ const IdeaWorkbench: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [postSid, setPostSid] = useState<string | null>(null);
+    const [project, setProject] = useState<DraftProject | null>(null);
+    // Writing a brief for an existing project (P4): its sid and name
+    const [target, setTarget] = useState<{ sid: string; name: string } | null>(null);
+    const [addedRoles, setAddedRoles] = useState<string[]>([]);
+    const [searchParams] = useSearchParams();
     const [previewing, setPreviewing] = useState(false);
     // After publishing, the workbench shows who could fill each role
     const [revealing, setRevealing] = useState(false);
@@ -83,6 +88,8 @@ const IdeaWorkbench: React.FC = () => {
         current: current ? { questions: current, answers, reflection } : null,
         brief,
         post_sid: postSid,
+        project,
+        target_project_sid: target?.sid || null,
     };
     const applyDraft = useCallback((d: DraftState) => {
         setIdea(d.idea);
@@ -92,20 +99,58 @@ const IdeaWorkbench: React.FC = () => {
         setReflection(d.current?.reflection || "");
         setBrief(d.brief as IdeaBrief | null);
         setPostSid(d.post_sid);
+        setProject(d.project || null);
+        setTarget(d.target_project_sid ? { sid: d.target_project_sid, name: "" } : null);
+        setAddedRoles([]);
         setRevealing(false);
         setError(null);
     }, []);
     const drafts = useIdeaDrafts(draftState, applyDraft);
 
+    // ?project=<sid> starts a draft that writes the brief of an existing project
+    useEffect(() => {
+        const sid = searchParams.get("project");
+        if (!sid || searchParams.get("draft")) return;
+        fetchWithAuth(`/api/project/${sid}`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((p) => {
+                if (!p) return;
+                drafts.startNew();
+                const name = p.name || "";
+                applyDraft({ idea: [name, p.description].filter(Boolean).join("：\n"), rounds: [], current: null, brief: null, post_sid: null, project: null, target_project_sid: sid });
+                setTarget({ sid, name });
+            });
+        // Runs once on arrival
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // A restored project-mode draft only has the sid; load the project's name for display
+    const targetSid = target?.sid;
+    const targetNamed = !!target?.name;
+    useEffect(() => {
+        if (!targetSid || targetNamed) return;
+        fetchWithAuth(`/api/project/${targetSid}`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((p) => p && setTarget({ sid: targetSid, name: p.name || "" }));
+    }, [targetSid, targetNamed]);
+
     const startNewIdea = () => {
         drafts.startNew();
-        applyDraft({ idea: "", rounds: [], current: null, brief: null, post_sid: null });
+        applyDraft({ idea: "", rounds: [], current: null, brief: null, post_sid: null, project: null });
+    };
+
+    // branchIdea starts a new draft from this idea's text, e.g. to pivot after it became a project
+    const branchIdea = () => {
+        const text = idea;
+        drafts.startNew();
+        applyDraft({ idea: text, rounds: [], current: null, brief: null, post_sid: null, project: null, target_project_sid: null });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const deleteDraft = async (draft: IdeaDraft) => {
         if (!window.confirm(t("match.ideas.confirmDelete"))) return;
         if (await drafts.remove(draft.id)) {
-            applyDraft({ idea: "", rounds: [], current: null, brief: null, post_sid: null });
+            applyDraft({ idea: "", rounds: [], current: null, brief: null, post_sid: null, project: null });
         }
     };
 
@@ -160,12 +205,37 @@ const IdeaWorkbench: React.FC = () => {
         run("publish", async () => {
             // lang tells the server which language to start writing match reasons in
             const lang = language.startsWith("zh") ? "zh" : "en";
-            const data = await postJSON<{ post_sid: string }>(`/api/ideas/materialize?lang=${lang}`, brief);
-            // Record the post on the draft, so the idea shows as published
+            // The server links the draft to the new project, so saving it first gives it an id
+            const draftId = await drafts.ensureSaved(draftState);
+            const data = await postJSON<{ post_sid: string; draft?: IdeaDraft }>(`/api/ideas/materialize?lang=${lang}`, { draft_id: draftId, brief });
             setPostSid(data.post_sid);
-            await drafts.save({ ...draftState, post_sid: data.post_sid });
+            if (data.draft) {
+                setProject(data.draft.project || null);
+                drafts.published(data.draft);
+            }
             setRevealing(true);
             window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+    // saveToProject writes the brief into the target project instead of creating one
+    const saveToProject = () =>
+        run("publish", async () => {
+            if (!target || !brief) return;
+            const draftId = await drafts.ensureSaved(draftState);
+            const data = await postJSON<{ draft: IdeaDraft }>("/api/ideas/attach", { draft_id: draftId, project_sid: target.sid, brief });
+            setPostSid(data.draft.post_sid);
+            setProject(data.draft.project || null);
+            drafts.published(data.draft);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+    // addRole puts a suggested role on the project's recruiting post
+    const addRole = (role: RoleCard) =>
+        run(`role:${role.title}`, async () => {
+            const sid = project?.sid || target?.sid;
+            if (!sid) return;
+            await postJSON(`/api/match/projects/${sid}/roles`, role);
+            setAddedRoles((list) => [...list, role.title]);
         });
 
     const copyPrompt = async () => {
@@ -175,8 +245,8 @@ const IdeaWorkbench: React.FC = () => {
         setTimeout(() => setCopied(false), 1500);
     };
 
-    // Editing is locked once published: the public post no longer follows the draft
-    const locked = postSid !== null;
+    // Editing is locked once published: from then on the project owns the brief
+    const locked = postSid !== null || project !== null;
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -213,6 +283,75 @@ const IdeaWorkbench: React.FC = () => {
                         </>
                     ) : (
                     <>
+                    {/* Writing the brief of an existing project */}
+                    {target && !locked && (
+                        <Card className="mb-6 border-indigo-200 bg-indigo-50/60">
+                            <p className="text-sm font-medium text-indigo-700">{t("match.ideas.forProject", { title: target.name })}</p>
+                            <p className="mt-1 text-sm text-gray-600">{t("match.ideas.forProjectHint")}</p>
+                        </Card>
+                    )}
+
+                    {/* A published idea points to its project, where the brief now lives */}
+                    {locked && (
+                        <Card className="mb-6 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white">
+                            <p className="flex items-center gap-2 text-sm font-medium text-emerald-700">
+                                <Check className="h-4 w-4" aria-hidden /> {target ? t("match.ideas.savedToProject") : t("match.ideas.becameProject")}
+                            </p>
+                            <h2 className="mt-1 text-lg font-semibold text-gray-900">{project?.title || brief?.title}</h2>
+                            <p className="mt-1 text-sm text-gray-600">{t("match.ideas.becameProjectHint")}</p>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {project && (
+                                    <Button onClick={() => navigate(`/project/${project.sid}/dashboard?section=overview`)} icon={<ArrowRight className="h-4 w-4" />}>
+                                        {t("match.ideas.openProject")}
+                                    </Button>
+                                )}
+                                {postSid && (
+                                    <>
+                                        <Button variant="secondary" onClick={() => setRevealing(true)} icon={<Users className="h-4 w-4" />}>
+                                            {t("match.reveal.open")}
+                                        </Button>
+                                        <Button variant="secondary" onClick={() => navigate(`/projectpost/${postSid}`)} icon={<Eye className="h-4 w-4" />}>
+                                            {t("match.ideas.viewPost")}
+                                        </Button>
+                                    </>
+                                )}
+                                <Button variant="ghost" onClick={branchIdea} disabled={busy !== null} icon={<GitBranch className="h-4 w-4" />}>
+                                    {t("match.ideas.branch")}
+                                </Button>
+                            </div>
+                            {/* Roles the workbench suggested for an existing project; the founder picks which to recruit */}
+                            {target && brief && brief.roles.length > 0 && (
+                                <div className="mt-5 border-t border-emerald-100 pt-4">
+                                    <p className="text-sm font-medium text-gray-900">{t("match.ideas.suggestedRoles")}</p>
+                                    <p className="mt-0.5 text-xs text-gray-500">{t("match.ideas.suggestedRolesHint")}</p>
+                                    <ul className="mt-3 space-y-2">
+                                        {brief.roles.map((role) => {
+                                            const added = addedRoles.includes(role.title);
+                                            return (
+                                                <li key={role.title} className="flex items-center justify-between gap-3 rounded-lg bg-white px-3 py-2 ring-1 ring-gray-200">
+                                                    <div className="min-w-0">
+                                                        <p className="truncate text-sm font-medium text-gray-900">{role.title}</p>
+                                                        <p className="truncate text-xs text-gray-500">{role.description}</p>
+                                                    </div>
+                                                    <Button
+                                                        variant={added ? "ghost" : "secondary"}
+                                                        size="sm"
+                                                        disabled={added || busy !== null}
+                                                        loading={busy === `role:${role.title}`}
+                                                        icon={added ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+                                                        onClick={() => addRole(role)}
+                                                    >
+                                                        {added ? t("match.ideas.roleAdded") : t("match.ideas.addRoleToPost")}
+                                                    </Button>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            )}
+                        </Card>
+                    )}
+
                     {/* Step 1: the idea */}
                     <Card>
                         <Label label={t("match.ideas.ideaLabel")}>
@@ -320,7 +459,7 @@ const IdeaWorkbench: React.FC = () => {
                     {brief && (
                         <FadeIn as="section" className="mt-6 rounded-xl border border-emerald-200 bg-white p-5 shadow-sm sm:p-6">
                             <div className="flex flex-wrap items-center justify-between gap-2">
-                                <Badge tone="green">{t("match.ideas.draft")}</Badge>
+                                <Badge tone="green">{locked ? t("match.ideas.publishedVersion") : t("match.ideas.draft")}</Badge>
                                 {!locked && <p className="text-xs text-gray-500">{t("match.ideas.editHint")}</p>}
                             </div>
 
@@ -379,7 +518,10 @@ const IdeaWorkbench: React.FC = () => {
                             </dl>
 
                             <div className="mt-6 flex items-center justify-between gap-3">
-                                <h3 className="font-semibold text-gray-900">{t("match.ideas.roles")}</h3>
+                                <div>
+                                    <h3 className="font-semibold text-gray-900">{target ? t("match.ideas.suggestedRoles") : t("match.ideas.roles")}</h3>
+                                    {target && !locked && <p className="mt-0.5 text-xs text-gray-500">{t("match.ideas.suggestedRolesNote")}</p>}
+                                </div>
                                 {!locked && (
                                     <Button variant="ghost" size="sm" onClick={() => regenerate("roles")} loading={busy === "regen:roles"} icon={<RefreshCw className="h-3.5 w-3.5" />}>
                                         {busy === "regen:roles" ? t("match.ideas.regenerating") : t("match.ideas.regenerate")}
@@ -414,28 +556,25 @@ const IdeaWorkbench: React.FC = () => {
                                 </Button>
                             </details>
 
-                            <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-5">
-                                {postSid ? (
-                                    <>
-                                        <Button onClick={() => setRevealing(true)} icon={<Users className="h-4 w-4" />}>
-                                            {t("match.reveal.open")}
-                                        </Button>
-                                        <Button variant="secondary" onClick={() => navigate(`/projectpost/${postSid}`)} icon={<Eye className="h-4 w-4" />}>
-                                            {t("match.ideas.viewPost")}
-                                        </Button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Button variant="secondary" onClick={() => setPreviewing(true)} icon={<Eye className="h-4 w-4" />}>
-                                            {t("match.ideas.preview")}
-                                        </Button>
-                                        <Button variant="success" onClick={publish} disabled={busy !== null || !brief.title.trim()} loading={busy === "publish"} icon={<Rocket className="h-4 w-4" />}>
-                                            {busy === "publish" ? t("match.ideas.publishing") : t("match.ideas.publish")}
-                                        </Button>
-                                        <p className="w-full text-xs text-gray-500">{t("match.ideas.publishNote")}</p>
-                                    </>
-                                )}
-                            </div>
+                            {!locked && target && (
+                                <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-5">
+                                    <Button onClick={saveToProject} disabled={busy !== null} loading={busy === "publish"} icon={<Check className="h-4 w-4" />}>
+                                        {t("match.ideas.saveToProject", { title: target.name })}
+                                    </Button>
+                                    <p className="w-full text-xs text-gray-500">{t("match.ideas.saveToProjectNote")}</p>
+                                </div>
+                            )}
+                            {!locked && !target && (
+                                <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-5">
+                                    <Button variant="secondary" onClick={() => setPreviewing(true)} icon={<Eye className="h-4 w-4" />}>
+                                        {t("match.ideas.preview")}
+                                    </Button>
+                                    <Button variant="success" onClick={publish} disabled={busy !== null || !brief.title.trim()} loading={busy === "publish"} icon={<Rocket className="h-4 w-4" />}>
+                                        {busy === "publish" ? t("match.ideas.publishing") : t("match.ideas.publish")}
+                                    </Button>
+                                    <p className="w-full text-xs text-gray-500">{t("match.ideas.publishNote")}</p>
+                                </div>
+                            )}
                         </FadeIn>
                     )}
                     </>
@@ -649,7 +788,9 @@ const DraftList: React.FC<DraftListProps> = ({ drafts, activeId, disabled, onOpe
     const { t, i18n } = useTranslation();
     const dateFormat = new Intl.DateTimeFormat(i18n.language, { month: "short", day: "numeric" });
     const status = (d: IdeaDraft) =>
-        d.post_sid ? t("match.ideas.published")
+        d.project_id ? (d.target_project_sid ? t("match.ideas.savedToProject") : t("match.ideas.becameProject"))
+            : d.target_project_sid ? t("match.ideas.stageForProject")
+            : d.post_sid ? t("match.ideas.published")
             : d.brief ? t("match.ideas.stageBrief")
                 : t("match.ideas.stageThinking", { n: (d.rounds?.length || 0) + (d.current ? 1 : 0) });
 
@@ -667,7 +808,7 @@ const DraftList: React.FC<DraftListProps> = ({ drafts, activeId, disabled, onOpe
                 <ul className="mt-3 space-y-2">
                     <AnimatePresence initial={false}>
                         {drafts.map((d) => {
-                            const title = (d.brief as IdeaBrief | null)?.title || d.idea || t("match.ideas.untitled");
+                            const title = d.project?.title || (d.brief as IdeaBrief | null)?.title || d.idea || t("match.ideas.untitled");
                             return (
                                 <motion.li
                                     key={d.id}
@@ -686,13 +827,16 @@ const DraftList: React.FC<DraftListProps> = ({ drafts, activeId, disabled, onOpe
                                             {status(d)} · {dateFormat.format(new Date(d.updated_at))}
                                         </p>
                                     </button>
-                                    <button
-                                        onClick={() => onDelete(d)}
-                                        disabled={disabled}
-                                        className="mt-1 text-xs text-gray-400 hover:text-red-600 disabled:opacity-50 lg:invisible lg:group-hover:visible lg:group-focus-within:visible"
-                                    >
-                                        {t("match.ideas.deleteDraft")}
-                                    </button>
+                                    {/* A draft that became a project is kept as the project's thinking record */}
+                                    {!d.project_id && (
+                                        <button
+                                            onClick={() => onDelete(d)}
+                                            disabled={disabled}
+                                            className="mt-1 text-xs text-gray-400 hover:text-red-600 disabled:opacity-50 lg:invisible lg:group-hover:visible lg:group-focus-within:visible"
+                                        >
+                                            {t("match.ideas.deleteDraft")}
+                                        </button>
+                                    )}
                                 </motion.li>
                             );
                         })}

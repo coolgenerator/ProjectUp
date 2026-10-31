@@ -21,7 +21,8 @@ from pathlib import Path
 from prompts.onboarding_prompts import (
     get_topic_suggestion_prompt,
     get_topic_elaboration_prompt,
-    get_project_details_prompt
+    get_project_details_prompt,
+    get_research_elaboration_chunked_prompts
 )
 from core.ai_provider import AIProvider
 
@@ -528,9 +529,13 @@ Output JSON only, no explanations."""
         selected_topic: Dict[str, Any],
         context: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Basic mode: Single AI call, fast response."""
+        """Basic mode: Single AI call, fast response. Uses chunked approach for research."""
 
-        # Get prompt template
+        # Use chunked approach for research projects to handle token limits
+        if project_type == "research":
+            return await self._elaborate_research_chunked(selected_topic, context)
+
+        # Get prompt template for other project types
         prompt_template = get_topic_elaboration_prompt(project_type)
 
         # Flatten context first
@@ -546,13 +551,12 @@ Output JSON only, no explanations."""
         # Format prompt
         prompt = prompt_template.format(**full_context)
 
-        # Call AI (use higher token limit for research projects due to detailed task breakdown)
-        max_tokens = 8192 if project_type == "research" else 4096
+        # Call AI with max allowed tokens (8192 is the Gemini limit)
         response = await self.ai_provider.generate_completion(
             prompt=prompt,
             system_prompt=self._get_system_prompt(project_type, "elaborate"),
             response_format="json",
-            max_tokens=max_tokens
+            max_tokens=8192
         )
 
         result = self._extract_json(response)
@@ -561,6 +565,71 @@ Output JSON only, no explanations."""
         result["topic_name"] = selected_topic.get("name")
 
         return result
+
+    async def _elaborate_research_chunked(
+        self,
+        selected_topic: Dict[str, Any],
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Chunked elaboration for research projects to handle token limits.
+
+        Makes two API calls:
+        1. Core research plan (background, methodology, etc.)
+        2. Timeline with detailed tasks
+
+        Then merges the results.
+        """
+        logger.info("[CHUNKED] Starting chunked research elaboration")
+
+        # Get chunked prompts
+        chunk1_template, chunk2_template = get_research_elaboration_chunked_prompts()
+
+        # Flatten context
+        flattened_context = self._flatten_context(context)
+
+        # Build full context
+        full_context = {
+            "topic_name": selected_topic.get("name"),
+            "topic_description": selected_topic.get("description"),
+            **flattened_context
+        }
+
+        system_prompt = self._get_system_prompt("research", "elaborate")
+
+        # Chunk 1: Core research plan
+        logger.info("[CHUNKED] Generating core research plan (chunk 1/2)")
+        chunk1_prompt = chunk1_template.format(**full_context)
+        chunk1_response = await self.ai_provider.generate_completion(
+            prompt=chunk1_prompt,
+            system_prompt=system_prompt,
+            response_format="json",
+            max_tokens=8192
+        )
+        chunk1_result = self._extract_json(chunk1_response)
+        logger.info("[CHUNKED] Core research plan generated successfully")
+
+        # Chunk 2: Timeline with tasks
+        logger.info("[CHUNKED] Generating timeline with tasks (chunk 2/2)")
+        chunk2_prompt = chunk2_template.format(**full_context)
+        chunk2_response = await self.ai_provider.generate_completion(
+            prompt=chunk2_prompt,
+            system_prompt=system_prompt,
+            response_format="json",
+            max_tokens=8192
+        )
+        chunk2_result = self._extract_json(chunk2_response)
+        logger.info("[CHUNKED] Timeline generated successfully")
+
+        # Merge results
+        merged_result = {**chunk1_result, **chunk2_result}
+
+        # Preserve the topic name
+        merged_result["topic_name"] = selected_topic.get("name")
+
+        logger.info("[CHUNKED] Research elaboration complete - merged both chunks")
+
+        return merged_result
 
     # ========================================================================
     # ENHANCED MODE (RAG + Chain-of-Thought)
@@ -1055,7 +1124,7 @@ Return enhanced plan."""
         return base + suffix
 
     def _extract_json(self, text: str) -> Dict[str, Any]:
-        """Extract JSON from AI response, handling markdown code blocks."""
+        """Extract JSON from AI response, handling markdown code blocks and truncation."""
         text = text.strip()
 
         # Remove markdown code blocks
@@ -1069,7 +1138,56 @@ Return enhanced plan."""
         try:
             return json.loads(text)
         except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse JSON: {text[:500]}...")  # Show more context
+            logger.error(f"Failed to parse JSON: {text[:500]}...")
             logger.error(f"Full response length: {len(text)} characters")
             logger.error(f"Last 200 characters: ...{text[-200:]}")
+
+            # Try to repair truncated JSON by closing open brackets
+            repaired_text = self._try_repair_json(text)
+            if repaired_text:
+                try:
+                    result = json.loads(repaired_text)
+                    logger.warning("Successfully repaired truncated JSON response")
+                    return result
+                except json.JSONDecodeError:
+                    pass
+
             raise ValueError(f"Invalid JSON response: {str(e)}")
+
+    def _try_repair_json(self, text: str) -> Optional[str]:
+        """Attempt to repair truncated JSON by closing open brackets."""
+        # Count open brackets
+        open_braces = text.count('{') - text.count('}')
+        open_brackets = text.count('[') - text.count(']')
+
+        if open_braces <= 0 and open_brackets <= 0:
+            return None  # Not a truncation issue
+
+        # Find the last complete key-value pair and truncate there
+        # Remove trailing incomplete content (after last comma or colon)
+        repaired = text.rstrip()
+
+        # Remove trailing incomplete value
+        while repaired and repaired[-1] not in '{}[],"0123456789nulltruefalse':
+            repaired = repaired[:-1]
+
+        # If ends with comma, remove it
+        if repaired.endswith(','):
+            repaired = repaired[:-1]
+
+        # If ends with colon (incomplete key-value), remove the key too
+        if repaired.endswith(':'):
+            # Find and remove the incomplete key
+            last_quote = repaired.rfind('"', 0, -1)
+            if last_quote > 0:
+                second_last_quote = repaired.rfind('"', 0, last_quote)
+                if second_last_quote >= 0:
+                    repaired = repaired[:second_last_quote].rstrip()
+                    if repaired.endswith(','):
+                        repaired = repaired[:-1]
+
+        # Close open brackets
+        repaired += ']' * open_brackets
+        repaired += '}' * open_braces
+
+        return repaired

@@ -1297,6 +1297,13 @@ func SubmitApplication(userID uint, postID uint, description string, role string
 
 // UpdateProjectStatus updates the status of a project and returns appropriate status text
 // This is used by various project status update endpoints (complete, archive, delete)
+// UnlinkIdeaDraft frees the idea a deleted project came from, so it is
+// editable again and can be published anew.
+func UnlinkIdeaDraft(db *gorm.DB, projectID uint) error {
+	return db.Model(&models.IdeaDraft{}).Where("project_id = ?", projectID).
+		Updates(map[string]interface{}{"project_id": nil, "post_sid": nil}).Error
+}
+
 func UpdateProjectStatus(projectSid string, userID uint, newStatus int) (string, int, error) {
 	// Find the project by SID
 	var project models.Project
@@ -1315,6 +1322,9 @@ func UpdateProjectStatus(projectSid string, userID uint, newStatus int) (string,
 	// Update the project status
 	if err := database.DB.Model(&project).Update("status", newStatus).Error; err != nil {
 		return "", 0, errors.New("failed to update project status")
+	}
+	if newStatus == 4 {
+		UnlinkIdeaDraft(database.DB, project.ProjectID)
 	}
 
 	// Return appropriate status text based on the status code
@@ -1438,6 +1448,12 @@ func DeleteProject(projectSid string, userID uint) error {
 	if err := tx.Exec("DELETE FROM project_posts WHERE project_id = ?", project.ProjectID).Error; err != nil {
 		tx.Rollback()
 		return fmt.Errorf("failed to delete project posts: %w", err)
+	}
+
+	// The idea it came from can be published again
+	if err := UnlinkIdeaDraft(tx, project.ProjectID); err != nil {
+		tx.Rollback()
+		return fmt.Errorf("failed to unlink idea draft: %w", err)
 	}
 
 	// 8. Finally, delete the project itself

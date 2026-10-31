@@ -16,6 +16,7 @@ func SetupIdeaMatchRoutes(router *gin.Engine) {
 		ideaGroup.POST("/shape", controllers.ShapeIdea())
 		ideaGroup.POST("/regenerate", controllers.RegenerateBriefField())
 		ideaGroup.POST("/materialize", controllers.MaterializeIdea())
+		ideaGroup.POST("/attach", controllers.AttachIdeaToProject())
 
 		ideaGroup.GET("/drafts", controllers.ListIdeaDrafts())
 		ideaGroup.POST("/drafts", controllers.CreateIdeaDraft())
@@ -45,6 +46,9 @@ func SetupIdeaMatchRoutes(router *gin.Engine) {
 		matchGroup.GET("/projects/:sid/team-chat", controllers.GetTeamChat())
 		matchGroup.POST("/projects/:sid/team-chat", controllers.PostTeamChatMessage())
 		matchGroup.DELETE("/projects/:sid/decisions/:id", controllers.DeleteDecision())
+		matchGroup.PUT("/projects/:sid/brief", controllers.UpdateProjectBrief())
+		matchGroup.POST("/projects/:sid/brief/regenerate", controllers.RegenerateProjectBriefField())
+		matchGroup.POST("/projects/:sid/roles", controllers.AddSuggestedRole())
 
 		// Matching profile, to-do counts and the applicant's own applications
 		matchGroup.GET("/profile", controllers.GetMatchProfile())

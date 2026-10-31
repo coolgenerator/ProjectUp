@@ -38,6 +38,10 @@ type Project struct {
 	Kickoff             datatypes.JSON `gorm:"type:jsonb" json:"kickoff,omitempty" swaggertype:"object"`                               // Kickoff checklist: item key -> done
 	SetupChecklist      datatypes.JSON `gorm:"type:jsonb;default:'[]'" json:"setup_checklist,omitempty" swaggertype:"array,object"` // Post-creation setup tasks
 	DurationWeeks       *int           `gorm:"type:int" json:"duration_weeks,omitempty" example:"8"` // Estimated project duration in weeks
+	// The project's brief (vision, problem, users, next steps, blockers); roles live on the recruiting post's spots
+	Brief          datatypes.JSON `gorm:"type:jsonb" json:"-" swaggertype:"object"`
+	BriefUpdatedAt *time.Time     `json:"brief_updated_at,omitempty"`
+	BriefUpdatedBy *uint          `json:"-"`
 
 	CreatedAt        time.Time      `gorm:"autoCreateTime" json:"created_at" example:"2024-02-16T12:34:56Z"`
 	UpdatedAt        time.Time      `gorm:"autoUpdateTime" json:"updated_at" example:"2024-02-17T14:45:22Z"`

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapPinIcon, TagIcon, ClockIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
+import { ArrowRight, Calendar, MapPin, Settings } from "lucide-react";
 import config from "../../config";
-import { statusLabels, visibilityLabels } from "../../types/project/statusMappings";
+import { coverGradient } from "./ProjectPostCard";
+import { Badge, Card, Tag, cx } from "../ui";
 
 const { AWS_BASE_URL } = config;
 
@@ -15,166 +17,107 @@ const canManageProject = (userRole?: string): boolean => {
     return userRole === 'owner' || userRole === 'admin';
 };
 
+const topicsOf = (project: any): string[] => {
+    if (Array.isArray(project.topics)) return project.topics;
+    if (Array.isArray(project.topic)) return project.topic;
+    if (typeof project.topic === 'string') {
+        try {
+            return JSON.parse(project.topic);
+        } catch {
+            return [];
+        }
+    }
+    return [];
+};
+
+// ProjectCard is a project the user owns or joined, on My Projects.
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
+    const [coverFailed, setCoverFailed] = useState(false);
+    const topics = topicsOf(project);
+    const open = () => navigate(`/project/${project.sid}/dashboard`);
+    const cover = project.cover && !coverFailed ? (project.cover.startsWith('http') ? project.cover : `${AWS_BASE_URL}${project.cover}`) : null;
 
-    // Format topics to handle different data structures
-    const getTopics = () => {
-        if (Array.isArray(project.topics)) {
-            return project.topics;
-        } else if (Array.isArray(project.topic)) {
-            return project.topic;
-        } else if (typeof project.topic === 'string') {
-            try {
-                return JSON.parse(project.topic);
-            } catch (e) {
-                return [];
-            }
-        }
-        return [];
-    };
+    const formatDate = (value?: string) => (value ? new Date(value).toLocaleDateString(i18n.language, { month: "short", day: "numeric" }) : "");
+    const dates = [formatDate(project.start_time), formatDate(project.end_time)].filter(Boolean).join(" – ");
 
-    const topics = getTopics();
-    const status = statusLabels[project.status] || { label: "Unknown", color: "bg-gray-100 text-gray-800" };
-    const visibility = visibilityLabels[project.visibility?.toLowerCase()] || { label: "Unknown", color: "text-gray-700" };
+    // Only states worth noticing get a badge; an active, published project needs none
+    const badges: { label: string; tone: "neutral" | "amber" | "blue" | "green" }[] = [];
+    if (project.status === 2) badges.push({ label: t("match.projectCard.archived"), tone: "amber" });
+    if (project.status === 3) badges.push({ label: t("match.projectCard.completed"), tone: "blue" });
+    if (project.visibility === "private") badges.push({ label: t("match.projectCard.private"), tone: "neutral" });
+    else if (!project.is_published) badges.push({ label: t("match.projectCard.draft"), tone: "neutral" });
 
     return (
-        <div className="bg-white dark:bg-slate-800 shadow-md rounded-lg hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col border border-gray-200 dark:border-slate-700">
-            {/* Header with cover image */}
-            <div className="relative h-32 bg-gray-200 dark:bg-slate-700 overflow-hidden">
-                {project.cover ? (
-                    <img
-                        src={project.cover.startsWith('http') ? project.cover : `${AWS_BASE_URL}${project.cover}`}
-                        alt={project.title}
-                        className="w-full h-full object-cover"
-                    />
-                ) : (
-                    <div className="flex items-center justify-center h-full bg-gradient-to-r from-blue-500 to-indigo-600">
-                        <span className="text-white text-xl font-bold">{project.title?.charAt(0) || 'P'}</span>
-                    </div>
-                )}
-
-                {/* Project type badge */}
-                <div className="absolute top-2 left-2">
-                    <span className="px-2 py-1 text-xs font-medium bg-white/90 dark:bg-slate-800/90 text-slate-900 dark:text-slate-100 rounded-full shadow-sm">
-                        {project.style || project.project_type || "Project"}
-                    </span>
-                </div>
-
-                {/* Project status badge */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm py-1.5 px-3">
-                    <div className="flex justify-between items-center gap-1 text-white text-xs">
-                        <div>
-                            <span className={`px-2 py-0.5 rounded-full ${status.color}`}>
-                                {status.label}
-                            </span>
+        <Card padded={false} interactive={!project.is_removed} className={cx("flex h-full flex-col overflow-hidden", project.is_removed && "opacity-70")}>
+            <button type="button" onClick={open} disabled={project.is_removed} className="block text-left disabled:cursor-default">
+                <div className="relative h-32 overflow-hidden">
+                    {cover ? (
+                        <img src={cover} alt="" className="h-full w-full object-cover" onError={() => setCoverFailed(true)} />
+                    ) : (
+                        <div className={`flex h-full items-center justify-center bg-gradient-to-br ${coverGradient(project.title || "")}`}>
+                            <span className="text-3xl font-bold text-white/90">{project.title?.charAt(0) || 'P'}</span>
                         </div>
-                        <div>
-                            {project.visibility === "private" ? (
-                                <span className={`px-2 py-0.5 rounded-full text-gray-700 bg-gray-100`}>
-                                    Private
-                                </span>
-                            ) : (
-                                <span className={`px-2 py-0.5 rounded-full ${project.is_published ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}>
-                                    {`${visibility.label} ${project.is_published ? "(Published)" : "(Draft)"}`}
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-4 flex-grow">
-                <h2 className="text-lg font-bold text-gray-800 dark:text-slate-100 mb-2 line-clamp-1">{project.title}</h2>
-
-                <p className="text-gray-600 dark:text-slate-300 text-sm mb-3 line-clamp-2">
-                    {project.description || "No description available."}
-                </p>
-
-                <div className="space-y-1.5 mb-3">
-                    {/* Time period */}
-                    <div className="flex items-start text-xs">
-                        <ClockIcon className="w-3.5 h-3.5 mt-0.5 mr-1.5 text-gray-400 dark:text-slate-500 flex-shrink-0" />
-                        <div className="text-gray-600 dark:text-slate-300">
-                            {project.start_time && (
-                                <span>From: {new Date(project.start_time).toLocaleDateString()}</span>
-                            )}
-                            {project.end_time && (
-                                <span className="block">To: {new Date(project.end_time).toLocaleDateString()}</span>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Location */}
-                    {project.location && (
-                        <div className="flex items-center text-xs">
-                            <MapPinIcon className="w-3.5 h-3.5 mr-1.5 text-gray-400 dark:text-slate-500 flex-shrink-0" />
-                            <span className="text-gray-600 dark:text-slate-300 truncate" title={project.location}>
-                                {project.location}
-                            </span>
+                    )}
+                    {badges.length > 0 && (
+                        <div className="absolute left-3 top-3 flex gap-1.5">
+                            {badges.map((b) => <Badge key={b.label} tone={b.tone} className="shadow-sm">{b.label}</Badge>)}
                         </div>
                     )}
                 </div>
-
-                {/* Topics */}
-                {topics.length > 0 && (
-                    <div className="mb-2">
-                        <div className="flex items-center mb-1">
-                            <TagIcon className="w-3.5 h-3.5 mr-1 text-gray-400 dark:text-slate-500" />
-                            <span className="text-xs text-gray-500 dark:text-slate-400">Topics</span>
+                <div className="p-4 pb-3">
+                    <h2 className="line-clamp-1 text-base font-semibold text-gray-900">{project.title}</h2>
+                    {project.description && <p className="mt-1 line-clamp-2 text-sm text-gray-600">{project.description}</p>}
+                    {(dates || project.location) && (
+                        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+                            {dates && <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" aria-hidden />{dates}</span>}
+                            {project.location && <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" aria-hidden />{project.location}</span>}
                         </div>
-                        <div className="flex flex-wrap gap-1">
-                            {topics.slice(0, 3).map((topic: string, index: number) => (
-                                <span
-                                    key={index}
-                                    className="inline-block bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded-full text-xs border border-blue-100 dark:border-blue-800"
-                                >
-                                    {topic}
-                                </span>
-                            ))}
-                            {topics.length > 3 && (
-                                <span className="inline-block bg-gray-50 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-1.5 py-0.5 rounded-full text-xs">
-                                    +{topics.length - 3}
-                                </span>
-                            )}
+                    )}
+                    {topics.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                            {topics.slice(0, 3).map((topic) => <Tag key={topic}>{topic}</Tag>)}
+                            {topics.length > 3 && <Tag>+{topics.length - 3}</Tag>}
                         </div>
-                    </div>
-                )}
-            </div>
+                    )}
+                </div>
+            </button>
 
-            {/* Action buttons */}
-            <div className="px-4 py-3 bg-gray-50 dark:bg-slate-700 border-t border-gray-100 dark:border-slate-600 mt-auto flex justify-between items-center">
+            <div className="mt-auto flex items-center gap-2 border-t border-gray-100 px-4 py-2.5">
                 {project.is_removed ? (
-                    /* Show message for removed members */
-                    <div className="w-full text-center">
-                        <span className="text-sm text-gray-500 dark:text-slate-400 italic">
-                            You were removed from this project
-                        </span>
-                    </div>
+                    <span className="w-full text-center text-sm italic text-gray-500">{t("match.projectCard.removed")}</span>
                 ) : (
-                    /* Show buttons for active members */
                     <>
+                        <span className="text-xs text-gray-500">
+                            {project.user_role === 'owner' ? t("match.projectCard.owner") : t("match.projectCard.member")}
+                        </span>
                         {canManageProject(project.user_role) && (
                             <button
                                 onClick={() => navigate(`/project/${project.sid}/dashboard?section=settings`)}
-                                className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white text-sm px-3 py-1.5 rounded transition-colors"
+                                className="ml-auto rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                                title={t("match.projectCard.manage")}
+                                aria-label={t("match.projectCard.manage")}
                             >
-                                Manage
+                                <Settings className="h-4 w-4" />
                             </button>
                         )}
                         <button
                             data-tour="project-dashboard-button"
                             data-project-sid={project.sid}
-                            onClick={() => navigate(`/project/${project.sid}/dashboard`)}
-                            className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white text-sm px-3 py-1.5 rounded transition-colors ml-auto"
+                            onClick={open}
+                            className={cx(
+                                "flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-50",
+                                !canManageProject(project.user_role) && "ml-auto"
+                            )}
                         >
-                            Dashboard
+                            {t("match.projectCard.open")}
+                            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                         </button>
                     </>
                 )}
             </div>
-        </div>
+        </Card>
     );
 };
 
