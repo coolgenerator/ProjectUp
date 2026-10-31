@@ -1,0 +1,52 @@
+{
+  "title": "Subscription & Billing",
+  "tabs": {
+    "overview": "Overview",
+    "payment": "Payment Methods",
+    "history": "Billing History"
+  },
+  "currentPlan": {
+    "title": "Current Plan",
+    "plan": "Plan",
+    "status": "Status",
+    "currentPeriod": "Current Period",
+    "noSubscription": "No active subscription",
+    "cancelNotice": "Your subscription will end on",
+    "upgradePlan": "Upgrade Plan",
+    "changePlan": "Change Plan",
+    "cancelSubscription": "Cancel Subscription",
+    "reactivate": "Reactivate Subscription"
+  },
+  "paymentMethods": {
+    "title": "Payment Methods",
+    "addMethod": "Add Payment Method",
+    "noMethods": "No payment methods on file",
+    "expires": "Expires",
+    "default": "Default"
+  },
+  "billingHistory": {
+    "title": "Billing History",
+    "date": "Date",
+    "description": "Description",
+    "amount": "Amount",
+    "status": "Status",
+    "invoice": "Invoice",
+    "download": "Download",
+    "noHistory": "No payment history available",
+    "subscriptionPayment": "Subscription payment"
+  },
+  "success": {
+    "title": "Payment Successful!",
+    "welcome": "Welcome to ProjectUp",
+    "whatNext": "What's next?",
+    "accountUpgraded": "Your account has been upgraded",
+    "accessFeatures": "You now have access to all premium features",
+    "receiptSent": "A receipt has been sent to your email",
+    "goToProjects": "Go to Projects",
+    "viewAccount": "View Account Settings",
+    "needHelp": "Need help?",
+    "contactSupport": "Contact Support"
+  },
+  "confirmCancel": "Are you sure you want to cancel your subscription? You will retain access until the end of your billing period.",
+  "processing": "Processing..."
+}

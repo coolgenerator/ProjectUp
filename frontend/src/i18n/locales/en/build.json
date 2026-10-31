@@ -1,0 +1,31 @@
+{
+  "title": "Build Your Project",
+  "subtitle": "Start with a template or create from scratch",
+  "templates": "Project Templates",
+  "fromScratch": "Start from Scratch",
+  "useTemplate": "Use This Template",
+  "customizeTemplate": "Customize Template",
+  "projectPlanning": "Project Planning",
+  "createMindmap": "Create Mindmap",
+  "defineGoals": "Define Goals",
+  "setMilestones": "Set Milestones",
+  "techStack": "Tech Stack",
+  "difficulty": "Difficulty",
+  "estimatedTime": "Estimated Time",
+  "features": "Features",
+  "beginner": "Beginner",
+  "intermediate": "Intermediate",
+  "advanced": "Advanced",
+  "categories": {
+    "web": "Web Development",
+    "mobile": "Mobile Development",
+    "ai": "AI & Machine Learning",
+    "game": "Game Development",
+    "data": "Data Science",
+    "blockchain": "Blockchain",
+    "iot": "IoT",
+    "cloud": "Cloud Computing",
+    "security": "Cybersecurity",
+    "design": "Design & UI/UX"
+  }
+}

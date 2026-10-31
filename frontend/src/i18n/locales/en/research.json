@@ -1,0 +1,61 @@
+{
+  "title": "Research Papers",
+  "subtitle": "Upload and manage your research papers",
+  "uploadPaper": "Upload Paper",
+  "searchPlaceholder": "Search papers...",
+  "noPapersYet": "No papers yet",
+  "noPapersFound": "No papers found",
+  "tryDifferentSearch": "Try a different search term",
+  "getStarted": "Upload your first research paper to get started",
+  "uploadFirstPaper": "Upload Your First Paper",
+  "intro": {
+    "hero": {
+      "title": "Research Management",
+      "description": "Organize, analyze, and collaborate on research papers with AI-powered insights. Transform how you manage academic literature.",
+      "showcaseAlt": "Research Management Interface"
+    },
+    "features": {
+      "uploadOrganize": {
+        "title": "Upload & Organize",
+        "description": "Easily upload PDF papers and organize them with tags, categories, and custom metadata."
+      },
+      "interactiveReader": {
+        "title": "Interactive Reader",
+        "description": "Read papers with an advanced PDF viewer featuring annotations, highlights, and note-taking."
+      },
+      "smartSearch": {
+        "title": "Smart Search",
+        "description": "Quickly find papers by title, author, keywords, or content with powerful search capabilities."
+      },
+      "aiAnalysis": {
+        "title": "AI Analysis",
+        "description": "Get AI-powered summaries, key insights, and methodology breakdowns for complex papers."
+      },
+      "collaborate": {
+        "title": "Collaborate",
+        "description": "Share papers, annotations, and insights with your research team seamlessly.",
+        "comingSoon": "Coming Soon"
+      },
+      "trackProgress": {
+        "title": "Track Progress",
+        "description": "Monitor your reading progress, citation counts, and organize papers by research projects.",
+        "comingSoon": "Coming Soon"
+      }
+    },
+    "cta": {
+      "title": "Ready to Transform Your Research?",
+      "description": "Join thousands of researchers using ProjectUp to manage their academic literature more effectively.",
+      "getStarted": "Get Started Free",
+      "signIn": "Sign In"
+    }
+  },
+  "upload": {
+    "selectFile": "Please select a PDF file",
+    "pdfOnly": "Only PDF files are allowed",
+    "uploadSuccess": "Paper uploaded successfully",
+    "uploadFailed": "Failed to upload paper"
+  },
+  "errors": {
+    "loadFailed": "Failed to load papers"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "title": "已保存内容",
+  "tabs": {
+    "all": "全部内容",
+    "general": "日常",
+    "project": "项目"
+  },
+  "empty": {
+    "noItems": "您没有保存任何内容。",
+    "noGeneral": "未找到已保存的日常帖子。",
+    "noProject": "未找到已保存的项目。"
+  },
+  "errors": {
+    "fetchFailed": "获取已保存内容失败"
+  }
+}

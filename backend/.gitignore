@@ -1,0 +1,47 @@
+# Go-specific rules
+bin/
+*.exe
+*.test
+vendor/
+logs/
+
+# Compiled Go binaries
+backend
+main
+server
+/projectup
+/app
+
+# PostgreSQL database files
+*.pgdata
+*.pgdump
+
+# Redis dump
+dump.rdb
+redis.conf
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Miscellaneous
+.DS_Store
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Backup files
+*.bak
+*.swp
+*.swo
+
+# Node
+node_modules/
+.env.test-account
+
+# Logs and local env files
+*.log
+.env.production

@@ -1,0 +1,13 @@
+{
+  "title": "Notifications",
+  "unreadCount": "You have {{count}} unread notification",
+  "unreadCountPlural": "You have {{count}} unread notifications",
+  "new": "New",
+  "earlier": "Earlier",
+  "view": "View",
+  "markRead": "Mark read",
+  "noNotifications": "All caught up!",
+  "noNotificationsDesc": "You don't have any notifications yet. We'll notify you when there's activity related to your account.",
+  "failedToFetch": "Failed to fetch notifications",
+  "failedToMark": "Failed to mark notification as read"
+}

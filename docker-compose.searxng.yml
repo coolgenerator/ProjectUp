@@ -1,0 +1,27 @@
+version: '3.8'
+
+# Standalone SearXNG setup for ProjectUp
+# This runs independently from other services
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: projectup-searxng
+    ports:
+      - "8888:8080"  # External port 8888, internal port 8080
+    volumes:
+      - ./searxng:/etc/searxng
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8888/
+      - SEARXNG_SECRET_KEY=${SEARXNG_SECRET_KEY:-ultrasecretkey}
+      # Disable rate limiting for local development
+      - SEARXNG_LIMITER=false
+    restart: unless-stopped
+
+# To run:
+# docker-compose -f docker-compose.searxng.yml up -d
+#
+# To test:
+# curl "http://localhost:8888/search?q=python&format=json"
+#
+# To use with ProjectUp:
+# export SEARXNG_URL=http://localhost:8888

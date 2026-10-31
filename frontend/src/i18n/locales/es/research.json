@@ -1,0 +1,61 @@
+{
+  "title": "Artículos de Investigación",
+  "subtitle": "Sube y gestiona tus artículos de investigación",
+  "uploadPaper": "Subir Artículo",
+  "searchPlaceholder": "Buscar artículos...",
+  "noPapersYet": "Aún no hay artículos",
+  "noPapersFound": "No se encontraron artículos",
+  "tryDifferentSearch": "Intenta con un término de búsqueda diferente",
+  "getStarted": "Sube tu primer artículo de investigación para comenzar",
+  "uploadFirstPaper": "Sube Tu Primer Artículo",
+  "intro": {
+    "hero": {
+      "title": "Gestión de Investigación",
+      "description": "Organiza, analiza y colabora en artículos de investigación con información impulsada por IA. Transforma cómo gestionas la literatura académica.",
+      "showcaseAlt": "Interfaz de Gestión de Investigación"
+    },
+    "features": {
+      "uploadOrganize": {
+        "title": "Subir y Organizar",
+        "description": "Sube fácilmente artículos en PDF y organízalos con etiquetas, categorías y metadatos personalizados."
+      },
+      "interactiveReader": {
+        "title": "Lector Interactivo",
+        "description": "Lee artículos con un visor de PDF avanzado que incluye anotaciones, resaltados y toma de notas."
+      },
+      "smartSearch": {
+        "title": "Búsqueda Inteligente",
+        "description": "Encuentra rápidamente artículos por título, autor, palabras clave o contenido con potentes capacidades de búsqueda."
+      },
+      "aiAnalysis": {
+        "title": "Análisis con IA",
+        "description": "Obtén resúmenes impulsados por IA, información clave y desglose de metodologías para artículos complejos."
+      },
+      "collaborate": {
+        "title": "Colaborar",
+        "description": "Comparte artículos, anotaciones e información con tu equipo de investigación sin problemas.",
+        "comingSoon": "Próximamente"
+      },
+      "trackProgress": {
+        "title": "Seguimiento del Progreso",
+        "description": "Monitorea tu progreso de lectura, conteos de citas y organiza artículos por proyectos de investigación.",
+        "comingSoon": "Próximamente"
+      }
+    },
+    "cta": {
+      "title": "¿Listo para Transformar Tu Investigación?",
+      "description": "Únete a miles de investigadores que usan ProjectUp para gestionar su literatura académica de manera más efectiva.",
+      "getStarted": "Comenzar Gratis",
+      "signIn": "Iniciar Sesión"
+    }
+  },
+  "upload": {
+    "selectFile": "Por favor selecciona un archivo PDF",
+    "pdfOnly": "Solo se permiten archivos PDF",
+    "uploadSuccess": "Artículo subido exitosamente",
+    "uploadFailed": "Error al subir artículo"
+  },
+  "errors": {
+    "loadFailed": "Error al cargar artículos"
+  }
+}

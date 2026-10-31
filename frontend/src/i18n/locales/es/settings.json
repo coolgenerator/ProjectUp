@@ -1,0 +1,214 @@
+{
+  "title": "Configuración",
+  "subtitle": "Gestiona tus preferencias",
+  "saveButton": "Guardar Configuración",
+  "saveSuccessMessage": "¡Configuración guardada exitosamente!",
+  "tabs": {
+    "general": "General",
+    "profile": "Perfil y Cuenta",
+    "account": "Cuenta",
+    "notifications": "Notificaciones",
+    "security": "Seguridad",
+    "aiSettings": "Configuración de IA",
+    "socialMedia": "Redes Sociales",
+    "appearance": "Apariencia",
+    "preferences": "Preferencias",
+    "modalWindows": "Ventanas Modales",
+    "applicationBehavior": "Comportamiento de la Aplicación",
+    "performance": "Rendimiento"
+  },
+  "account": {
+    "title": "Configuración de Cuenta",
+    "updateUsername": "Actualizar Nombre de Usuario",
+    "username": "Nombre de Usuario",
+    "checkingAvailability": "Verificando disponibilidad...",
+    "usernameAvailable": "Nombre de usuario disponible",
+    "usernameTaken": "El nombre de usuario ya está en uso",
+    "usernameError": "El nombre de usuario solo puede contener letras, números y guiones bajos",
+    "usernameMinLength": "El nombre de usuario debe tener al menos 3 caracteres",
+    "usernameHint": "El nombre de usuario solo puede contener letras, números y guiones bajos.",
+    "updating": "Actualizando...",
+    "updateUsernameButton": "Actualizar Nombre de Usuario",
+    "updateEmail": "Actualizar Correo Electrónico",
+    "currentEmail": "Correo Electrónico Actual",
+    "newEmail": "Nuevo Correo Electrónico",
+    "emailInUse": "El correo electrónico ya está en uso",
+    "invalidEmailFormat": "Formato de correo electrónico inválido",
+    "emailRequired": "El correo electrónico es requerido",
+    "checkingEmail": "Verificando disponibilidad del correo...",
+    "emailVerificationNote": "Nota: Necesitarás verificar tu nueva dirección de correo electrónico antes de que el cambio tenga efecto.",
+    "sendingVerification": "Enviando Verificación...",
+    "updateEmailButton": "Actualizar Correo Electrónico",
+    "usernameUpdateSuccess": "Nombre de usuario actualizado exitosamente",
+    "emailUpdateSuccess": "Solicitud de actualización de correo enviada. Por favor revisa tu bandeja de entrada para verificación.",
+    "updateFailed": "La actualización falló",
+    "deleteAccount": "Eliminar Cuenta"
+  },
+  "security": {
+    "title": "Configuración de Seguridad",
+    "changePassword": "Cambiar Contraseña",
+    "currentPassword": "Contraseña Actual",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
+    "passwordMismatch": "Las nuevas contraseñas no coinciden",
+    "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+    "passwordHint": "La contraseña debe tener al menos 8 caracteres.",
+    "changingPassword": "Actualizando...",
+    "changePasswordButton": "Cambiar Contraseña",
+    "passwordUpdateSuccess": "Contraseña actualizada exitosamente",
+    "passwordUpdateFailed": "Error al actualizar la contraseña",
+    "twoFactorAuth": "Autenticación de Dos Factores",
+    "enable2FA": "Habilitar 2FA",
+    "disable2FA": "Deshabilitar 2FA",
+    "sessions": "Sesiones Activas",
+    "viewSessions": "Ver todas las sesiones",
+    "logoutAll": "Cerrar sesión en todos los dispositivos",
+    "loginHistory": "Historial de Inicio de Sesión",
+    "viewHistory": "Ver historial de inicio de sesión"
+  },
+  "aiSettings": {
+    "title": "Configuración de API de IA",
+    "description": "Configura tus claves API para servicios de IA. Estas claves se almacenan de forma segura y se utilizan para funciones impulsadas por IA.",
+    "openaiKey": "Clave API de OpenAI",
+    "anthropicKey": "Clave API de Anthropic",
+    "googleAiKey": "Clave API de Google AI",
+    "saveApiKeys": "Guardar Claves API",
+    "apiKeysSaved": "Claves API guardadas"
+  },
+  "socialMedia": {
+    "title": "Conexiones de Redes Sociales",
+    "description": "Conecta tus cuentas de redes sociales para importar contenido y sincronizar tu actividad.",
+    "youtube": "YouTube",
+    "reddit": "Reddit",
+    "bilibili": "Bilibili",
+    "xiaohongshu": "Xiaohongshu",
+    "connect": "Conectar",
+    "disconnect": "Desconectar",
+    "connected": "Conectado",
+    "notConnected": "No Conectado"
+  },
+  "language": {
+    "title": "Preferencia de Idioma",
+    "description": "Elige tu idioma preferido para la interfaz",
+    "updating": "Actualizando preferencia de idioma...",
+    "options": {
+      "english": "Inglés",
+      "chinese": "Chino"
+    }
+  },
+  "displayName": {
+    "title": "Nombre a Mostrar",
+    "updateSuccess": "Preferencia de nombre a mostrar actualizada exitosamente",
+    "options": {
+      "firstName": "Nombre",
+      "preferredName": "Nombre Preferido",
+      "username": "Nombre de Usuario",
+      "fullName": "Nombre Completo"
+    }
+  },
+  "profile": {
+    "title": "Información de Perfil y Cuenta",
+    "subtitle": "Gestiona la configuración de tu perfil y detalles de cuenta"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "subtitle": "Gestiona cómo recibes notificaciones",
+    "deliveryMethods": "Métodos de Entrega de Notificaciones",
+    "deliveryMethodsDesc": "Elige cómo quieres recibir notificaciones",
+    "notificationTypes": "Sobre Qué Notificarte",
+    "notificationTypesDesc": "Selecciona sobre qué actividades quieres ser notificado",
+    "quickTip": "Consejo Rápido:",
+    "quickTipDesc": "Puedes personalizar cómo recibes notificaciones usando los métodos de entrega arriba, y elegir qué tipos de actividades quieres que te notifiquen abajo.",
+    "inApp": {
+      "title": "Notificaciones en la Aplicación",
+      "description": "Mostrar notificaciones dentro de la interfaz de la aplicación"
+    },
+    "email": {
+      "title": "Notificaciones por Correo",
+      "description": "Recibir notificaciones por correo electrónico a tu dirección registrada"
+    },
+    "push": {
+      "title": "Notificaciones Push",
+      "description": "Recibir notificaciones push del navegador incluso cuando la aplicación está cerrada"
+    },
+    "projectUpdates": {
+      "title": "Actualizaciones de Proyectos",
+      "description": "Cuando los proyectos que sigues reciben actualizaciones o nuevos hitos"
+    },
+    "comments": {
+      "title": "Comentarios",
+      "description": "Cuando alguien comenta en tus publicaciones o responde a tus comentarios"
+    },
+    "messages": {
+      "title": "Mensajes Directos",
+      "description": "Cuando recibes nuevos mensajes directos de otros usuarios"
+    }
+  },
+  "privacy": {
+    "title": "Privacidad de Cuenta",
+    "options": {
+      "public": "Público",
+      "private": "Privado",
+      "friendsOnly": "Solo Amigos"
+    },
+    "profileVisibility": "Visibilidad del Perfil",
+    "dataPrivacy": "Privacidad de Datos",
+    "blockedUsers": "Usuarios Bloqueados"
+  },
+  "appearance": {
+    "title": "Apariencia",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "auto": "Sistema",
+    "accentColor": "Color de Acento",
+    "fontSize": "Tamaño de Fuente",
+    "small": "Pequeño",
+    "medium": "Mediano",
+    "large": "Grande",
+    "animations": "Animaciones",
+    "reducedMotion": "Movimiento Reducido",
+    "colorScheme": "Elige tu esquema de color preferido",
+    "currentTheme": "Tema actual:",
+    "lightMode": "Modo Claro",
+    "darkMode": "Modo Oscuro",
+    "themePersistence": "Tu preferencia de tema se guarda automáticamente y persistirá entre sesiones."
+  },
+  "theme": {
+    "title": "Tema",
+    "options": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "auto": "Sistema"
+    }
+  },
+  "modals": {
+    "title": "Ventanas Modales",
+    "autoClose": "Cerrar automáticamente modales después de acción",
+    "enableAnimations": "Habilitar animaciones de modal",
+    "description": "Controla cómo se comportan las ventanas modales en la aplicación"
+  },
+  "behavior": {
+    "title": "Comportamiento de la Aplicación",
+    "autoRefresh": "Actualizar contenido automáticamente",
+    "confirmActions": "Confirmar antes de acciones destructivas"
+  },
+  "performance": {
+    "title": "Rendimiento",
+    "enableAnimations": "Habilitar animaciones",
+    "prefetchData": "Precargar datos para carga más rápida",
+    "description": "Ajusta la configuración de rendimiento según las capacidades de tu dispositivo"
+  },
+  "sidebar": {
+    "account": "Cuenta",
+    "profile": "Perfil",
+    "privacy": "Privacidad",
+    "notifications": "Notificaciones",
+    "appearance": "Apariencia",
+    "language": "Idioma",
+    "security": "Seguridad",
+    "billing": "Facturación",
+    "applications": "Aplicaciones",
+    "developer": "Desarrollador"
+  }
+}

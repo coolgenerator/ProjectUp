@@ -1,0 +1,214 @@
+{
+  "title": "Settings",
+  "subtitle": "Manage your preferences",
+  "saveButton": "Save Settings",
+  "saveSuccessMessage": "Settings saved successfully!",
+  "tabs": {
+    "general": "General",
+    "profile": "Profile & Account",
+    "account": "Account",
+    "notifications": "Notifications",
+    "security": "Security",
+    "aiSettings": "AI Settings",
+    "socialMedia": "Social Media",
+    "appearance": "Appearance",
+    "preferences": "Preferences",
+    "modalWindows": "Modal Windows",
+    "applicationBehavior": "Application Behavior",
+    "performance": "Performance"
+  },
+  "account": {
+    "title": "Account Settings",
+    "updateUsername": "Update Username",
+    "username": "Username",
+    "checkingAvailability": "Checking availability...",
+    "usernameAvailable": "Username available",
+    "usernameTaken": "Username is already taken",
+    "usernameError": "Username can only contain letters, numbers, and underscores",
+    "usernameMinLength": "Username must be at least 3 characters long",
+    "usernameHint": "Username can only contain letters, numbers, and underscores.",
+    "updating": "Updating...",
+    "updateUsernameButton": "Update Username",
+    "updateEmail": "Update Email",
+    "currentEmail": "Current Email",
+    "newEmail": "New Email",
+    "emailInUse": "Email is already in use",
+    "invalidEmailFormat": "Invalid email format",
+    "emailRequired": "Email is required",
+    "checkingEmail": "Checking email availability...",
+    "emailVerificationNote": "Note: You will need to verify your new email address before the change takes effect.",
+    "sendingVerification": "Sending Verification...",
+    "updateEmailButton": "Update Email",
+    "usernameUpdateSuccess": "Username updated successfully",
+    "emailUpdateSuccess": "Email update request sent. Please check your inbox for verification.",
+    "updateFailed": "Update failed",
+    "deleteAccount": "Delete Account"
+  },
+  "security": {
+    "title": "Security Settings",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "passwordMismatch": "New passwords do not match",
+    "passwordMinLength": "Password must be at least 8 characters long",
+    "passwordHint": "Password must be at least 8 characters long.",
+    "changingPassword": "Updating...",
+    "changePasswordButton": "Change Password",
+    "passwordUpdateSuccess": "Password updated successfully",
+    "passwordUpdateFailed": "Failed to update password",
+    "twoFactorAuth": "Two-Factor Authentication",
+    "enable2FA": "Enable 2FA",
+    "disable2FA": "Disable 2FA",
+    "sessions": "Active Sessions",
+    "viewSessions": "View all sessions",
+    "logoutAll": "Log out all devices",
+    "loginHistory": "Login History",
+    "viewHistory": "View login history"
+  },
+  "aiSettings": {
+    "title": "AI API Configuration",
+    "description": "Configure your API keys for AI services. These keys are stored securely and used for AI-powered features.",
+    "openaiKey": "OpenAI API Key",
+    "anthropicKey": "Anthropic API Key",
+    "googleAiKey": "Google AI API Key",
+    "saveApiKeys": "Save API Keys",
+    "apiKeysSaved": "API Keys saved"
+  },
+  "socialMedia": {
+    "title": "Social Media Connections",
+    "description": "Connect your social media accounts to import content and sync your activity.",
+    "youtube": "YouTube",
+    "reddit": "Reddit",
+    "bilibili": "Bilibili",
+    "xiaohongshu": "Xiaohongshu",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "notConnected": "Not Connected"
+  },
+  "language": {
+    "title": "Language Preference",
+    "description": "Choose your preferred language for the interface",
+    "updating": "Updating language preference...",
+    "options": {
+      "english": "English",
+      "chinese": "Chinese"
+    }
+  },
+  "displayName": {
+    "title": "Display Name",
+    "updateSuccess": "Display name preference updated successfully",
+    "options": {
+      "firstName": "First Name",
+      "preferredName": "Preferred Name",
+      "username": "Username",
+      "fullName": "Full Name"
+    }
+  },
+  "profile": {
+    "title": "Profile & Account Information",
+    "subtitle": "Manage your profile settings and account details"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Manage how you receive notifications",
+    "deliveryMethods": "Notification Delivery Methods",
+    "deliveryMethodsDesc": "Choose how you want to receive notifications",
+    "notificationTypes": "What to Notify You About",
+    "notificationTypesDesc": "Select which activities you want to be notified about",
+    "quickTip": "Quick Tip:",
+    "quickTipDesc": "You can customize how you receive notifications using the delivery methods above, and choose what types of activities you want to be notified about below.",
+    "inApp": {
+      "title": "In-App Notifications",
+      "description": "Show notifications within the application interface"
+    },
+    "email": {
+      "title": "Email Notifications",
+      "description": "Receive notifications via email to your registered address"
+    },
+    "push": {
+      "title": "Push Notifications",
+      "description": "Get browser push notifications even when the app is closed"
+    },
+    "projectUpdates": {
+      "title": "Project Updates",
+      "description": "When projects you follow receive updates or new milestones"
+    },
+    "comments": {
+      "title": "Comments",
+      "description": "When someone comments on your posts or replies to your comments"
+    },
+    "messages": {
+      "title": "Direct Messages",
+      "description": "When you receive new direct messages from other users"
+    }
+  },
+  "privacy": {
+    "title": "Account Privacy",
+    "options": {
+      "public": "Public",
+      "private": "Private",
+      "friendsOnly": "Friends Only"
+    },
+    "profileVisibility": "Profile Visibility",
+    "dataPrivacy": "Data Privacy",
+    "blockedUsers": "Blocked Users"
+  },
+  "appearance": {
+    "title": "Appearance",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "System",
+    "accentColor": "Accent Color",
+    "fontSize": "Font Size",
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large",
+    "animations": "Animations",
+    "reducedMotion": "Reduced Motion",
+    "colorScheme": "Choose your preferred color scheme",
+    "currentTheme": "Current theme:",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "themePersistence": "Your theme preference is automatically saved and will persist across sessions."
+  },
+  "theme": {
+    "title": "Theme",
+    "options": {
+      "light": "Light",
+      "dark": "Dark",
+      "auto": "System"
+    }
+  },
+  "modals": {
+    "title": "Modal Windows",
+    "autoClose": "Auto-close modals after action",
+    "enableAnimations": "Enable modal animations",
+    "description": "Control how modal windows behave in the application"
+  },
+  "behavior": {
+    "title": "Application Behavior",
+    "autoRefresh": "Auto-refresh content",
+    "confirmActions": "Confirm before destructive actions"
+  },
+  "performance": {
+    "title": "Performance",
+    "enableAnimations": "Enable animations",
+    "prefetchData": "Prefetch data for faster loading",
+    "description": "Adjust performance settings based on your device capabilities"
+  },
+  "sidebar": {
+    "account": "Account",
+    "profile": "Profile",
+    "privacy": "Privacy",
+    "notifications": "Notifications",
+    "appearance": "Appearance",
+    "language": "Language",
+    "security": "Security",
+    "billing": "Billing",
+    "applications": "Applications",
+    "developer": "Developer"
+  }
+}

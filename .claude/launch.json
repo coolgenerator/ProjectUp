@@ -1,0 +1,24 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "demo",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["demo/start.sh"],
+      "port": 5173,
+      "autoPort": false
+    },
+    {
+      "name": "demo-backend",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "source demo/demo.env && source demo/openrouter.env && cd backend && go run ."],
+      "port": 8080
+    },
+    {
+      "name": "demo-frontend",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "source demo/demo.env && cd frontend && npm run dev -- --port 5173"],
+      "port": 5173
+    }
+  ]
+}

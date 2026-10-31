@@ -1,0 +1,193 @@
+/* Timeline View Custom Styles */
+
+/* Target the actual gantt-task-react library elements */
+.gantt-container [class*="barWrapper"] {
+  position: relative;
+}
+
+/* Enhance task bar hover state with subtle brightness */
+.gantt-container [class*="bar"]:hover {
+  filter: brightness(1.05);
+  cursor: pointer;
+}
+
+/* Prevent text selection while dragging */
+.gantt-container.dragging {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Cursor change during dependency creation */
+.gantt-container.dragging * {
+  cursor: crosshair !important;
+}
+
+/* Make sure the right edge is easier to click */
+.gantt-container [class*="barWrapper"] {
+  cursor: default;
+}
+
+.gantt-container [class*="barWrapper"]:hover {
+  cursor: pointer;
+}
+
+/* Specific targeting for the right 25px */
+.gantt-container svg rect {
+  cursor: default;
+}
+
+.gantt-container svg rect:hover {
+  filter: brightness(1.05);
+}
+
+/* Weekend shading */
+.gantt-container .weekend-highlight {
+  fill: rgba(100, 116, 139, 0.04);
+  pointer-events: none;
+}
+
+/* Improve overall gantt appearance */
+.gantt-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+/* Grid lines - softer color */
+.gantt-container svg line[stroke="#e0e0e0"] {
+  stroke: #e5e7eb !important;
+}
+
+/* Today marker */
+.gantt-container .today-marker {
+  stroke: #3b82f6;
+  stroke-width: 2.5;
+  stroke-dasharray: 6, 4;
+  opacity: 0.6;
+}
+
+/* Smooth scrolling */
+.gantt-container {
+  scroll-behavior: smooth;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/* Custom scrollbar for better UX */
+.gantt-container::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.gantt-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 5px;
+}
+
+.gantt-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 5px;
+}
+
+.gantt-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Task bar improvements */
+.gantt-container svg g[class*="_barWrapper"] rect {
+  transition: filter 0.15s ease;
+}
+
+/* Header styling improvements */
+.gantt-container svg text {
+  font-weight: 500;
+}
+
+/* Today column highlight */
+.gantt-container .today-column {
+  fill: rgba(59, 130, 246, 0.05);
+  pointer-events: none;
+}
+
+/* Hide placeholder tasks used for infinite scrolling */
+.gantt-container g[class*="barWrapper"] rect[fill="transparent"],
+.gantt-container g[class*="barWrapper"] rect[style*="transparent"] {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Hide placeholder task rows entirely */
+.gantt-container svg > g:first-child,
+.gantt-container svg > g:last-child {
+  /* These might be the placeholder tasks - hide if they have no visible content */
+}
+
+/* Alternative: use data attributes to hide placeholders */
+.gantt-container [data-task-id="__placeholder_start__"],
+.gantt-container [data-task-id="__placeholder_end__"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Weekend task shadow - darker overlay for tasks on weekends */
+.gantt-container .weekend-task-shadow {
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Make weekend tasks more prominent on hover */
+.gantt-container g[class*="barWrapper"]:hover .weekend-task-shadow {
+  opacity: 0.8;
+}
+
+/* Drag handle overlay - make it more visible */
+.gantt-container .drag-handle-overlay {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  transition: all 0.2s ease;
+}
+
+/* Enhance drag handle visibility on hover */
+.gantt-container g[class*="barWrapper"]:hover .drag-handle-overlay {
+  filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.4));
+}
+
+/* Cursor change when hovering over task bars with drag handles */
+.gantt-container g[class*="barWrapper"]:hover {
+  cursor: pointer;
+}
+
+/* Custom dependency arrows styling */
+.gantt-container .dependency-group {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+/* Hover state - only change color, not size */
+.gantt-container .dependency-group:hover .dependency-main {
+  stroke: #ea580c;
+  transition: stroke 0.2s ease;
+}
+
+.gantt-container .dependency-group:hover .dependency-shadow {
+  opacity: 0.2;
+  transition: opacity 0.2s ease;
+}
+
+/* Selected state - only change color, not size (same as hover) */
+.gantt-container .dependency-group.selected .dependency-main {
+  stroke: #ea580c;
+}
+
+.gantt-container .dependency-group.selected .dependency-shadow {
+  opacity: 0.25;
+}
+
+.gantt-container .dependency-group.selected .dependency-circle {
+  fill: #ea580c;
+}
+
+.gantt-container .custom-dependency-arrows {
+  pointer-events: none;
+}

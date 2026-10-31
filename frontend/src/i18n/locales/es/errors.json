@@ -1,0 +1,12 @@
+{
+  "404": "Página No Encontrada",
+  "500": "Error Interno del Servidor",
+  "networkError": "Error de Red",
+  "unauthorized": "Acceso No Autorizado",
+  "forbidden": "Prohibido",
+  "badRequest": "Solicitud Incorrecta",
+  "timeout": "Tiempo de Espera Agotado",
+  "somethingWentWrong": "Algo salió mal",
+  "tryAgain": "Por favor intenta de nuevo",
+  "contactSupport": "Contactar Soporte"
+}

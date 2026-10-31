@@ -1,0 +1,269 @@
+name: AI Service CI/CD
+
+on:
+  # Only run on pushes to main (including merged PRs)
+  push:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: pytest tests/ -v --cov=. --cov-report=term-missing
+
+    - name: Run linting
+      continue-on-error: true
+      run: |
+        pip install flake8 black isort
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        black --check .
+        isort --check-only .
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create deployment package
+      run: |
+        mkdir -p deployment
+        cp -r config core database middleware models prompts routes services storage streaming tests tools utils workflows *.py requirements.txt ai-services.service deploy_setup.sh deployment/
+        tar -czf ai-service.tar.gz deployment/
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ai-service-package
+        path: ai-service.tar.gz
+        retention-days: 7
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    environment:
+      name: production
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ai-service-package
+
+    - name: Deploy to EC2 via SSH
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_AI_SERVICE_SSH_PRIVATE_KEY }}
+        HOST: ${{ secrets.EC2_AI_SERVICE_HOST }}
+        USER: ${{ secrets.EC2_AI_SERVICE_USER }}
+        DEPLOY_PATH: ${{ secrets.EC2_AI_SERVICE_DEPLOY_PATH }}
+        SERVICE_NAME: ${{ secrets.EC2_AI_SERVICE_SERVICE_NAME }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+
+        # Create deployment directory with correct ownership and permissions
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          sudo mkdir -p $DEPLOY_PATH && \
+          sudo chown -R $USER:$USER $DEPLOY_PATH && \
+          sudo chmod -R 755 $DEPLOY_PATH"
+
+        # Stop the service before deploying
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          sudo systemctl stop $SERVICE_NAME || true"
+
+        # Copy the deployment package to the server
+        scp -i private_key.pem -o StrictHostKeyChecking=no ai-service.tar.gz $USER@$HOST:$DEPLOY_PATH/
+
+        # Extract and setup the service
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          cd $DEPLOY_PATH && \
+          tar -xzf ai-service.tar.gz && \
+          rm -rf config core database middleware models prompts routes services storage streaming tests tools utils workflows *.py && \
+          mv deployment/* . && \
+          rmdir deployment && \
+          rm ai-service.tar.gz"
+
+        # Copy .env file if it exists in GitHub secrets
+        # Write secret using echo with -e to interpret escape sequences
+        echo -n '${{ secrets.AI_SERVICE_ENV_FILE }}' > .env.production 2>/dev/null || echo -n '' > .env.production
+
+        if [ -s .env.production ]; then
+          echo "📝 Deploying .env file from GitHub secrets..."
+          scp -i private_key.pem -o StrictHostKeyChecking=no .env.production $USER@$HOST:$DEPLOY_PATH/.env
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+            sudo chown $USER:$USER $DEPLOY_PATH/.env && \
+            sudo chmod 600 $DEPLOY_PATH/.env"
+          rm -f .env.production
+          echo "✅ .env file deployed successfully"
+        else
+          echo "ℹ️  No .env file in GitHub secrets - creating minimal .env"
+          echo "   Set AI_SERVICE_ENV_FILE secret to deploy full .env in future"
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+            touch $DEPLOY_PATH/.env && \
+            sudo chown $USER:$USER $DEPLOY_PATH/.env && \
+            sudo chmod 600 $DEPLOY_PATH/.env"
+        fi
+
+        # Deploy Google Cloud service account credentials
+        # Note: GOOGLE_CLIENT_SECRET is for OAuth (user auth), not for service accounts
+        # We need GCP_SERVICE_ACCOUNT_KEY for Vertex AI server-to-server authentication
+
+        # Write secret to temp file first to avoid bash expansion issues
+        echo "🔍 Checking GCP_SERVICE_ACCOUNT_KEY secret..."
+        echo -n '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > google_credentials_temp.txt 2>/dev/null || echo -n '' > google_credentials_temp.txt
+
+        if [ ! -s google_credentials_temp.txt ]; then
+          echo "❌ Secret GCP_SERVICE_ACCOUNT_KEY is empty or not accessible"
+          echo "   Please verify the secret is set in: Settings > Secrets and variables > Actions"
+          echo "   Repository: ${{ github.repository }}"
+        else
+          echo "✓ Secret GCP_SERVICE_ACCOUNT_KEY is accessible"
+          SECRET_LENGTH=$(wc -c < google_credentials_temp.txt)
+          echo "   Secret length: $SECRET_LENGTH characters"
+
+          # Check first character to determine format
+          FIRST_CHAR=$(head -c 1 google_credentials_temp.txt)
+          echo "   First character: '$FIRST_CHAR'"
+
+          # If starts with '{', it's JSON, otherwise assume base64
+          if [ "$FIRST_CHAR" = "{" ]; then
+            echo "   Format: JSON detected (starts with '{')"
+            mv google_credentials_temp.txt google_credentials.json
+          else
+            echo "   Format: Base64 detected, decoding..."
+            base64 -d google_credentials_temp.txt > google_credentials.json 2>/dev/null || echo -n '' > google_credentials.json
+            rm -f google_credentials_temp.txt
+          fi
+        fi
+
+        # Validate JSON format (helps debug formatting issues)
+        if [ -s google_credentials.json ]; then
+          echo "📝 Deploying Google Cloud service account credentials..."
+
+          # Validate JSON syntax using Python
+          if python3 -c "import json; json.load(open('google_credentials.json'))" 2>/dev/null; then
+            echo "✓ JSON validation passed"
+          else
+            echo "⚠️  Warning: Credential file may not be valid JSON"
+            echo "First 200 characters of credential file:"
+            head -c 200 google_credentials.json
+          fi
+
+          # Upload credentials to server and set in .env as single-line JSON
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+            mkdir -p $DEPLOY_PATH/config"
+          scp -i private_key.pem -o StrictHostKeyChecking=no google_credentials.json $USER@$HOST:$DEPLOY_PATH/config/credential.json
+
+          # Set proper permissions
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+            sudo chown $USER:$USER $DEPLOY_PATH/config/credential.json && \
+            sudo chmod 600 $DEPLOY_PATH/config/credential.json"
+
+          # Set GOOGLE_APPLICATION_CREDENTIALS path in .env
+          # Also set GCP_SERVICE_ACCOUNT_KEY as JSON string (for alternate initialization methods)
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+            sed -i '/^GCP_SERVICE_ACCOUNT_KEY=/d' $DEPLOY_PATH/.env && \
+            sed -i '/^GOOGLE_APPLICATION_CREDENTIALS=/d' $DEPLOY_PATH/.env && \
+            echo \"GCP_SERVICE_ACCOUNT_KEY=\$(cat $DEPLOY_PATH/config/credential.json | tr -d '\n')\" >> $DEPLOY_PATH/.env && \
+            echo \"GOOGLE_APPLICATION_CREDENTIALS=$DEPLOY_PATH/config/credential.json\" >> $DEPLOY_PATH/.env"
+
+          # Clean up local credentials file
+          rm -f google_credentials.json
+
+          echo "✅ Google Cloud service account credentials deployed successfully"
+        else
+          echo "⚠️  No GCP service account credentials in GitHub secrets"
+          echo "   Set GCP_SERVICE_ACCOUNT_KEY secret for Vertex AI access"
+          echo "   (Note: GOOGLE_CLIENT_SECRET is for OAuth, not for Vertex AI)"
+        fi
+
+        # Run deployment setup script
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          chmod +x $DEPLOY_PATH/deploy_setup.sh && \
+          $DEPLOY_PATH/deploy_setup.sh"
+
+        rm -f private_key.pem
+
+  generate-docs:
+    name: Generate API Documentation
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Generate OpenAPI docs
+      run: |
+        python -c "from main import app; import json; print(json.dumps(app.openapi()))" > openapi.json
+
+    - name: Upload docs artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: openapi-docs
+        path: openapi.json
+        retention-days: 7

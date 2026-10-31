@@ -1,0 +1,425 @@
+"""
+Vector Store Manager
+Manages ChromaDB vector store for semantic search and RAG
+"""
+
+import logging
+import uuid
+from typing import List, Dict, Any, Optional, Tuple
+from pathlib import Path
+import chromadb
+from chromadb.config import Settings
+from chromadb.utils import embedding_functions
+
+logger = logging.getLogger(__name__)
+
+
+class VectorStoreManager:
+    """
+    Manages vector store operations using ChromaDB
+
+    Features:
+    - Document storage with embeddings
+    - Semantic search
+    - Project-based collections
+    - Metadata filtering
+    - Citation tracking
+    """
+
+    def __init__(
+        self,
+        persist_directory: str = "./chroma_db",
+        embedding_model: str = "all-MiniLM-L6-v2"
+    ):
+        """
+        Initialize vector store manager
+
+        Args:
+            persist_directory: Where to store the vector database
+            embedding_model: Sentence transformer model for embeddings
+        """
+        self.persist_directory = Path(persist_directory)
+        self.persist_directory.mkdir(parents=True, exist_ok=True)
+
+        # Initialize ChromaDB client
+        self.client = chromadb.PersistentClient(
+            path=str(self.persist_directory),
+            settings=Settings(
+                anonymized_telemetry=False,
+                allow_reset=True
+            )
+        )
+
+        # Initialize embedding function
+        self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+            model_name=embedding_model
+        )
+
+        logger.info(f"Vector store initialized at {self.persist_directory}")
+
+    def get_or_create_collection(
+        self,
+        project_id: str,
+        collection_type: str = "documents"
+    ) -> chromadb.Collection:
+        """
+        Get or create a collection for a project
+
+        Args:
+            project_id: Project identifier
+            collection_type: Type of collection (documents, code, conversations)
+
+        Returns:
+            ChromaDB collection
+        """
+        collection_name = f"{project_id}_{collection_type}"
+
+        try:
+            collection = self.client.get_or_create_collection(
+                name=collection_name,
+                embedding_function=self.embedding_function,
+                metadata={"project_id": project_id, "type": collection_type}
+            )
+            logger.info(f"Using collection: {collection_name}")
+            return collection
+        except Exception as e:
+            logger.error(f"Error creating collection {collection_name}: {e}")
+            raise
+
+    def add_documents(
+        self,
+        project_id: str,
+        documents: List[str],
+        metadatas: List[Dict[str, Any]],
+        ids: Optional[List[str]] = None,
+        collection_type: str = "documents"
+    ) -> List[str]:
+        """
+        Add documents to the vector store
+
+        Args:
+            project_id: Project identifier
+            documents: List of document texts
+            metadatas: List of metadata dicts for each document
+            ids: Optional list of document IDs
+            collection_type: Type of collection
+
+        Returns:
+            List of document IDs
+        """
+        if not documents:
+            return []
+
+        if ids is None:
+            ids = [str(uuid.uuid4()) for _ in documents]
+
+        collection = self.get_or_create_collection(project_id, collection_type)
+
+        try:
+            collection.add(
+                documents=documents,
+                metadatas=metadatas,
+                ids=ids
+            )
+            logger.info(f"Added {len(documents)} documents to {project_id}_{collection_type}")
+            return ids
+        except Exception as e:
+            logger.error(f"Error adding documents: {e}")
+            raise
+
+    def semantic_search(
+        self,
+        project_id: str,
+        query: str,
+        n_results: int = 5,
+        collection_type: str = "documents",
+        where: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Perform semantic search
+
+        Args:
+            project_id: Project identifier
+            query: Search query
+            n_results: Number of results to return
+            collection_type: Type of collection to search
+            where: Metadata filters
+
+        Returns:
+            Dict with documents, metadatas, distances, and ids
+        """
+        collection = self.get_or_create_collection(project_id, collection_type)
+
+        try:
+            results = collection.query(
+                query_texts=[query],
+                n_results=n_results,
+                where=where
+            )
+
+            # Format results
+            formatted_results = {
+                "documents": results["documents"][0] if results["documents"] else [],
+                "metadatas": results["metadatas"][0] if results["metadatas"] else [],
+                "distances": results["distances"][0] if results["distances"] else [],
+                "ids": results["ids"][0] if results["ids"] else []
+            }
+
+            logger.info(f"Found {len(formatted_results['documents'])} results for query")
+            return formatted_results
+
+        except Exception as e:
+            logger.error(f"Error in semantic search: {e}")
+            return {
+                "documents": [],
+                "metadatas": [],
+                "distances": [],
+                "ids": []
+            }
+
+    def get_relevant_context(
+        self,
+        project_id: str,
+        query: str,
+        max_chunks: int = 5,
+        collection_type: str = "documents"
+    ) -> List[Dict[str, Any]]:
+        """
+        Get relevant context chunks for a query
+
+        Args:
+            project_id: Project identifier
+            query: User query
+            max_chunks: Maximum number of chunks to return
+            collection_type: Type of collection
+
+        Returns:
+            List of context chunks with metadata
+        """
+        results = self.semantic_search(
+            project_id=project_id,
+            query=query,
+            n_results=max_chunks,
+            collection_type=collection_type
+        )
+
+        context_chunks = []
+        for i, (doc, metadata, distance) in enumerate(zip(
+            results["documents"],
+            results["metadatas"],
+            results["distances"]
+        )):
+            context_chunks.append({
+                "content": doc,
+                "metadata": metadata,
+                "relevance_score": 1 - distance,  # Convert distance to similarity
+                "rank": i + 1,
+                "source": metadata.get("source", "unknown"),
+                "chunk_id": metadata.get("chunk_id", ""),
+                "document_id": metadata.get("document_id", "")
+            })
+
+        return context_chunks
+
+    def delete_document(
+        self,
+        project_id: str,
+        document_id: str,
+        collection_type: str = "documents"
+    ) -> bool:
+        """
+        Delete a document and all its chunks
+
+        Args:
+            project_id: Project identifier
+            document_id: Document identifier
+            collection_type: Type of collection
+
+        Returns:
+            Success status
+        """
+        collection = self.get_or_create_collection(project_id, collection_type)
+
+        try:
+            # Get all chunks for this document
+            results = collection.get(
+                where={"document_id": document_id}
+            )
+
+            if results["ids"]:
+                collection.delete(ids=results["ids"])
+                logger.info(f"Deleted {len(results['ids'])} chunks for document {document_id}")
+                return True
+            else:
+                logger.warning(f"No chunks found for document {document_id}")
+                return False
+
+        except Exception as e:
+            logger.error(f"Error deleting document: {e}")
+            return False
+
+    def get_collection_stats(
+        self,
+        project_id: str,
+        collection_type: str = "documents"
+    ) -> Dict[str, Any]:
+        """
+        Get statistics about a collection
+
+        Args:
+            project_id: Project identifier
+            collection_type: Type of collection
+
+        Returns:
+            Statistics dict
+        """
+        collection = self.get_or_create_collection(project_id, collection_type)
+
+        try:
+            count = collection.count()
+
+            # Get unique documents
+            all_data = collection.get()
+            unique_docs = set()
+            if all_data["metadatas"]:
+                for metadata in all_data["metadatas"]:
+                    if "document_id" in metadata:
+                        unique_docs.add(metadata["document_id"])
+
+            return {
+                "total_chunks": count,
+                "unique_documents": len(unique_docs),
+                "collection_name": collection.name,
+                "project_id": project_id,
+                "collection_type": collection_type
+            }
+        except Exception as e:
+            logger.error(f"Error getting collection stats: {e}")
+            return {
+                "total_chunks": 0,
+                "unique_documents": 0,
+                "error": str(e)
+            }
+
+    def update_document_metadata(
+        self,
+        project_id: str,
+        document_id: str,
+        new_metadata: Dict[str, Any],
+        collection_type: str = "documents"
+    ) -> bool:
+        """
+        Update metadata for all chunks of a document
+
+        Args:
+            project_id: Project identifier
+            document_id: Document identifier
+            new_metadata: New metadata to merge
+            collection_type: Type of collection
+
+        Returns:
+            Success status
+        """
+        collection = self.get_or_create_collection(project_id, collection_type)
+
+        try:
+            # Get all chunks for this document
+            results = collection.get(
+                where={"document_id": document_id}
+            )
+
+            if not results["ids"]:
+                logger.warning(f"No chunks found for document {document_id}")
+                return False
+
+            # Update each chunk's metadata
+            updated_metadatas = []
+            for metadata in results["metadatas"]:
+                updated_metadata = {**metadata, **new_metadata}
+                updated_metadatas.append(updated_metadata)
+
+            collection.update(
+                ids=results["ids"],
+                metadatas=updated_metadatas
+            )
+
+            logger.info(f"Updated metadata for {len(results['ids'])} chunks")
+            return True
+
+        except Exception as e:
+            logger.error(f"Error updating metadata: {e}")
+            return False
+
+    def search_with_filters(
+        self,
+        project_id: str,
+        query: str,
+        filters: Dict[str, Any],
+        n_results: int = 5,
+        collection_type: str = "documents"
+    ) -> List[Dict[str, Any]]:
+        """
+        Search with metadata filters
+
+        Args:
+            project_id: Project identifier
+            query: Search query
+            filters: Metadata filters (e.g., {"file_type": "pdf", "category": "technical"})
+            n_results: Number of results
+            collection_type: Type of collection
+
+        Returns:
+            List of matching documents
+        """
+        results = self.semantic_search(
+            project_id=project_id,
+            query=query,
+            n_results=n_results,
+            collection_type=collection_type,
+            where=filters
+        )
+
+        return self._format_search_results(results)
+
+    def _format_search_results(self, results: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Format search results into a clean list"""
+        formatted = []
+        for doc, metadata, distance, doc_id in zip(
+            results["documents"],
+            results["metadatas"],
+            results["distances"],
+            results["ids"]
+        ):
+            formatted.append({
+                "id": doc_id,
+                "content": doc,
+                "metadata": metadata,
+                "relevance_score": 1 - distance,
+                "source": metadata.get("source", "unknown")
+            })
+        return formatted
+
+    def clear_collection(
+        self,
+        project_id: str,
+        collection_type: str = "documents"
+    ) -> bool:
+        """
+        Clear all documents from a collection
+
+        Args:
+            project_id: Project identifier
+            collection_type: Type of collection
+
+        Returns:
+            Success status
+        """
+        collection_name = f"{project_id}_{collection_type}"
+
+        try:
+            self.client.delete_collection(name=collection_name)
+            logger.info(f"Cleared collection: {collection_name}")
+            return True
+        except Exception as e:
+            logger.error(f"Error clearing collection: {e}")
+            return False

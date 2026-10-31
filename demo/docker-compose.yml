@@ -1,0 +1,57 @@
+# Local infra for the ProjectUp demo. Ports are offset (5433/6380/9010) so they
+# don't collide with other local Postgres/Redis/MinIO instances.
+name: projectup-demo
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: projectup
+      POSTGRES_PASSWORD: projectup
+      POSTGRES_DB: projectup_demo
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+
+  # S3-compatible storage for uploads. Console: http://localhost:9011
+  minio:
+    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: projectup
+      MINIO_ROOT_PASSWORD: projectup-minio
+    ports:
+      - "9010:9000"
+      - "9011:9001"
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      retries: 30
+
+  # Creates the bucket. MinIO ignores per-object ACLs, so public reads are
+  # granted only on the prefixes the backend uploads as public (media/, avatar/);
+  # papers/ and resources/ stay private and are served via presigned URLs.
+  minio-init:
+    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      sh -c "mc alias set local http://minio:9000 projectup projectup-minio &&
+             mc mb --ignore-existing local/projectup &&
+             mc anonymous set none local/projectup &&
+             mc anonymous set download local/projectup/media &&
+             mc anonymous set download local/projectup/avatar"
+    restart: "no"
+
+volumes:
+  pgdata:
+  miniodata:

@@ -1,0 +1,36 @@
+{
+  "about": {
+    "title": "关于 ProjectUp",
+    "description1": "ProjectUp 通过结合人类创造力与 AI 智能的结构化工作流程，将您转变为 AI 驱动的项目经理。",
+    "description2": "研究想法、验证概念、制定可行计划。在智能辅助下自信地构建出色的项目。"
+  },
+  "platform": {
+    "title": "平台",
+    "dailyPost": "每日动态",
+    "exploreProjects": "探索项目",
+    "research": "研究",
+    "findBuddy": "寻找伙伴",
+    "discoverJob": "发现工作"
+  },
+  "account": {
+    "title": "账户",
+    "manageProfile": "管理个人资料",
+    "manageProjects": "管理项目",
+    "managePosts": "管理帖子",
+    "saved": "已保存",
+    "accountSettings": "账户设置"
+  },
+  "contact": {
+    "title": "联系我们",
+    "feedbackMessage": "有任何反馈或想加入我们？",
+    "joinDiscord": "加入 Discord"
+  },
+  "comingSoon": "即将推出",
+  "legal": {
+    "termsOfService": "服务条款",
+    "privacyPolicy": "隐私政策",
+    "cookiePolicy": "Cookie 政策",
+    "allRightsReserved": "版权所有"
+  },
+  "copyright": "© 2024 ProjectUp. 保留所有权利。"
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- <svg width="100%" height="100%" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
+    <g transform="matrix(6.25,0,0,6.25,0,0)">
+        <path d="M48,0.995L48,47.005C48,47.554 47.554,48 47.005,48L0.995,48C0.446,48 0,47.554 0,47.005L0,0.995C0,0.446 0.446,0 0.995,0L47.005,0C47.554,0 48,0.446 48,0.995Z" style="fill:url(#_Linear1);"/>
+    </g>
+    <g transform="matrix(1,0,0,1,0.819559,13.3759)">
+        <path d="M174.055,95.92C190.128,100.969 185.844,140.834 185.844,140.834" style="fill:none;"/>
+    </g>
+    <g transform="matrix(1.85972,0,0,2,11.6338,111.935)">
+        <path d="M12.79,40L50,60L87.21,40" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:9.32px;"/>
+    </g>
+    <g transform="matrix(1.85972,0,0,-2,11.5894,186.7)">
+        <path d="M12.79,40L50,60L87.21,40" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:9.32px;"/>
+    </g>
+    <g transform="matrix(1.13875e-16,-1.85972,-2,-1.22465e-16,203.684,242.286)">
+        <path d="M12.79,40L50,60L87.21,40" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:9.32px;"/>
+    </g>
+    <g transform="matrix(1.6853,-0.0858343,0,1.28022,-183.517,3.48465)">
+        <path d="M214.953,94.464C249.442,94.047 266.426,99.921 265.9,127.44C265.374,154.96 262.355,157.634 237.72,157.664C213.085,157.695 214.003,157.729 214.003,157.729" style="fill:rgb(0,104,201);stroke:white;stroke-width:12.32px;stroke-linejoin:miter;stroke-miterlimit:100;"/>
+    </g>
+    <g transform="matrix(0.809012,0,0,0.809012,22.3474,72.71)">
+        <path d="M191.43,41.357C191.43,85.686 191.288,170.893 191.288,198.501" style="fill:none;stroke:white;stroke-width:22.25px;stroke-linejoin:miter;stroke-miterlimit:100;"/>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(48,48,-48,48,0,0)"><stop offset="0" style="stop-color:rgb(0,132,255);stop-opacity:1"/><stop offset="0.19" style="stop-color:rgb(0,126,244);stop-opacity:1"/><stop offset="0.39" style="stop-color:rgb(0,111,214);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(0,79,153);stop-opacity:1"/></linearGradient>
+    </defs>
+</svg> -->
+<svg width="200" height="200" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="ProjectUp Ascent Logo">
+    <defs>
+        <linearGradient id="ascentGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#3B82F6;" />   <!-- Blue for Theory -->
+            <stop offset="50%" style="stop-color:#10B981;" />  <!-- Green for Building -->
+            <stop offset="100%" style="stop-color:#A3E635;" /> <!-- Lime for Mastery -->
+        </linearGradient>
+    </defs>
+    <path 
+        d="M 25 85 
+           L 25 15 
+           L 55 40 
+           L 25 40 
+           L 65 60 
+           L 25 60 
+           L 75 80"
+        fill="none" 
+        stroke="url(#ascentGradient)" 
+        stroke-width="12" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+    />
+</svg>
+

@@ -1,0 +1,41 @@
+{
+  "about": {
+    "title": "About ProjectUp",
+    "description1": "ProjectUp transforms you into an AI-powered project manager through structured workflows that combine human creativity with AI intelligence.",
+    "description2": "Research ideas, validate concepts, and develop actionable plans with intelligent assistance. Build amazing projects with confidence."
+  },
+  "platform": {
+    "title": "Platform",
+    "dailyPost": "Daily Posts",
+    "exploreProjects": "Explore Projects",
+    "research": "Research",
+    "findBuddy": "Find Buddy",
+    "discoverJob": "Discover Jobs"
+  },
+  "account": {
+    "title": "Account",
+    "manageProfile": "Manage Profile",
+    "manageProjects": "Manage Projects",
+    "managePosts": "Manage Posts",
+    "saved": "Saved",
+    "accountSettings": "Account Settings"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "feedbackMessage": "Your feedback makes us better:",
+    "joinDiscord": "Join Discord"
+  },
+  "legal": {
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "cookiePolicy": "Cookie Policy",
+    "allRightsReserved": "All rights reserved."
+  },
+  "comingSoon": "Coming Soon",
+  "help": "Help Center",
+  "blog": "Blog",
+  "careers": "Careers",
+  "partners": "Partners",
+  "developers": "Developers",
+  "copyright": "© 2024 ProjectUp. All rights reserved."
+}

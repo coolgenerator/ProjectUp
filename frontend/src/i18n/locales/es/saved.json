@@ -1,0 +1,16 @@
+{
+  "title": "Contenido Guardado",
+  "tabs": {
+    "all": "Todos los Elementos",
+    "general": "Diario",
+    "project": "Proyectos"
+  },
+  "empty": {
+    "noItems": "No tienes elementos guardados.",
+    "noGeneral": "No se encontraron publicaciones diarias guardadas.",
+    "noProject": "No se encontraron proyectos guardados."
+  },
+  "errors": {
+    "fetchFailed": "Error al obtener los elementos guardados"
+  }
+}

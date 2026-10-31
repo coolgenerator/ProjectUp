@@ -1,0 +1,97 @@
+{
+  "modal": {
+    "editPost": "编辑帖子",
+    "deletePost": "删除帖子",
+    "deleteConfirmation": "您确定要删除此帖子吗？此操作无法撤销。",
+    "deleteError": "删除帖子失败，请重试。"
+  },
+  "create": {
+    "warning": {
+      "title": "保护您的想法",
+      "intro": "在分享您的项目详情之前，请考虑：",
+      "questions": {
+        "unique": "您的想法是否独特或有潜在价值？",
+        "share": "您想与所有人分享还是只与信任的人分享？",
+        "visibility": "考虑使用下面的可见性设置来控制谁可以看到您的帖子"
+      },
+      "disclaimer": "注意：虽然我们提供可见性控制，但我们不对平台上分享的想法的任何未经授权的使用或盗用负责。分享敏感信息时请谨慎。"
+    },
+    "sections": {
+      "postTitle": "帖子标题",
+      "postCover": "帖子封面",
+      "postMedia": "帖子媒体",
+      "postDescription": "帖子描述",
+      "topics": "主题",
+      "timeline": "时间线",
+      "location": "位置",
+      "positions": "职位",
+      "applicationQuestions": "申请问题",
+      "visibility": "可见性"
+    },
+    "fields": {
+      "title": {
+        "label": "标题",
+        "placeholder": "输入帖子标题"
+      },
+      "cover": {
+        "label": "选择封面"
+      },
+      "description": {
+        "label": "描述",
+        "placeholder": "描述您的帖子..."
+      },
+      "topics": {
+        "label": "主题",
+        "selectCategory": "选择类别：",
+        "selectSubcategory": "选择子类别：",
+        "selectedTopics": "已选主题：",
+        "addCustom": "添加自定义主题：",
+        "customPlaceholder": "输入自定义主题",
+        "add": "添加"
+      },
+      "timeline": {
+        "startTime": "开始时间",
+        "now": "现在",
+        "specifyDate": "指定日期",
+        "deadline": "截止日期"
+      },
+      "positions": {
+        "label": "可用职位",
+        "namePlaceholder": "职位名称",
+        "responsibilitiesPlaceholder": "职责",
+        "spotsPlaceholder": "名额",
+        "add": "添加职位"
+      },
+      "visibility": {
+        "label": "帖子可见性",
+        "selectOption": "选择可见性选项",
+        "private": "私密",
+        "public": "公开",
+        "local": "本地",
+        "organization": "{{school}}（对您组织内的人可见）",
+        "publishProject": "发布此项目（使其可在项目列表中被发现）",
+        "verifyEmail": "要与您的学校/组织分享，请在个人资料设置中验证您的学校邮箱。"
+      }
+    },
+    "visibilityInfo": {
+      "title": "保护您的想法",
+      "intro": "明智选择！不同的可见性选项帮助控制谁可以看到您的项目：",
+      "options": {
+        "private": "私密：仅通过直接链接访问",
+        "public": "公开：平台上的所有人可见",
+        "local": "本地：仅您所在地区的用户可见",
+        "organization": "组织：仅您组织的认证成员可见"
+      }
+    }
+  },
+  "validation": {
+    "titleRequired": "标题为必填项",
+    "coverRequired": "封面图片为必填项",
+    "descriptionRequired": "描述为必填项",
+    "startDateRequired": "开始日期为必填项",
+    "positionsRequired": "至少需要一个职位",
+    "visibilityRequired": "可见性为必填项",
+    "topicsRequired": "至少需要一个主题"
+  },
+  "required": "*"
+}

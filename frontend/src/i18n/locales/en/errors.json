@@ -1,0 +1,12 @@
+{
+  "404": "Page Not Found",
+  "500": "Internal Server Error",
+  "networkError": "Network Error",
+  "unauthorized": "Unauthorized Access",
+  "forbidden": "Forbidden",
+  "badRequest": "Bad Request",
+  "timeout": "Request Timeout",
+  "somethingWentWrong": "Something went wrong",
+  "tryAgain": "Please try again",
+  "contactSupport": "Contact Support"
+}

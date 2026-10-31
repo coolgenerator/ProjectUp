@@ -1,0 +1,26 @@
+[Unit]
+Description=ProjectUp AI Agent Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/projectup/ai-agent
+Environment="PATH=/opt/projectup/ai-agent/venv/bin:/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=/opt/projectup/ai-agent/.env.production
+ExecStart=/opt/projectup/ai-agent/venv/bin/python main.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=projectup-ai-agent
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Resource limits
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

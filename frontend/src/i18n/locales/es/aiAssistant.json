@@ -1,0 +1,71 @@
+{
+  "title": "Asistente de Proyecto con IA",
+  "steps": {
+    "analyze": "Asistente de Proyecto con IA",
+    "ideas": "Ideas de Proyecto",
+    "roadmap": "Hoja de Ruta del Proyecto"
+  },
+  "buttons": {
+    "backToIdeas": "Volver a Ideas Generadas",
+    "backToRoadmap": "Volver a Hoja de Ruta Generada"
+  },
+  "dialog": {
+    "existingSession": {
+      "title": "¿Continuar tu Proyecto?",
+      "message": "Tienes una sesión existente del asistente de proyecto con IA. ¿Deseas continuar donde lo dejaste o comenzar un análisis nuevo?",
+      "continue": "Continuar Sesión",
+      "startFresh": "Comenzar de Nuevo"
+    }
+  },
+  "modals": {
+    "addSkill": {
+      "title": "Agregar Nueva Habilidad",
+      "placeholder": "Ingresa una nueva habilidad"
+    },
+    "addInterest": {
+      "title": "Agregar Nuevo Interés",
+      "placeholder": "Ingresa un nuevo interés"
+    }
+  },
+  "loading": {
+    "preparing": "Preparando análisis",
+    "analyzing": "Analizando habilidades e intereses...",
+    "processing": "Procesando entradas divertidas e interesantes...",
+    "searching": "Buscando dominios de proyecto relevantes...",
+    "evaluating": "Evaluando restricciones de dificultad y tiempo...",
+    "generating": "Generando ideas de proyecto personalizadas...",
+    "finalizing": "Finalizando recomendaciones de proyecto...",
+    "completing": "Completando análisis",
+    "preparingRoadmap": "Preparando generación de hoja de ruta",
+    "analyzingProject": "Analizando requisitos del proyecto...",
+    "breakingDown": "Desglosando estructura del proyecto...",
+    "identifyingPhases": "Identificando fases clave de desarrollo...",
+    "planningSteps": "Planificando pasos de implementación...",
+    "researchingResources": "Investigando recursos de aprendizaje...",
+    "estimatingDuration": "Estimando duración de tareas...",
+    "finalizingRoadmap": "Finalizando estructura de hoja de ruta...",
+    "assembling": "Ensamblando tu hoja de ruta",
+    "roadmapComplete": "¡Generación de hoja de ruta completa!",
+    "errorOccurred": "Ocurrió un error",
+    "preparingRegenerate": "Preparando para regenerar ideas",
+    "analyzingPrevious": "Analizando sugerencias anteriores...",
+    "findingDirections": "Encontrando nuevas direcciones creativas...",
+    "exploringAlternatives": "Explorando dominios de proyecto alternativos...",
+    "identifyingCombinations": "Identificando combinaciones tecnológicas únicas...",
+    "generatingFresh": "Generando ideas de proyecto frescas...",
+    "finalizingNew": "Finalizando nuevas recomendaciones...",
+    "completingRegenerate": "Completando regeneración",
+    "failed": "Error al generar hoja de ruta"
+  },
+  "errors": {
+    "generatingIdeas": "Error al Generar Ideas",
+    "generatingIdeasDesc": "Encontramos un error al generar ideas de proyecto. Por favor intenta de nuevo o ajusta tus entradas.",
+    "regeneratingIdeas": "Error al Regenerar Ideas",
+    "regeneratingIdeasDesc": "Encontramos un error al regenerar ideas de proyecto. Por favor intenta de nuevo o ajusta tus entradas.",
+    "generatingRoadmap": "Error al Generar Hoja de Ruta",
+    "generatingRoadmapDesc": "Hubo un error al generar los pasos de la hoja de ruta. Por favor intenta de nuevo.",
+    "tryAgain": "Por favor intenta de nuevo",
+    "notSpecified": "No especificado",
+    "errorLabel": "Error"
+  }
+}

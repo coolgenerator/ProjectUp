@@ -1,0 +1,61 @@
+{
+  "title": "研究论文",
+  "subtitle": "上传和管理您的研究论文",
+  "uploadPaper": "上传论文",
+  "searchPlaceholder": "搜索论文...",
+  "noPapersYet": "还没有论文",
+  "noPapersFound": "未找到论文",
+  "tryDifferentSearch": "尝试不同的搜索词",
+  "getStarted": "上传您的第一篇研究论文以开始使用",
+  "uploadFirstPaper": "上传您的第一篇论文",
+  "intro": {
+    "hero": {
+      "title": "研究管理",
+      "description": "使用 AI 驱动的洞察来组织、分析和协作研究论文。改变您管理学术文献的方式。",
+      "showcaseAlt": "研究管理界面"
+    },
+    "features": {
+      "uploadOrganize": {
+        "title": "上传与组织",
+        "description": "轻松上传 PDF 论文，并使用标签、类别和自定义元数据进行组织。"
+      },
+      "interactiveReader": {
+        "title": "交互式阅读器",
+        "description": "使用具有注释、高亮和笔记功能的高级 PDF 查看器阅读论文。"
+      },
+      "smartSearch": {
+        "title": "智能搜索",
+        "description": "通过强大的搜索功能，快速按标题、作者、关键词或内容查找论文。"
+      },
+      "aiAnalysis": {
+        "title": "AI 分析",
+        "description": "获得 AI 驱动的摘要、关键见解和复杂论文的方法论分解。"
+      },
+      "collaborate": {
+        "title": "协作",
+        "description": "与您的研究团队无缝共享论文、注释和见解。",
+        "comingSoon": "即将推出"
+      },
+      "trackProgress": {
+        "title": "跟踪进度",
+        "description": "监控您的阅读进度、引用计数，并按研究项目组织论文。",
+        "comingSoon": "即将推出"
+      }
+    },
+    "cta": {
+      "title": "准备好改变您的研究了吗？",
+      "description": "加入数千名研究人员，使用 ProjectUp 更有效地管理他们的学术文献。",
+      "getStarted": "免费开始",
+      "signIn": "登录"
+    }
+  },
+  "upload": {
+    "selectFile": "请选择一个 PDF 文件",
+    "pdfOnly": "只允许 PDF 文件",
+    "uploadSuccess": "论文上传成功",
+    "uploadFailed": "上传论文失败"
+  },
+  "errors": {
+    "loadFailed": "加载论文失败"
+  }
+}

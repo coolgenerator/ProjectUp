@@ -1,0 +1,25 @@
+[Unit]
+Description=ProjectUp Backend API Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/projectup/backend
+EnvironmentFile=/opt/projectup/backend/.env.production
+ExecStart=/opt/projectup/backend/server
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=projectup-backend
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Resource limits
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

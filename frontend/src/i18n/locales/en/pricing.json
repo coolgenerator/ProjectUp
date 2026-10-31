@@ -1,0 +1,285 @@
+{
+  "title": "Choose Your Plan",
+  "subtitle": "Select the perfect plan for your needs. All plans include core features to help you succeed.",
+  "monthly": "Monthly",
+  "annual": "Annual",
+  "save": "Save 20% annually",
+  "regularPricing": "Regular",
+  "studentPricingLabel": "Student",
+  "eduRequired": ".edu required",
+  "studentDiscountAvailable": "Student discount available",
+  "mostPopular": "Most Popular",
+  "bestValue": "Best Value",
+  "currentPlan": "Current Plan",
+  "selectPlan": "Select Plan",
+  "upgrade": "Upgrade",
+  "downgrade": "Downgrade",
+  "signUpToSubscribe": "Sign Up to Subscribe",
+  "signUpFree": "Sign Up Free",
+  "getStarted": "Get Started",
+  "cancellingAtPeriodEnd": "(Cancelling at period end)",
+  "perMonth": "/mo",
+  "perYear": "/year",
+  "billedAnnually": "billed annually",
+  "billedAnnuallyAs": "Billed annually as ${{amount}}",
+  "features": "Features",
+  "free": "Free",
+  "customPricing": "Custom Pricing",
+  "individualPlans": "Individual Plans",
+  "individualPlansDesc": "Perfect for students, researchers, and knowledge workers",
+  "teamPlans": "Team & Lab Plans",
+  "teamPlansDesc": "Built for teams and organizations that need to scale",
+  "studentPricing": "Students: ${{price}}/mo",
+  "saveAmount": "Save ${{amount}}/year",
+  "havePromoCode": "Have a promo code?",
+  "enterPromoCode": "Enter promo code",
+  "codeAppliedAtCheckout": "✓ Code will be applied at checkout",
+  "annualBenefitsTitle": "Benefits of Annual Billing",
+  "savingsBenefit": "20% Savings",
+  "savingsBenefitDesc": "Get 2 months free with annual billing",
+  "priceLockBenefit": "Price Lock",
+  "priceLockBenefitDesc": "Lock in your rate for the entire year",
+  "prioritySupportBenefit": "Priority Support",
+  "prioritySupportBenefitDesc": "Annual customers get priority support",
+  "footerNote": "All prices are in USD. Prices exclude applicable taxes.",
+  "needHelp": "Need help choosing?",
+  "contactTeam": "Contact our team",
+  "freeTrial": "14-day free trial",
+  "priceUnits": {
+    "perUser": "per user",
+    "perUserPlusSetup": "per user + $499 setup",
+    "custom": "custom pricing"
+  },
+  "studentDiscounts": {
+    "title": "Student Discounts",
+    "subtitle": "Valid .edu email required",
+    "starterDiscount": "20% off monthly + additional 15% off annual",
+    "advancedDiscount": "25% off monthly + additional 15% off annual",
+    "proDiscount": "25% off monthly + additional 15% off annual"
+  },
+  "clickToExpand": "[Click to expand]",
+  "upCredits": {
+    "title": "What is an UP Credit?",
+    "description": "UP Credits power all AI features on ProjectUp",
+    "conversion": "1 UP Credit = 100,000 tokens",
+    "conversionDetail": "(~75 pages of analysis)",
+    "feature1": "Document analysis and summarization",
+    "feature2": "AI-powered note generation",
+    "feature3": "Intelligent project assistance",
+    "feature4": "Teammate matching with a reason and risk for each pick",
+    "feature5": "Smart search and recommendations"
+  },
+  "understandingCredits": {
+    "title": "Understanding UP Credits",
+    "whatAre": {
+      "question": "What are UP Credits?",
+      "intro": "UP Credits power all AI features on ProjectUp:"
+    },
+    "monthlyVsBonus": {
+      "question": "Monthly vs Bonus Credits",
+      "monthly": {
+        "title": "Monthly UP Credits (included in plans)",
+        "refresh": "Refresh every billing cycle",
+        "noRollover": "Don't roll over to next month",
+        "bestFor": "Best for regular usage"
+      },
+      "bonus": {
+        "title": "Bonus UP Credits (purchase separately)",
+        "neverExpire": "Never expire",
+        "useAnytime": "Use anytime, even after canceling",
+        "stack": "Stack with monthly credits",
+        "perfect": "Perfect for occasional heavy usage"
+      },
+      "priority": "Usage Priority:",
+      "priorityDesc": "Monthly credits are used first, then Bonus credits."
+    },
+    "howMany": {
+      "question": "How many credits do I need?",
+      "typicalUsage": "Typical Usage Examples:",
+      "example1": "Analyze a 20-page PDF: ~0.3 credits",
+      "example2": "Match teammates for one open role: ~0.5 credits",
+      "example3": "AI project assistant (1 hour): ~2-5 credits",
+      "example4": "Shape an idea into a project with the AI coach: ~3-8 credits",
+      "mostStudents": "Most students use 20-50 credits/month",
+      "powerUsers": "Power users typically need 80-150 credits/month"
+    }
+  },
+  "purchaseCredits": {
+    "title": "Purchase Additional Credits",
+    "subtitle": "Buy credits anytime to supplement your monthly allocation",
+    "purchase": "Purchase",
+    "customVolumes": "Need larger volumes?",
+    "contactSales": "Contact sales for custom volumes",
+    "packCredits": "{{count}} Credits",
+    "perCredit": "${{price}} per credit"
+  },
+  "plans": {
+    "free": {
+      "name": "Basic",
+      "description": "Perfect for getting started",
+      "features": [
+        "Browse and apply to recruiting projects",
+        "Create paper notes",
+        "0 UP Credits",
+        "30MB storage",
+        "Community support"
+      ],
+      "buttonText": "Get Started"
+    },
+    "starter": {
+      "name": "Starter",
+      "description": "For turning your first idea into a project",
+      "features": [
+        "AI idea coach that asks, never decides",
+        "10 UP Credits/mo",
+        "100MB storage",
+        "1 project/mo",
+        "IdeaTree access",
+        "Project collaboration",
+        "Paper AI assistant",
+        "Community support"
+      ],
+      "buttonText": "Start with Starter"
+    },
+    "advanced": {
+      "name": "Advanced",
+      "description": "For students and researchers building a team",
+      "features": [
+        "AI teammate suggestions for your open roles",
+        "50 UP Credits/mo",
+        "500MB storage",
+        "5 projects/mo",
+        "Everything in Starter",
+        "Advanced workflows & tools",
+        "Team meeting schedules",
+        "Priority support",
+        "Version control"
+      ],
+      "buttonText": "Go Advanced"
+    },
+    "pro": {
+      "name": "Pro",
+      "description": "For power users and professionals",
+      "features": [
+        "Teammate suggestions across all your projects",
+        "80 UP Credits/mo",
+        "1GB storage",
+        "Unlimited projects",
+        "Everything in Advanced",
+        "Custom integrations",
+        "Advanced analytics",
+        "API access",
+        "Priority support"
+      ],
+      "buttonText": "Go Pro"
+    },
+    "teamShared": {
+      "name": "Team Shared",
+      "description": "For small to medium teams (3-10 users)",
+      "features": [
+        "Minimum 3 users",
+        "80 UP Credits per user/mo",
+        "Everything in Pro (per user)",
+        "Shared community server",
+        "Team admin dashboard",
+        "Shared team resources",
+        "Team collaboration spaces",
+        "Admin controls & permissions",
+        "Team analytics & insights",
+        "Expert marketplace access (10% fee)"
+      ],
+      "buttonText": "Start with Team Shared"
+    },
+    "teamIsolated": {
+      "name": "Team Isolated",
+      "description": "For labs and organizations needing dedicated infrastructure",
+      "features": [
+        "Minimum 5 users",
+        "120 UP Credits per user/mo",
+        "Everything in Team Shared",
+        "Isolated dedicated server",
+        "Custom domain (yourlab.projectup.me)",
+        "Private community instance",
+        "Customized agents for your organization",
+        "White-label options",
+        "Advanced security & SSO",
+        "Dedicated account manager",
+        "Custom training & onboarding",
+        "One-time setup: $499"
+      ],
+      "buttonText": "Start with Team Isolated"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "For large organizations (10+ users)",
+      "features": [
+        "Everything in Team Isolated",
+        "Unlimited team members",
+        "Unlimited file storage",
+        "Custom contracts & SLAs",
+        "24/7 phone & email support",
+        "Advanced security & compliance",
+        "Custom feature development",
+        "Dedicated infrastructure",
+        "Volume discount on UP Credits"
+      ],
+      "buttonText": "Contact Sales"
+    }
+  },
+  "security": "Secure payment powered by Stripe",
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "upCreditsRunOut": {
+      "question": "What happens if I run out of UP Credits?",
+      "answer": "You can purchase additional UP Credits anytime, or upgrade to a higher plan. Your work is never lost."
+    },
+    "upCreditsRollover": {
+      "question": "Do unused UP Credits roll over?",
+      "answer": "No, UP Credits refresh monthly. Consider purchasing à la carte credits if you need flexibility."
+    },
+    "changePlans": {
+      "question": "Can I change plans anytime?",
+      "answer": "Yes, upgrade or downgrade anytime. Prorated charges/credits applied automatically."
+    },
+    "teamIsolatedSetup": {
+      "question": "What's included in the $499 setup fee for Team Isolated?",
+      "answer": "Server deployment, custom domain configuration, environment setup, initial agent customization, and team onboarding session."
+    },
+    "deploymentTime": {
+      "question": "How long does Team Isolated deployment take?",
+      "answer": "Typically 3-5 business days after payment and initial consultation."
+    },
+    "teamCreditsShared": {
+      "question": "Do Team plans share UP Credits?",
+      "answer": "No, each team member gets their own monthly UP Credit allocation."
+    },
+    "freeTrial": {
+      "question": "Is there a free trial?",
+      "answer": "Yes! All paid plans include a 14-day free trial. No credit card required to start."
+    },
+    "paymentMethods": {
+      "question": "What payment methods do you accept?",
+      "answer": "We accept all major credit cards, PayPal, and wire transfers for Enterprise plans."
+    },
+    "billing": {
+      "question": "How does billing work?",
+      "answer": "You'll be billed monthly or annually based on your chosen plan. All payments are processed securely through Stripe."
+    },
+    "changeCancel": {
+      "question": "Can I change or cancel my plan?",
+      "answer": "Yes, you can upgrade, downgrade, or cancel your subscription at any time. Changes take effect at the next billing cycle."
+    },
+    "security": {
+      "question": "Is my payment information secure?",
+      "answer": "Absolutely. We use Stripe for payment processing, which is PCI compliant and uses industry-standard encryption."
+    },
+    "refunds": {
+      "question": "Do you offer refunds?",
+      "answer": "We offer a 30-day money-back guarantee for all paid plans. Contact support if you're not satisfied."
+    },
+    "switchBilling": {
+      "question": "Can I switch between monthly and annual billing?",
+      "answer": "Yes, you can switch between billing cycles. When switching to annual, you'll receive the discounted rate immediately."
+    }
+  }
+}

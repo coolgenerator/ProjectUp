@@ -1,0 +1,120 @@
+{
+  "title": "My Resources",
+  "subtitle": "Manage your web links, files, and other resources in one place",
+  "storageQuota": "Storage Quota",
+  "files": "Files",
+  "maxPerFile": "Max {{size}} per file",
+  "premium": "Premium",
+  "free": "Free",
+  "upgrade": "Upgrade",
+  "searchPlaceholder": "Search resources...",
+  "buttons": {
+    "addLink": "Add Link",
+    "uploadFile": "Upload File",
+    "addPaper": "Add Paper",
+    "upload": "Upload",
+    "saveChanges": "Save Changes"
+  },
+  "filters": {
+    "all": "All",
+    "links": "Links",
+    "files": "Files",
+    "papers": "Papers"
+  },
+  "types": {
+    "webLink": "Web Link",
+    "file": "File"
+  },
+  "actions": {
+    "open": "Open",
+    "download": "Download"
+  },
+  "empty": {
+    "title": "No resources yet",
+    "subtitle": "Start by adding a link or uploading a file",
+    "addFirstLink": "Add First Link",
+    "uploadFirstFile": "Upload First File"
+  },
+  "success": {
+    "linkAdded": "Link added successfully",
+    "fileUploaded": "File uploaded successfully",
+    "resourceUpdated": "Resource updated successfully",
+    "resourceDeleted": "Resource deleted successfully"
+  },
+  "errors": {
+    "loadFailed": "Failed to load resources",
+    "loadPapersFailed": "Failed to load papers",
+    "searchFailed": "Search failed",
+    "addLinkFailed": "Failed to add link",
+    "uploadFailed": "Failed to upload file",
+    "updateFailed": "Failed to update resource",
+    "deleteFailed": "Failed to delete resource",
+    "selectFile": "Please select a file",
+    "addPaperFailed": "Failed to add paper"
+  },
+  "dialogs": {
+    "addLink": {
+      "title": "Add Web Link",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Enter link title",
+      "urlLabel": "URL",
+      "urlPlaceholder": "https://example.com",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Optional description",
+      "tagsLabel": "Tags",
+      "tagsPlaceholder": "Comma-separated tags"
+    },
+    "uploadFile": {
+      "title": "Upload File",
+      "fileLabel": "File",
+      "chooseFile": "Click to choose file or drag and drop",
+      "maxSize": "Max {{size}}",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Optional custom title",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Optional description",
+      "tagsLabel": "Tags",
+      "tagsPlaceholder": "Comma-separated tags"
+    },
+    "editResource": {
+      "title": "Edit Resource",
+      "titleLabel": "Title",
+      "descriptionLabel": "Description",
+      "tagsLabel": "Tags",
+      "tagsPlaceholder": "Comma-separated tags"
+    },
+    "deleteResource": {
+      "title": "Delete Resource",
+      "message": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
+    }
+  },
+  "papers": {
+    "empty": {
+      "title": "No Papers Yet",
+      "subtitle": "Start building your academic library",
+      "addFirst": "Add Your First Paper"
+    },
+    "actions": {
+      "read": "Read"
+    },
+    "processing": "Processing paper...",
+    "success": "Paper added successfully with extracted metadata!",
+    "successMinimal": "Paper added! Metadata will be extracted in background.",
+    "uploadSuccess": "Paper uploaded and processed successfully!",
+    "dialog": {
+      "addLink": "Add Link",
+      "uploadPDF": "Upload PDF",
+      "paperLink": "Paper Link (arXiv, DOI, or PDF URL)",
+      "supportedSites": "Supports arXiv, DOI, and direct PDF links",
+      "pdfFile": "PDF File",
+      "clickToUpload": "Click to upload PDF",
+      "dragDrop": "or drag and drop",
+      "autoExtract": "Automatic extraction will:",
+      "extractTitle": "Extract title and authors",
+      "extractAuthors": "Identify publication details",
+      "generateTags": "Generate relevant tags",
+      "categorize": "Categorize paper type",
+      "process": "Process & Add"
+    }
+  }
+}

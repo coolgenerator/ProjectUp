@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Custom Scrollbar Styles */
+@layer utilities {
+    .scrollbar-thin {
+        scrollbar-width: thin;
+    }
+    
+    .scrollbar-thumb-purple-400 {
+        scrollbar-color: #a78bfa #f3f4f6;
+    }
+    
+    /* Webkit browsers */
+    .scrollbar-thin::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-track {
+        @apply bg-gray-100 rounded-full;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        @apply bg-purple-400 rounded-full;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+        @apply bg-purple-500;
+    }
+}
+
+/* Animation for collapsed sidebar button */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100%) translateY(-50%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) translateY(-50%);
+    }
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-out;
+}

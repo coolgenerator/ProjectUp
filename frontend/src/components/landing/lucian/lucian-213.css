@@ -1,0 +1,41 @@
+/* Lucian UX/UI Prompt #213 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#213 */
+.u213{position:relative;width:340px;height:340px;border-radius:30px;overflow:hidden;background:radial-gradient(80% 50% at 50% 0%,var(--ux-accent-soft),transparent 70%),var(--ux-surface);box-shadow:0 0 0 1px var(--ux-line),0 30px 60px -36px var(--ux-shadow-strong);color:var(--ux-ink)}
+.u213-hd{position:absolute;left:0;right:0;top:20px;text-align:center}
+.u213-hd small{font-size:10px;font-weight:850;letter-spacing:.08em;color:var(--ux-accent)}
+.u213-hd h3{margin:4px 0 0;font-size:19px;font-weight:900;letter-spacing:-.035em}
+.u213-tl{position:absolute;left:18px;right:18px;top:76px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.u213-tb{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;padding:7px 4px 10px;border:0;border-radius:12px;background:none;color:var(--ux-ink-3);font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:color .25s,background .25s}
+.u213-tb svg{width:16px;height:16px}
+.u213-tb.is-on{color:var(--ux-ink);background:var(--ux-surface-2)}
+.u213-tb:focus-visible{outline:2px solid var(--ux-accent);outline-offset:1px}
+.u213-tb>i{position:absolute;left:12px;right:12px;bottom:4px;height:3px;border-radius:2px;background:var(--ux-line);overflow:hidden}
+.u213-tb>i b{display:block;height:100%;border-radius:2px;background:var(--ux-accent);transform:scaleX(0);transform-origin:0 50%}
+.u213-pv{position:absolute;left:18px;right:18px;top:142px;bottom:18px;border-radius:18px;background:var(--ux-surface);box-shadow:0 0 0 1px var(--ux-line),0 18px 36px -24px var(--ux-shadow-strong);overflow:hidden}
+.u213-pn{position:absolute;inset:0;padding:12px 14px;opacity:0;transform:translateY(10px) scale(.98);transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.u213-pn.is-on{opacity:1;transform:none}
+.u213-pn small{font-size:10px;font-weight:800;color:var(--ux-ink-3)}
+
+.u213-wk{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px;height:132px}
+.u213-wk>span{display:block;border-radius:7px;background:var(--ux-surface-2);font-size:9px;font-weight:800;color:var(--ux-ink-3);text-align:center;padding-top:4px}
+.u213-ev{position:absolute;border-radius:6px;padding:3px 4px;font-size:8.5px;font-weight:800;line-height:1.2;color:#fff;opacity:0;transform:translateY(-8px) scale(.9);transition:opacity .3s,transform .45s cubic-bezier(.3,1.5,.5,1);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.u213-pn.is-play .u213-ev{opacity:1;transform:none}
+
+.u213-dh{display:flex;align-items:center;gap:6px}
+.u213-dh b{font-size:12.5px;font-weight:900;margin-right:auto}
+.u213-dh em{display:inline-flex;align-items:center;gap:4px;font-style:normal;font-size:9.5px;font-weight:800;color:#DB2777}
+.u213-dh em::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.u213-ln{height:7px;margin-top:9px;border-radius:4px;background:var(--ux-surface-3);transform:scaleX(0);transform-origin:0 50%;transition:transform .5s cubic-bezier(.3,.8,.3,1)}
+.u213-ln.is-h{height:10px;background:var(--ux-ink-3);margin-top:14px}
+.u213-pn.is-play .u213-ln{transform:scaleX(var(--w))}
+.u213-cr{position:absolute;width:2px;height:12px;background:#DB2777;border-radius:1px;left:14px;top:40px;opacity:0;transition:transform .5s cubic-bezier(.3,.8,.3,1),opacity .2s}
+.u213-cr::after{content:attr(data-label);position:absolute;left:0;top:-13px;padding:1px 4px;border-radius:4px 4px 4px 0;background:#DB2777;color:#fff;font-size:8px;font-weight:800;white-space:nowrap}
+.u213-pn.is-play .u213-cr{opacity:1}
+
+.u213-kp{display:flex;align-items:baseline;gap:8px;margin-top:2px}
+.u213-kp b{font-size:22px;font-weight:900;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.u213-kp span{font-size:10px;font-weight:800;color:#059669}
+.u213-br{display:flex;align-items:flex-end;gap:7px;height:96px;margin-top:8px;padding-bottom:1px;border-bottom:1px solid var(--ux-line)}
+.u213-br i{flex:1;border-radius:5px 5px 2px 2px;background:color-mix(in srgb,var(--ux-accent) 30%,transparent);height:var(--h);transform:scaleY(0);transform-origin:50% 100%;transition:transform .6s cubic-bezier(.3,1.3,.5,1)}
+.u213-br i:last-child{background:var(--ux-accent)}
+.u213-pn.is-play .u213-br i{transform:none}
+@media (prefers-reduced-motion: reduce){.u213-pn,.u213-ev,.u213-ln,.u213-br i,.u213-cr{transition:none!important}}

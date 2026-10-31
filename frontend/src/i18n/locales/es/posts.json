@@ -1,0 +1,134 @@
+{
+  "modal": {
+    "editPost": "Editar publicación",
+    "deletePost": "Eliminar publicación",
+    "deleteConfirmation": "¿Estás seguro de que quieres eliminar esta publicación? Esta acción no se puede deshacer.",
+    "deleteError": "Error al eliminar la publicación. Por favor intenta de nuevo."
+  },
+  "create": {
+    "warning": {
+      "title": "¡Importante!",
+      "message": "Esta publicación se creará en el proyecto y será visible para otros miembros del proyecto según la configuración de visibilidad.",
+      "intro": "Before sharing your project details, please consider:",
+      "questions": {
+        "unique": "Is your idea unique or potentially valuable?",
+        "share": "Would you like to share it with everyone or just trusted individuals?",
+        "visibility": "Consider using the visibility settings below to control who can see your post"
+      },
+      "disclaimer": "Note: While we provide visibility controls, we are not responsible for any unauthorized use or misappropriation of ideas shared on our platform. Please exercise caution when sharing sensitive information."
+    },
+    "sections": {
+      "postTitle": "Título de la Publicación",
+      "content": "Contenido",
+      "media": "Medios",
+      "tags": "Etiquetas",
+      "visibility": "Visibilidad",
+      "postCover": "Post Cover",
+      "postMedia": "Post Media",
+      "postDescription": "Post Description",
+      "topics": "Topics",
+      "timeline": "Timeline",
+      "location": "Location",
+      "positions": "Positions",
+      "applicationQuestions": "Application Questions"
+    },
+    "fields": {
+      "title": {
+        "label": "Título",
+        "placeholder": "Ingresa el título de la publicación"
+      },
+      "content": {
+        "label": "Contenido",
+        "placeholder": "Escribe el contenido de tu publicación aquí..."
+      },
+      "media": {
+        "label": "Subir Medios",
+        "selected": "archivos seleccionados"
+      },
+      "tags": {
+        "label": "Etiquetas",
+        "placeholder": "Agregar etiquetas (presiona Enter)",
+        "count": "etiquetas"
+      },
+      "cover": {
+        "label": "Choose Your Cover"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Describe your post..."
+      },
+      "topics": {
+        "label": "Topics",
+        "selectCategory": "Select a Category:",
+        "selectSubcategory": "Select a Subcategory:",
+        "selectedTopics": "Selected Topics:",
+        "addCustom": "Add Custom Topic:",
+        "customPlaceholder": "Type a custom topic",
+        "add": "Add"
+      },
+      "timeline": {
+        "startTime": "Start Time",
+        "now": "Now",
+        "specifyDate": "Specify Date",
+        "deadline": "Deadline"
+      },
+      "positions": {
+        "label": "Available Positions",
+        "namePlaceholder": "Position Name",
+        "responsibilitiesPlaceholder": "Responsibilities",
+        "spotsPlaceholder": "Spots",
+        "add": "Add Position"
+      },
+      "visibility": {
+        "label": "Post Visibility",
+        "selectOption": "Select visibility option",
+        "private": "Private",
+        "public": "Public",
+        "local": "Local",
+        "organization": "{{school}} (visible to people in your organization)",
+        "publishProject": "Publish this project (makes it discoverable in project listings)",
+        "verifyEmail": "To share with your school/organization, please verify your school email in your profile settings."
+      }
+    },
+    "visibility": {
+      "public": "Público",
+      "private": "Privado",
+      "local": "Local",
+      "organization": "Organización",
+      "unlisted": "No listado"
+    },
+    "visibilityInfo": {
+      "public": "Visible para todos los usuarios",
+      "private": "Visible solo para miembros del proyecto",
+      "local": "Visible para usuarios locales",
+      "organization": "Visible para miembros de la organización",
+      "unlisted": "No aparece en listados públicos",
+      "title": "Protect Your Idea",
+      "intro": "Choose wisely! Different visibility options help control who can see your project:",
+      "options": {
+        "private": "Private: Only accessible via direct link",
+        "public": "Public: Visible to everyone on the platform",
+        "local": "Local: Only visible to users in your area",
+        "organization": "Organization: Only visible to verified members of your organization"
+      }
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "submit": "Crear Publicación",
+      "submitting": "Creando..."
+    }
+  },
+  "validation": {
+    "titleRequired": "El título es requerido",
+    "contentRequired": "El contenido es requerido",
+    "titleTooLong": "El título es demasiado largo",
+    "contentTooLong": "El contenido es demasiado largo",
+    "coverRequired": "Cover image is required",
+    "descriptionRequired": "Description is required",
+    "startDateRequired": "Start date is required",
+    "positionsRequired": "At least one position is required",
+    "visibilityRequired": "Visibility is required",
+    "topicsRequired": "At least one topic is required"
+  },
+  "required": "Requerido"
+}

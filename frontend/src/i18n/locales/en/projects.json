@@ -1,0 +1,176 @@
+{
+  "title": "Projects",
+  "createProject": "Create New Project",
+  "myProjects": "My Projects",
+  "allProjects": "All Projects",
+  "projectName": "Project Name",
+  "projectDescription": "Project Description",
+  "projectType": "Project Type",
+  "teamSize": "Team Size",
+  "duration": "Duration",
+  "skills": "Required Skills",
+  "status": "Status",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "members": "Members",
+  "owner": "Owner",
+  "visibility": "Visibility",
+  "public": "Public",
+  "private": "Private",
+  "applyToJoin": "Apply to Join",
+  "inviteMembers": "Invite Members",
+  "projectDashboard": "Project Dashboard",
+  "projectSettings": "Project Settings",
+  "deleteProject": "Delete Project",
+  "archiveProject": "Archive Project",
+  "active": "Active",
+  "completed": "Completed",
+  "archived": "Archived",
+  "recruiting": "Recruiting",
+  "inProgress": "In Progress",
+  "onHold": "On Hold",
+  "loadingProjects": "Loading projects...",
+  "filterProjects": "Filter Projects",
+  "searchPlaceholder": "Search a Topic, Class or Project...",
+  "selectType": "Select Type",
+  "research": "Research",
+  "schoolWork": "School Work",
+  "personalProject": "Personal Project",
+  "others": "Others",
+  "topics": "Topics",
+  "dateRange": "Date Range",
+  "in7Days": "In 7 Days",
+  "in30Days": "In 30 Days",
+  "inOneYear": "In One Year",
+  "allTime": "All Time",
+  "applyFilters": "Apply Filters",
+  "applying": "Applying...",
+  "clearFilters": "Clear Filters",
+  "exploreProjects": "Explore Projects",
+  "createAProject": "Create a Project",
+  "askAI": "Ask AI",
+  "createWithAI": "Create Project with AI",
+  "aiProjectAssistant": "AI Project Assistant",
+  "noMoreProjects": "No more projects to display",
+  "noProjectsFound": "No projects found",
+  "beTheFirst": "Be the first to create an exciting project and find collaborators!",
+  "createYourFirstProject": "Create Your First Project",
+  "intro": {
+    "hero": {
+      "title": "Explore Collaborative Projects",
+      "description": "Join a vibrant community of creators, innovators, and learners. Discover exciting projects, connect with talented collaborators, and turn ideas into reality together.",
+      "showcaseAlt": "Project Collaboration Demo"
+    },
+    "features": {
+      "discoverCollaborators": {
+        "title": "Discover Collaborators",
+        "description": "Find teammates with complementary skills and shared interests to bring your ideas to life."
+      },
+      "exploreProjects": {
+        "title": "Explore Diverse Projects",
+        "description": "Browse projects across research, school work, personal endeavors, and more to find your perfect match."
+      },
+      "seamlessCommunication": {
+        "title": "Seamless Communication",
+        "description": "Connect with project creators and team members through integrated messaging and collaboration tools."
+      },
+      "trackProgress": {
+        "title": "Track Progress",
+        "description": "Stay updated on project milestones, deadlines, and achievements with real-time progress tracking."
+      },
+      "showcaseWork": {
+        "title": "Showcase Your Work",
+        "description": "Build your portfolio by sharing your projects and contributions with the community."
+      },
+      "aiAssistance": {
+        "title": "AI-Powered Assistance",
+        "description": "Get intelligent project planning and ideation support from our AI assistant to kickstart your journey."
+      }
+    },
+    "cta": {
+      "title": "Ready to Start Collaborating?",
+      "description": "Join thousands of creators and innovators building the future together.",
+      "getStarted": "Get Started Free",
+      "signIn": "Sign In"
+    }
+  },
+  "myProjects": {
+    "title": "My Projects",
+    "createProject": "Create Project",
+    "tabs": {
+      "all": "All Projects",
+      "activeOwned": "My Active Projects",
+      "activeJoined": "Joined Active Projects",
+      "archived": "Archived Projects",
+      "completed": "Completed Projects"
+    },
+    "sections": {
+      "owned": "Projects You Own",
+      "joined": "Projects You've Joined"
+    },
+    "emptyStates": {
+      "noProjects": {
+        "title": "No projects yet",
+        "description": "Get started by creating your first project. Use AI assistance to help plan and structure your ideas.",
+        "action": "Create Your First Project",
+        "secondaryAction": "Browse Projects"
+      },
+      "noActiveOwned": {
+        "title": "No active projects",
+        "description": "You don't have any active projects that you own. Start a new project to collaborate with others.",
+        "action": "Create New Project"
+      },
+      "noActiveJoined": {
+        "title": "No joined projects",
+        "description": "You haven't joined any active projects yet. Browse available projects to find ones that match your interests.",
+        "action": "Browse Projects"
+      },
+      "noArchived": {
+        "title": "No archived projects",
+        "description": "You don't have any archived projects. Projects you archive will appear here."
+      },
+      "noCompleted": {
+        "title": "No completed projects",
+        "description": "You haven't completed any projects yet. Keep working on your active projects to see them here when finished.",
+        "action": "View Active Projects"
+      }
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch projects"
+    }
+  },
+  "dashboard": {
+    "title": "Project Dashboard",
+    "sections": {
+      "overview": "Overview",
+      "ideaForest": "Idea Forest",
+      "tasks": "Task Management",
+      "milestones": "Milestones",
+      "resources": "Resources",
+      "workTools": "Work Tools",
+      "meetings": "Meetings",
+      "teamMembers": "Team Members",
+      "projectSettings": "Project Settings"
+    },
+    "buttons": {
+      "editProject": "Edit Project",
+      "managePosts": "Manage Posts",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "visibility": {
+      "public": "Public",
+      "private": "Private",
+      "local": "Local",
+      "organization": "Organization",
+      "unlisted": "Unlisted",
+      "unlistedPublished": "Unlisted (Published)"
+    },
+    "applications": {
+      "title": "Applications",
+      "noApplications": "No applications available",
+      "emptyMessage": "Applications will appear here when users apply to your project."
+    }
+  }
+}

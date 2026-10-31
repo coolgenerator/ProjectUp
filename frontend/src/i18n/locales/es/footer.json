@@ -1,0 +1,41 @@
+{
+  "about": {
+    "title": "Acerca de ProjectUp",
+    "description1": "ProjectUp te transforma en un gerente de proyectos impulsado por IA a través de flujos de trabajo estructurados que combinan la creatividad humana con la inteligencia artificial.",
+    "description2": "Investiga ideas, valida conceptos y desarrolla planes accionables con asistencia inteligente. Construye proyectos increíbles con confianza."
+  },
+  "platform": {
+    "title": "Plataforma",
+    "dailyPost": "Publicaciones Diarias",
+    "exploreProjects": "Explorar Proyectos",
+    "research": "Investigación",
+    "findBuddy": "Encontrar Compañero",
+    "discoverJob": "Descubrir Trabajos"
+  },
+  "account": {
+    "title": "Cuenta",
+    "manageProfile": "Administrar Perfil",
+    "manageProjects": "Administrar Proyectos",
+    "managePosts": "Administrar Publicaciones",
+    "saved": "Guardados",
+    "accountSettings": "Configuración de Cuenta"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "feedbackMessage": "Tus comentarios nos hacen mejores:",
+    "joinDiscord": "Únete a Discord"
+  },
+  "legal": {
+    "termsOfService": "Términos de Servicio",
+    "privacyPolicy": "Política de Privacidad",
+    "cookiePolicy": "Política de Cookies",
+    "allRightsReserved": "Todos los derechos reservados."
+  },
+  "comingSoon": "Próximamente",
+  "help": "Centro de Ayuda",
+  "blog": "Blog",
+  "careers": "Carreras",
+  "partners": "Socios",
+  "developers": "Desarrolladores",
+  "copyright": "© 2024 ProjectUp. Todos los derechos reservados."
+}

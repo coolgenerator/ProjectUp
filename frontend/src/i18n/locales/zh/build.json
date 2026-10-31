@@ -1,0 +1,33 @@
+{
+  "title": "实践您的项目",
+  "subtitle": "使用我们的工具和模板快速开始",
+  "templates": {
+    "title": "项目模板",
+    "popular": "热门模板",
+    "all": "所有模板",
+    "categories": {
+      "web": "网页开发",
+      "mobile": "移动应用",
+      "ai": "人工智能",
+      "game": "游戏开发",
+      "data": "数据科学",
+      "iot": "物联网",
+      "blockchain": "区块链",
+      "cloud": "云计算"
+    },
+    "card": {
+      "difficulty": "难度",
+      "duration": "预计时长",
+      "language": "编程语言",
+      "framework": "框架",
+      "useTemplate": "使用此模板",
+      "preview": "预览",
+      "customize": "自定义"
+    },
+    "difficultyLevels": {
+      "beginner": "初级",
+      "intermediate": "中级",
+      "advanced": "高级"
+    }
+  }
+}

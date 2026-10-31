@@ -1,0 +1,13 @@
+{
+  "title": "Notificaciones",
+  "unreadCount": "Tienes {{count}} notificación sin leer",
+  "unreadCountPlural": "Tienes {{count}} notificaciones sin leer",
+  "new": "Nuevas",
+  "earlier": "Anteriores",
+  "view": "Ver",
+  "markRead": "Marcar como leída",
+  "noNotifications": "¡Todo al día!",
+  "noNotificationsDesc": "No tienes notificaciones aún. Te notificaremos cuando haya actividad relacionada con tu cuenta.",
+  "failedToFetch": "Error al obtener las notificaciones",
+  "failedToMark": "Error al marcar la notificación como leída"
+}

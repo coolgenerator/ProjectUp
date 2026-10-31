@@ -1,0 +1,90 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+*.log
+
+# Production builds
+build/
+dist/
+*.pyc
+__pycache__/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+.env.test-account
+*.env
+!demo.env
+!*.env.example
+
+# Cloud credentials (service-account keys etc.)
+*service-account*.json
+*credentials*.json
+ai-service/config/*.json
+!ai-service/config/api_config.json
+
+# Local build output and Claude local settings
+**/dist/
+.claude/settings.local.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Private keys
+*.pem
+*.key
+*.crt
+
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.pytest_cache/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Backups
+backups/
+*.backup
+
+# Demo eval run outputs
+demo/eval/

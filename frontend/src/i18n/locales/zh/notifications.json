@@ -1,0 +1,13 @@
+{
+  "title": "通知",
+  "unreadCount": "您有 {{count}} 条未读通知",
+  "unreadCountPlural": "您有 {{count}} 条未读通知",
+  "new": "新通知",
+  "earlier": "较早的通知",
+  "view": "查看",
+  "markRead": "标记为已读",
+  "noNotifications": "全部已读！",
+  "noNotificationsDesc": "您暂时没有任何通知。当有与您账户相关的活动时，我们会通知您。",
+  "failedToFetch": "获取通知失败",
+  "failedToMark": "标记通知为已读失败"
+}

@@ -1,0 +1,28 @@
+[Unit]
+Description=ProjectUp Backend API - Go/Gin REST Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/backend
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+# Make .env optional - only loaded if file exists
+EnvironmentFile=-/home/ubuntu/backend/.env
+
+ExecStart=/home/ubuntu/backend/server
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=append:/var/log/backend.log
+StandardError=append:/var/log/backend-error.log
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

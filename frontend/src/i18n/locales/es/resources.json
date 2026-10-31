@@ -1,0 +1,120 @@
+{
+  "title": "Mis Recursos",
+  "subtitle": "Gestiona tus enlaces web, archivos y otros recursos en un solo lugar",
+  "storageQuota": "Cuota de Almacenamiento",
+  "files": "Archivos",
+  "maxPerFile": "Máx. {{size}} por archivo",
+  "premium": "Premium",
+  "free": "Gratis",
+  "upgrade": "Actualizar",
+  "searchPlaceholder": "Buscar recursos...",
+  "buttons": {
+    "addLink": "Agregar Enlace",
+    "uploadFile": "Subir Archivo",
+    "addPaper": "Agregar Artículo",
+    "upload": "Subir",
+    "saveChanges": "Guardar Cambios"
+  },
+  "filters": {
+    "all": "Todos",
+    "links": "Enlaces",
+    "files": "Archivos",
+    "papers": "Artículos"
+  },
+  "types": {
+    "webLink": "Enlace Web",
+    "file": "Archivo"
+  },
+  "actions": {
+    "open": "Abrir",
+    "download": "Descargar"
+  },
+  "empty": {
+    "title": "Aún no hay recursos",
+    "subtitle": "Comienza agregando un enlace o subiendo un archivo",
+    "addFirstLink": "Agregar Primer Enlace",
+    "uploadFirstFile": "Subir Primer Archivo"
+  },
+  "success": {
+    "linkAdded": "Enlace agregado exitosamente",
+    "fileUploaded": "Archivo subido exitosamente",
+    "resourceUpdated": "Recurso actualizado exitosamente",
+    "resourceDeleted": "Recurso eliminado exitosamente"
+  },
+  "errors": {
+    "loadFailed": "Error al cargar recursos",
+    "loadPapersFailed": "Error al cargar artículos",
+    "searchFailed": "Búsqueda fallida",
+    "addLinkFailed": "Error al agregar enlace",
+    "uploadFailed": "Error al subir archivo",
+    "updateFailed": "Error al actualizar recurso",
+    "deleteFailed": "Error al eliminar recurso",
+    "selectFile": "Por favor selecciona un archivo",
+    "addPaperFailed": "Error al agregar artículo"
+  },
+  "dialogs": {
+    "addLink": {
+      "title": "Agregar Enlace Web",
+      "titleLabel": "Título",
+      "titlePlaceholder": "Ingresa el título del enlace",
+      "urlLabel": "URL",
+      "urlPlaceholder": "https://ejemplo.com",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "Descripción opcional",
+      "tagsLabel": "Etiquetas",
+      "tagsPlaceholder": "Etiquetas separadas por comas"
+    },
+    "uploadFile": {
+      "title": "Subir Archivo",
+      "fileLabel": "Archivo",
+      "chooseFile": "Haz clic para elegir archivo o arrastra y suelta",
+      "maxSize": "Máx. {{size}}",
+      "titleLabel": "Título",
+      "titlePlaceholder": "Título personalizado opcional",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "Descripción opcional",
+      "tagsLabel": "Etiquetas",
+      "tagsPlaceholder": "Etiquetas separadas por comas"
+    },
+    "editResource": {
+      "title": "Editar Recurso",
+      "titleLabel": "Título",
+      "descriptionLabel": "Descripción",
+      "tagsLabel": "Etiquetas",
+      "tagsPlaceholder": "Etiquetas separadas por comas"
+    },
+    "deleteResource": {
+      "title": "Eliminar Recurso",
+      "message": "¿Estás seguro de que quieres eliminar \"{{title}}\"? Esta acción no se puede deshacer."
+    }
+  },
+  "papers": {
+    "empty": {
+      "title": "Aún No Hay Artículos",
+      "subtitle": "Comienza a construir tu biblioteca académica",
+      "addFirst": "Agregar Tu Primer Artículo"
+    },
+    "actions": {
+      "read": "Leer"
+    },
+    "processing": "Procesando artículo...",
+    "success": "¡Artículo agregado exitosamente con metadatos extraídos!",
+    "successMinimal": "¡Artículo agregado! Los metadatos se extraerán en segundo plano.",
+    "uploadSuccess": "¡Artículo subido y procesado exitosamente!",
+    "dialog": {
+      "addLink": "Agregar Enlace",
+      "uploadPDF": "Subir PDF",
+      "paperLink": "Enlace del Artículo (arXiv, DOI o URL del PDF)",
+      "supportedSites": "Compatible con arXiv, DOI y enlaces directos de PDF",
+      "pdfFile": "Archivo PDF",
+      "clickToUpload": "Haz clic para subir PDF",
+      "dragDrop": "o arrastra y suelta",
+      "autoExtract": "La extracción automática hará:",
+      "extractTitle": "Extraer título y autores",
+      "extractAuthors": "Identificar detalles de publicación",
+      "generateTags": "Generar etiquetas relevantes",
+      "categorize": "Categorizar tipo de artículo",
+      "process": "Procesar y Agregar"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "title": "AI 项目助手",
+  "steps": {
+    "analyze": "AI 项目助手",
+    "ideas": "项目创意",
+    "roadmap": "项目路线图"
+  },
+  "buttons": {
+    "backToIdeas": "返回生成的创意",
+    "backToRoadmap": "返回生成的路线图"
+  },
+  "dialog": {
+    "existingSession": {
+      "title": "继续您的项目？",
+      "message": "您有一个现有的 AI 项目助手会话。您想继续之前的进度还是开始新的分析？",
+      "continue": "继续会话",
+      "startFresh": "开始新分析"
+    }
+  },
+  "modals": {
+    "addSkill": {
+      "title": "添加新技能",
+      "placeholder": "输入新技能"
+    },
+    "addInterest": {
+      "title": "添加新兴趣",
+      "placeholder": "输入新兴趣"
+    }
+  },
+  "loading": {
+    "preparing": "准备分析中",
+    "analyzing": "正在分析技能和兴趣...",
+    "processing": "正在处理有趣的输入...",
+    "searching": "正在搜索相关项目领域...",
+    "evaluating": "正在评估难度和时间限制...",
+    "generating": "正在生成个性化项目创意...",
+    "finalizing": "正在完成项目推荐...",
+    "completing": "完成分析",
+    "preparingRoadmap": "准备生成路线图",
+    "analyzingProject": "正在分析项目需求...",
+    "breakingDown": "正在分解项目结构...",
+    "identifyingPhases": "正在识别关键开发阶段...",
+    "planningSteps": "正在规划实施步骤...",
+    "researchingResources": "正在研究学习资源...",
+    "estimatingDuration": "正在估算任务时长...",
+    "finalizingRoadmap": "正在完成路线图结构...",
+    "assembling": "正在组装您的路线图",
+    "roadmapComplete": "路线图生成完成！",
+    "errorOccurred": "发生错误",
+    "preparingRegenerate": "准备重新生成创意",
+    "analyzingPrevious": "正在分析之前的建议...",
+    "findingDirections": "正在寻找新的创意方向...",
+    "exploringAlternatives": "正在探索替代项目领域...",
+    "identifyingCombinations": "正在识别独特的技术组合...",
+    "generatingFresh": "正在生成全新的项目创意...",
+    "finalizingNew": "正在完成新建议...",
+    "completingRegenerate": "完成重新生成",
+    "failed": "生成路线图失败"
+  },
+  "errors": {
+    "generatingIdeas": "生成创意时出错",
+    "generatingIdeasDesc": "我们在生成项目创意时遇到错误。请重试或调整您的输入。",
+    "regeneratingIdeas": "重新生成创意时出错",
+    "regeneratingIdeasDesc": "我们在重新生成项目创意时遇到错误。请重试或调整您的输入。",
+    "generatingRoadmap": "生成路线图时出错",
+    "generatingRoadmapDesc": "生成路线图步骤时发生错误。请重试。",
+    "tryAgain": "请重试",
+    "notSpecified": "未指定",
+    "errorLabel": "错误"
+  }
+}

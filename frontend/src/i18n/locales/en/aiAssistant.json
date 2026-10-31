@@ -1,0 +1,71 @@
+{
+  "title": "AI Project Assistant",
+  "steps": {
+    "analyze": "AI Project Assistant",
+    "ideas": "Project Ideas",
+    "roadmap": "Project Roadmap"
+  },
+  "buttons": {
+    "backToIdeas": "Back to Generated Ideas",
+    "backToRoadmap": "Back to Generated Roadmap"
+  },
+  "dialog": {
+    "existingSession": {
+      "title": "Continue Your Project?",
+      "message": "You have an existing AI project assistant session. Would you like to continue where you left off or start a fresh analysis?",
+      "continue": "Continue Session",
+      "startFresh": "Start Fresh"
+    }
+  },
+  "modals": {
+    "addSkill": {
+      "title": "Add New Skill",
+      "placeholder": "Enter a new skill"
+    },
+    "addInterest": {
+      "title": "Add New Interest",
+      "placeholder": "Enter a new interest"
+    }
+  },
+  "loading": {
+    "preparing": "Preparing analysis",
+    "analyzing": "Analyzing skills and interests...",
+    "processing": "Processing fun & interesting inputs...",
+    "searching": "Searching for relevant project domains...",
+    "evaluating": "Evaluating difficulty and timeframe constraints...",
+    "generating": "Generating personalized project ideas...",
+    "finalizing": "Finalizing project recommendations...",
+    "completing": "Completing analysis",
+    "preparingRoadmap": "Preparing roadmap generation",
+    "analyzingProject": "Analyzing project requirements...",
+    "breakingDown": "Breaking down project structure...",
+    "identifyingPhases": "Identifying key development phases...",
+    "planningSteps": "Planning implementation steps...",
+    "researchingResources": "Researching learning resources...",
+    "estimatingDuration": "Estimating task durations...",
+    "finalizingRoadmap": "Finalizing roadmap structure...",
+    "assembling": "Assembling your roadmap",
+    "roadmapComplete": "Roadmap generation complete!",
+    "errorOccurred": "Error occurred",
+    "preparingRegenerate": "Preparing to regenerate ideas",
+    "analyzingPrevious": "Analyzing previous suggestions...",
+    "findingDirections": "Finding new creative directions...",
+    "exploringAlternatives": "Exploring alternative project domains...",
+    "identifyingCombinations": "Identifying unique technology combinations...",
+    "generatingFresh": "Generating fresh project ideas...",
+    "finalizingNew": "Finalizing new recommendations...",
+    "completingRegenerate": "Completing regeneration",
+    "failed": "Failed to generate roadmap"
+  },
+  "errors": {
+    "generatingIdeas": "Error Generating Ideas",
+    "generatingIdeasDesc": "We encountered an error while generating project ideas. Please try again or adjust your inputs.",
+    "regeneratingIdeas": "Error Regenerating Ideas",
+    "regeneratingIdeasDesc": "We encountered an error while regenerating project ideas. Please try again or adjust your inputs.",
+    "generatingRoadmap": "Error Generating Roadmap",
+    "generatingRoadmapDesc": "There was an error generating the roadmap steps. Please try again.",
+    "tryAgain": "Please try again",
+    "notSpecified": "Not specified",
+    "errorLabel": "Error"
+  }
+}

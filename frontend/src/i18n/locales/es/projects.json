@@ -1,0 +1,176 @@
+{
+  "title": "Proyectos",
+  "createProject": "Crear Nuevo Proyecto",
+  "myProjects": "Mis Proyectos",
+  "allProjects": "Todos los Proyectos",
+  "projectName": "Nombre del Proyecto",
+  "projectDescription": "Descripción del Proyecto",
+  "projectType": "Tipo de Proyecto",
+  "teamSize": "Tamaño del Equipo",
+  "duration": "Duración",
+  "skills": "Habilidades Requeridas",
+  "status": "Estado",
+  "startDate": "Fecha de Inicio",
+  "endDate": "Fecha de Finalización",
+  "members": "Miembros",
+  "owner": "Propietario",
+  "visibility": "Visibilidad",
+  "public": "Público",
+  "private": "Privado",
+  "applyToJoin": "Solicitar Unirse",
+  "inviteMembers": "Invitar Miembros",
+  "projectDashboard": "Panel del Proyecto",
+  "projectSettings": "Configuración del Proyecto",
+  "deleteProject": "Eliminar Proyecto",
+  "archiveProject": "Archivar Proyecto",
+  "active": "Activo",
+  "completed": "Completado",
+  "archived": "Archivado",
+  "recruiting": "Reclutando",
+  "inProgress": "En Progreso",
+  "onHold": "En Espera",
+  "loadingProjects": "Cargando proyectos...",
+  "filterProjects": "Filtrar Proyectos",
+  "searchPlaceholder": "Buscar un Tema, Clase o Proyecto...",
+  "selectType": "Seleccionar Tipo",
+  "research": "Investigación",
+  "schoolWork": "Trabajo Escolar",
+  "personalProject": "Proyecto Personal",
+  "others": "Otros",
+  "topics": "Temas",
+  "dateRange": "Rango de Fechas",
+  "in7Days": "En 7 Días",
+  "in30Days": "En 30 Días",
+  "inOneYear": "En Un Año",
+  "allTime": "Todo el Tiempo",
+  "applyFilters": "Aplicar Filtros",
+  "applying": "Aplicando...",
+  "clearFilters": "Limpiar Filtros",
+  "exploreProjects": "Explorar Proyectos",
+  "createAProject": "Crear un Proyecto",
+  "askAI": "Preguntar a IA",
+  "createWithAI": "Crear Proyecto con IA",
+  "aiProjectAssistant": "Asistente de Proyecto con IA",
+  "noMoreProjects": "No hay más proyectos para mostrar",
+  "noProjectsFound": "No se encontraron proyectos",
+  "beTheFirst": "¡Sé el primero en crear un proyecto emocionante y encontrar colaboradores!",
+  "createYourFirstProject": "Crea Tu Primer Proyecto",
+  "intro": {
+    "hero": {
+      "title": "Explora Proyectos Colaborativos",
+      "description": "Únete a una comunidad vibrante de creadores, innovadores y estudiantes. Descubre proyectos emocionantes, conéctate con colaboradores talentosos y convierte ideas en realidad juntos.",
+      "showcaseAlt": "Demostración de Colaboración en Proyectos"
+    },
+    "features": {
+      "discoverCollaborators": {
+        "title": "Descubre Colaboradores",
+        "description": "Encuentra compañeros de equipo con habilidades complementarias e intereses compartidos para dar vida a tus ideas."
+      },
+      "exploreProjects": {
+        "title": "Explora Proyectos Diversos",
+        "description": "Navega proyectos en investigación, trabajo escolar, emprendimientos personales y más para encontrar tu combinación perfecta."
+      },
+      "seamlessCommunication": {
+        "title": "Comunicación Fluida",
+        "description": "Conéctate con creadores de proyectos y miembros del equipo a través de herramientas integradas de mensajería y colaboración."
+      },
+      "trackProgress": {
+        "title": "Seguimiento del Progreso",
+        "description": "Mantente actualizado sobre hitos, plazos y logros del proyecto con seguimiento en tiempo real."
+      },
+      "showcaseWork": {
+        "title": "Muestra Tu Trabajo",
+        "description": "Construye tu portafolio compartiendo tus proyectos y contribuciones con la comunidad."
+      },
+      "aiAssistance": {
+        "title": "Asistencia Impulsada por IA",
+        "description": "Obtén soporte inteligente de planificación e ideación de proyectos de nuestro asistente de IA para iniciar tu viaje."
+      }
+    },
+    "cta": {
+      "title": "¿Listo para Comenzar a Colaborar?",
+      "description": "Únete a miles de creadores e innovadores construyendo el futuro juntos.",
+      "getStarted": "Comenzar Gratis",
+      "signIn": "Iniciar Sesión"
+    }
+  },
+  "myProjects": {
+    "title": "Mis Proyectos",
+    "createProject": "Crear Proyecto",
+    "tabs": {
+      "all": "Todos los Proyectos",
+      "activeOwned": "Mis Proyectos Activos",
+      "activeJoined": "Proyectos Activos Unidos",
+      "archived": "Proyectos Archivados",
+      "completed": "Proyectos Completados"
+    },
+    "sections": {
+      "owned": "Proyectos de Tu Propiedad",
+      "joined": "Proyectos a los que Te Has Unido"
+    },
+    "emptyStates": {
+      "noProjects": {
+        "title": "Aún no hay proyectos",
+        "description": "Comienza creando tu primer proyecto. Usa la asistencia de IA para ayudar a planificar y estructurar tus ideas.",
+        "action": "Crea Tu Primer Proyecto",
+        "secondaryAction": "Explorar Proyectos"
+      },
+      "noActiveOwned": {
+        "title": "No hay proyectos activos",
+        "description": "No tienes ningún proyecto activo de tu propiedad. Inicia un nuevo proyecto para colaborar con otros.",
+        "action": "Crear Nuevo Proyecto"
+      },
+      "noActiveJoined": {
+        "title": "No hay proyectos unidos",
+        "description": "Aún no te has unido a ningún proyecto activo. Explora proyectos disponibles para encontrar los que coincidan con tus intereses.",
+        "action": "Explorar Proyectos"
+      },
+      "noArchived": {
+        "title": "No hay proyectos archivados",
+        "description": "No tienes proyectos archivados. Los proyectos que archives aparecerán aquí."
+      },
+      "noCompleted": {
+        "title": "No hay proyectos completados",
+        "description": "Aún no has completado ningún proyecto. Sigue trabajando en tus proyectos activos para verlos aquí cuando terminen.",
+        "action": "Ver Proyectos Activos"
+      }
+    },
+    "errors": {
+      "fetchFailed": "Error al obtener proyectos"
+    }
+  },
+  "dashboard": {
+    "title": "Panel del Proyecto",
+    "sections": {
+      "overview": "Resumen",
+      "ideaForest": "Bosque de Ideas",
+      "tasks": "Gestión de Tareas",
+      "milestones": "Hitos",
+      "resources": "Recursos",
+      "workTools": "Herramientas de Trabajo",
+      "meetings": "Reuniones",
+      "teamMembers": "Miembros del Equipo",
+      "projectSettings": "Configuración del Proyecto"
+    },
+    "buttons": {
+      "editProject": "Editar Proyecto",
+      "managePosts": "Gestionar Publicaciones",
+      "saveChanges": "Guardar Cambios",
+      "saving": "Guardando...",
+      "cancel": "Cancelar"
+    },
+    "visibility": {
+      "public": "Público",
+      "private": "Privado",
+      "local": "Local",
+      "organization": "Organización",
+      "unlisted": "No Listado",
+      "unlistedPublished": "No Listado (Publicado)"
+    },
+    "applications": {
+      "title": "Solicitudes",
+      "noApplications": "No hay solicitudes disponibles",
+      "emptyMessage": "Las solicitudes aparecerán aquí cuando los usuarios soliciten unirse a tu proyecto."
+    }
+  }
+}

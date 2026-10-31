@@ -1,0 +1,15 @@
+{
+    "openai": {
+        "api_key": "your-openai-api-key-here"
+    },
+    "vertex_ai": {
+        "project_id": "river-sonar-455619-j5",
+        "location": "us-central1",
+        "model": "gemini-pro",
+        "client_email": "project-up-dev@river-sonar-455619-j5.iam.gserviceaccount.com"
+    },
+    "mcp": {
+        "endpoint": "your-mcp-endpoint-url",
+        "deployment_name": "your-mcp-deployment-name"
+    }
+}

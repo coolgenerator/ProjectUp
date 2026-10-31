@@ -1,0 +1,285 @@
+{
+  "title": "Elige tu plan",
+  "subtitle": "Elige el plan que mejor se adapte a ti. Todos los planes incluyen las funciones principales para ayudarte a sacar tu proyecto adelante.",
+  "monthly": "Mensual",
+  "annual": "Anual",
+  "save": "Ahorra un 20% al año",
+  "regularPricing": "Estándar",
+  "studentPricingLabel": "Estudiante",
+  "eduRequired": "requiere .edu",
+  "studentDiscountAvailable": "Descuento para estudiantes disponible",
+  "mostPopular": "Más popular",
+  "bestValue": "Mejor valor",
+  "currentPlan": "Plan actual",
+  "selectPlan": "Seleccionar plan",
+  "upgrade": "Mejorar",
+  "downgrade": "Bajar de plan",
+  "signUpToSubscribe": "Regístrate para suscribirte",
+  "signUpFree": "Regístrate gratis",
+  "getStarted": "Comenzar",
+  "cancellingAtPeriodEnd": "(Se cancela al final del período)",
+  "perMonth": "/mes",
+  "perYear": "/año",
+  "billedAnnually": "facturado anualmente",
+  "billedAnnuallyAs": "Facturado anualmente: ${{amount}}",
+  "features": "Funciones",
+  "free": "Gratis",
+  "customPricing": "Precio personalizado",
+  "individualPlans": "Planes individuales",
+  "individualPlansDesc": "Ideales para estudiantes, investigadores y profesionales del conocimiento",
+  "teamPlans": "Planes para equipos y laboratorios",
+  "teamPlansDesc": "Pensados para equipos y organizaciones que necesitan crecer",
+  "studentPricing": "Estudiantes: ${{price}}/mes",
+  "saveAmount": "Ahorra ${{amount}}/año",
+  "havePromoCode": "¿Tienes un código promocional?",
+  "enterPromoCode": "Introduce el código promocional",
+  "codeAppliedAtCheckout": "✓ El código se aplicará al pagar",
+  "annualBenefitsTitle": "Ventajas de la facturación anual",
+  "savingsBenefit": "Ahorro del 20%",
+  "savingsBenefitDesc": "Obtén 2 meses gratis con la facturación anual",
+  "priceLockBenefit": "Precio fijo",
+  "priceLockBenefitDesc": "Mantén tu tarifa durante todo el año",
+  "prioritySupportBenefit": "Soporte prioritario",
+  "prioritySupportBenefitDesc": "Los clientes anuales reciben soporte prioritario",
+  "footerNote": "Todos los precios están en USD y no incluyen los impuestos aplicables.",
+  "needHelp": "¿Necesitas ayuda para elegir?",
+  "contactTeam": "Contacta con nuestro equipo",
+  "freeTrial": "Prueba gratuita de 14 días",
+  "priceUnits": {
+    "perUser": "por usuario",
+    "perUserPlusSetup": "por usuario + $499 de configuración",
+    "custom": "precio personalizado"
+  },
+  "studentDiscounts": {
+    "title": "Descuentos para estudiantes",
+    "subtitle": "Se requiere un correo .edu válido",
+    "starterDiscount": "20% de descuento mensual + 15% adicional en el plan anual",
+    "advancedDiscount": "25% de descuento mensual + 15% adicional en el plan anual",
+    "proDiscount": "25% de descuento mensual + 15% adicional en el plan anual"
+  },
+  "clickToExpand": "[Haz clic para ampliar]",
+  "upCredits": {
+    "title": "¿Qué es un UP Credit?",
+    "description": "Los UP Credits impulsan todas las funciones de IA de ProjectUp",
+    "conversion": "1 UP Credit = 100.000 tokens",
+    "conversionDetail": "(~75 páginas de análisis)",
+    "feature1": "Análisis y resumen de documentos",
+    "feature2": "Generación de notas con IA",
+    "feature3": "Asistencia inteligente para proyectos",
+    "feature4": "Búsqueda de compañeros de equipo, con el motivo y el riesgo de cada sugerencia",
+    "feature5": "Búsqueda y recomendaciones inteligentes"
+  },
+  "understandingCredits": {
+    "title": "Entender los UP Credits",
+    "whatAre": {
+      "question": "¿Qué son los UP Credits?",
+      "intro": "Los UP Credits impulsan todas las funciones de IA de ProjectUp:"
+    },
+    "monthlyVsBonus": {
+      "question": "Créditos mensuales y créditos extra",
+      "monthly": {
+        "title": "UP Credits mensuales (incluidos en los planes)",
+        "refresh": "Se renuevan en cada ciclo de facturación",
+        "noRollover": "No se acumulan para el mes siguiente",
+        "bestFor": "Ideales para el uso habitual"
+      },
+      "bonus": {
+        "title": "UP Credits extra (se compran aparte)",
+        "neverExpire": "Nunca caducan",
+        "useAnytime": "Úsalos cuando quieras, incluso después de cancelar",
+        "stack": "Se suman a los créditos mensuales",
+        "perfect": "Ideales para picos de uso ocasionales"
+      },
+      "priority": "Orden de uso:",
+      "priorityDesc": "Primero se usan los créditos mensuales y después los extra."
+    },
+    "howMany": {
+      "question": "¿Cuántos créditos necesito?",
+      "typicalUsage": "Ejemplos de uso habitual:",
+      "example1": "Analizar un PDF de 20 páginas: ~0,3 créditos",
+      "example2": "Buscar compañeros para un puesto abierto: ~0,5 créditos",
+      "example3": "Asistente de proyectos con IA (1 hora): ~2-5 créditos",
+      "example4": "Convertir una idea en proyecto con el coach de IA: ~3-8 créditos",
+      "mostStudents": "La mayoría de los estudiantes usa 20-50 créditos al mes",
+      "powerUsers": "Los usuarios intensivos suelen necesitar 80-150 créditos al mes"
+    }
+  },
+  "purchaseCredits": {
+    "title": "Comprar créditos adicionales",
+    "subtitle": "Compra créditos cuando quieras para complementar tu asignación mensual",
+    "purchase": "Comprar",
+    "customVolumes": "¿Necesitas más volumen?",
+    "contactSales": "Contacta con ventas para volúmenes personalizados",
+    "packCredits": "{{count}} créditos",
+    "perCredit": "${{price}} por crédito"
+  },
+  "plans": {
+    "free": {
+      "name": "Básico",
+      "description": "Perfecto para empezar",
+      "features": [
+        "Explora proyectos que buscan equipo y postúlate",
+        "Crea notas de artículos",
+        "0 UP Credits",
+        "30MB de almacenamiento",
+        "Soporte de la comunidad"
+      ],
+      "buttonText": "Comenzar"
+    },
+    "starter": {
+      "name": "Inicial",
+      "description": "Para convertir tu primera idea en un proyecto",
+      "features": [
+        "Coach de ideas con IA que pregunta, nunca decide por ti",
+        "10 UP Credits/mes",
+        "100MB de almacenamiento",
+        "1 proyecto/mes",
+        "Acceso a IdeaTree",
+        "Colaboración en proyectos",
+        "Asistente de IA para artículos",
+        "Soporte de la comunidad"
+      ],
+      "buttonText": "Empezar con Inicial"
+    },
+    "advanced": {
+      "name": "Avanzado",
+      "description": "Para estudiantes e investigadores que están formando un equipo",
+      "features": [
+        "Sugerencias de compañeros con IA para tus puestos abiertos",
+        "50 UP Credits/mes",
+        "500MB de almacenamiento",
+        "5 proyectos/mes",
+        "Todo lo de Inicial",
+        "Flujos de trabajo y herramientas avanzadas",
+        "Calendario de reuniones del equipo",
+        "Soporte prioritario",
+        "Control de versiones"
+      ],
+      "buttonText": "Pasar a Avanzado"
+    },
+    "pro": {
+      "name": "Pro",
+      "description": "Para usuarios intensivos y profesionales",
+      "features": [
+        "Sugerencias de compañeros para todos tus proyectos",
+        "80 UP Credits/mes",
+        "1GB de almacenamiento",
+        "Proyectos ilimitados",
+        "Todo lo de Avanzado",
+        "Integraciones personalizadas",
+        "Analíticas avanzadas",
+        "Acceso a la API",
+        "Soporte prioritario"
+      ],
+      "buttonText": "Pasar a Pro"
+    },
+    "teamShared": {
+      "name": "Equipo compartido",
+      "description": "Para equipos pequeños y medianos (3-10 usuarios)",
+      "features": [
+        "Mínimo 3 usuarios",
+        "80 UP Credits por usuario/mes",
+        "Todo lo de Pro (por usuario)",
+        "Servidor de comunidad compartido",
+        "Panel de administración del equipo",
+        "Recursos compartidos del equipo",
+        "Espacios de colaboración del equipo",
+        "Controles y permisos de administrador",
+        "Analíticas e informes del equipo",
+        "Acceso al mercado de expertos (comisión del 10%)"
+      ],
+      "buttonText": "Empezar con Equipo compartido"
+    },
+    "teamIsolated": {
+      "name": "Equipo aislado",
+      "description": "Para laboratorios y organizaciones que necesitan infraestructura dedicada",
+      "features": [
+        "Mínimo 5 usuarios",
+        "120 UP Credits por usuario/mes",
+        "Todo lo de Equipo compartido",
+        "Servidor dedicado y aislado",
+        "Dominio personalizado (yourlab.projectup.me)",
+        "Instancia de comunidad privada",
+        "Agentes personalizados para tu organización",
+        "Opciones de marca blanca",
+        "Seguridad avanzada y SSO",
+        "Gestor de cuenta dedicado",
+        "Formación e incorporación personalizadas",
+        "Configuración única: $499"
+      ],
+      "buttonText": "Empezar con Equipo aislado"
+    },
+    "enterprise": {
+      "name": "Empresa",
+      "description": "Para grandes organizaciones (más de 10 usuarios)",
+      "features": [
+        "Todo lo de Equipo aislado",
+        "Miembros de equipo ilimitados",
+        "Almacenamiento de archivos ilimitado",
+        "Contratos y SLA personalizados",
+        "Soporte por teléfono y correo 24/7",
+        "Seguridad y cumplimiento avanzados",
+        "Desarrollo de funciones a medida",
+        "Infraestructura dedicada",
+        "Descuento por volumen en UP Credits"
+      ],
+      "buttonText": "Contactar con ventas"
+    }
+  },
+  "security": "Pago seguro con Stripe",
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "upCreditsRunOut": {
+      "question": "¿Qué pasa si me quedo sin UP Credits?",
+      "answer": "Puedes comprar UP Credits adicionales en cualquier momento o pasar a un plan superior. Nunca pierdes tu trabajo."
+    },
+    "upCreditsRollover": {
+      "question": "¿Se acumulan los UP Credits que no uso?",
+      "answer": "No, los UP Credits se renuevan cada mes. Si necesitas flexibilidad, puedes comprar créditos sueltos."
+    },
+    "changePlans": {
+      "question": "¿Puedo cambiar de plan cuando quiera?",
+      "answer": "Sí, puedes mejorar o bajar de plan cuando quieras. Los cargos y abonos se prorratean automáticamente."
+    },
+    "teamIsolatedSetup": {
+      "question": "¿Qué incluye la tarifa de configuración de $499 de Equipo aislado?",
+      "answer": "Despliegue del servidor, configuración del dominio personalizado, preparación del entorno, personalización inicial de los agentes y una sesión de incorporación para el equipo."
+    },
+    "deploymentTime": {
+      "question": "¿Cuánto tarda el despliegue de Equipo aislado?",
+      "answer": "Normalmente entre 3 y 5 días hábiles después del pago y la consulta inicial."
+    },
+    "teamCreditsShared": {
+      "question": "¿Los planes de equipo comparten los UP Credits?",
+      "answer": "No, cada miembro del equipo tiene su propia asignación mensual de UP Credits."
+    },
+    "freeTrial": {
+      "question": "¿Hay prueba gratuita?",
+      "answer": "¡Sí! Todos los planes de pago incluyen una prueba gratuita de 14 días. No necesitas tarjeta de crédito para empezar."
+    },
+    "paymentMethods": {
+      "question": "¿Qué métodos de pago aceptan?",
+      "answer": "Aceptamos las principales tarjetas de crédito, PayPal y transferencias bancarias para los planes Empresa."
+    },
+    "billing": {
+      "question": "¿Cómo funciona la facturación?",
+      "answer": "Se te factura mensual o anualmente según el plan que elijas. Todos los pagos se procesan de forma segura a través de Stripe."
+    },
+    "changeCancel": {
+      "question": "¿Puedo cambiar o cancelar mi plan?",
+      "answer": "Sí, puedes mejorar, bajar de plan o cancelar tu suscripción en cualquier momento. Los cambios se aplican en el siguiente ciclo de facturación."
+    },
+    "security": {
+      "question": "¿Mi información de pago está segura?",
+      "answer": "Por supuesto. Usamos Stripe para procesar los pagos, que cumple con PCI y utiliza cifrado estándar del sector."
+    },
+    "refunds": {
+      "question": "¿Ofrecen reembolsos?",
+      "answer": "Ofrecemos una garantía de devolución de 30 días en todos los planes de pago. Contacta con soporte si no estás satisfecho."
+    },
+    "switchBilling": {
+      "question": "¿Puedo cambiar entre facturación mensual y anual?",
+      "answer": "Sí, puedes cambiar de ciclo de facturación. Al pasar al plan anual, obtienes el precio con descuento de inmediato."
+    }
+  }
+}

@@ -1,0 +1,1698 @@
+definitions:
+  controllers.PaginatedProjectsResponse:
+    properties:
+      hasMore:
+        description: Indicates if there are more pages beyond the current one
+        type: boolean
+      page:
+        description: Current page number
+        type: integer
+      projects:
+        description: Slice of Project (or ProjectPost, if that’s your model)
+        items:
+          $ref: '#/definitions/models.ProjectPostResponse'
+        type: array
+      total:
+        description: Total number of records (useful for front-end pagination)
+        type: integer
+    type: object
+  controllers.ProjectApplicationRequest:
+    properties:
+      postId:
+        type: integer
+      responses:
+        items:
+          properties:
+            questionId:
+              type: integer
+            response:
+              type: string
+          required:
+          - questionId
+          - response
+          type: object
+        type: array
+    required:
+    - postId
+    - responses
+    type: object
+  models.LoginRequest:
+    description: Required user credentials to authenticate.
+    properties:
+      identifier:
+        example: johndoe@example.com
+        type: string
+      password:
+        example: mypassword
+        type: string
+    required:
+    - identifier
+    - password
+    type: object
+  models.LoginResponse:
+    properties:
+      avatar:
+        example: https://example.com/avatar.jpg
+        type: string
+      email:
+        example: user@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      id:
+        example: 1
+        type: integer
+      last_name:
+        example: Doe
+        type: string
+      refreshToken:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      sid:
+        example: "123456"
+        type: string
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      username:
+        example: john_doe
+        type: string
+    type: object
+  models.Notification:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      is_read:
+        type: boolean
+      notification_id:
+        type: integer
+      title:
+        type: string
+      url:
+        description: URL for details
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.ProjectPostResponse:
+    properties:
+      class:
+        type: string
+      cover:
+        type: string
+      deadline:
+        type: string
+      description:
+        type: string
+      is_loved:
+        type: boolean
+      is_saved:
+        type: boolean
+      location:
+        type: string
+      love_count:
+        type: integer
+      medias:
+        items:
+          type: integer
+        type: array
+      post_id:
+        description: Fields from project_posts
+        type: integer
+      project_id:
+        type: integer
+      school:
+        type: string
+      short_id:
+        type: string
+      spots:
+        items:
+          type: integer
+        type: array
+      start_time:
+        type: string
+      style:
+        description: Fields from project (mapped into ProjectPostResponse)
+        type: string
+      title:
+        type: string
+      topic:
+        items:
+          type: integer
+        type: array
+      topics:
+        description: if you store them in project.topic
+        items:
+          type: integer
+        type: array
+      user_id:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      applications:
+        items:
+          type: object
+        type: array
+      avatar_url:
+        description: Avatar URL
+        example: https://example.com/avatar.jpg
+        type: string
+      biography:
+        description: Biography
+        example: Passionate developer and entrepreneur.
+        type: string
+      city:
+        description: City
+        example: San Diego
+        type: string
+      country:
+        description: Country
+        example: USA
+        type: string
+      created_at:
+        description: Creation timestamp
+        example: "2024-02-16T12:34:56Z"
+        type: string
+      email:
+        description: Email, unique
+        example: johndoe@example.com
+        type: string
+      email_verified:
+        description: Personal email verification status
+        example: true
+        type: boolean
+      field:
+        description: Field of study
+        example: Computer Science
+        type: string
+      first_name:
+        description: First name
+        example: John
+        type: string
+      id:
+        description: Primary key
+        example: 1
+        type: integer
+      interests:
+        description: Relationships
+        items:
+          type: object
+        type: array
+      language:
+        description: Preferred language
+        type: object
+      last_name:
+        description: Last name
+        example: Doe
+        type: string
+      liked_posts:
+        items:
+          type: object
+        type: array
+      password:
+        description: Hashed password (not shown)
+        type: string
+      phone:
+        description: Phone number
+        example: +1-555-555-5555
+        type: string
+      preferred_name:
+        description: Preferred name
+        example: Johnny
+        type: string
+      project_comments:
+        items:
+          type: object
+        type: array
+      project_interactions:
+        items:
+          type: object
+        type: array
+      project_posts:
+        items:
+          type: object
+        type: array
+      projects:
+        items:
+          type: object
+        type: array
+      refresh_token:
+        description: Refresh token
+        example: some-refresh-token
+        type: string
+      resume_url:
+        description: Resume URL
+        example: https://example.com/resume.pdf
+        type: string
+      school:
+        description: School name
+        example: UC San Diego
+        type: string
+      school_email:
+        description: School email
+        example: johndoe@school.edu
+        type: string
+      school_email_verified:
+        description: School email verification status
+        example: false
+        type: boolean
+      sid:
+        description: Short ID
+        example: USR1234
+        type: string
+      skills:
+        items:
+          type: object
+        type: array
+      state:
+        description: State or province
+        example: California
+        type: string
+      token:
+        description: Access token
+        example: some-jwt-token
+        type: string
+      updated_at:
+        description: Update timestamp
+        example: "2024-02-16T12:34:56Z"
+        type: string
+      user_type:
+        description: Role (e.g., ADMIN or USER)
+        example: USER
+        type: string
+      username:
+        description: Username
+        example: johndoe123
+        type: string
+      verified:
+        description: Verification status
+        example: true
+        type: boolean
+      website:
+        description: Personal website
+        example: https://johndoe.com
+        type: string
+      zip_code:
+        description: ZIP code
+        example: "92093"
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /check-email-verified:
+    get:
+      consumes:
+      - application/json
+      description: Checks whether a given email is verified
+      parameters:
+      - description: User Email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Verification status
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+        "400":
+          description: Email is required
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Check email verification status
+      tags:
+      - Auth
+  /check-username:
+    get:
+      description: Checks if a given username already exists in the system
+      parameters:
+      - description: Username to check
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Username exists status
+          schema: {}
+        "400":
+          description: Invalid request
+          schema: {}
+        "500":
+          description: Database query error
+          schema: {}
+      summary: Check username availability
+      tags:
+      - Auth
+  /contact/:
+    get:
+      description: Retrieves a list of contacts for the authenticated user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with contacts
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get user contacts
+      tags:
+      - Contacts
+  /contact/accept:
+    post:
+      description: Accepts a pending contact request.
+      parameters:
+      - description: Contact user ID
+        in: query
+        name: contact_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Contact request accepted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Contact request not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Accept contact request
+      tags:
+      - Contacts
+  /contact/decline:
+    post:
+      description: Declines a pending contact request.
+      parameters:
+      - description: Contact user ID
+        in: query
+        name: contact_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Contact request declined successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Decline contact request
+      tags:
+      - Contacts
+  /contact/get-requests:
+    get:
+      description: Retrieves a list of pending contact requests for the authenticated
+        user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Pending contact requests
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get contact requests
+      tags:
+      - Contacts
+  /contact/requests:
+    post:
+      description: Sends a contact request to another user.
+      parameters:
+      - description: Contact user ID
+        in: query
+        name: contact_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Contact request sent successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Contact request already exists
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Send contact request
+      tags:
+      - Contacts
+  /create-group:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new group chat with the specified users.
+      parameters:
+      - description: Group name and user IDs
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Group chat created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a group chat
+      tags:
+      - GroupChat
+  /get-or-create:
+    post:
+      consumes:
+      - application/json
+      description: Checks if a private chat exists between two users; creates a new
+        one if not.
+      parameters:
+      - description: User IDs
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Chat found or created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get or create a private chat
+      tags:
+      - Chat
+  /get-profile:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a user's public profile details
+      parameters:
+      - description: User ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response with profile details
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get user profile by ID
+      tags:
+      - Users
+  /group-members:
+    get:
+      description: Retrieves the list of users in a specified group chat.
+      parameters:
+      - description: Chat ID
+        in: query
+        name: chat_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of group members
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get group members
+      tags:
+      - GroupChat
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in a user and returns an access token and refresh token
+      parameters:
+      - description: User credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful login
+          schema:
+            $ref: '#/definitions/models.LoginResponse'
+        "400":
+          description: Invalid input
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      summary: User login
+      tags:
+      - Auth
+  /logout:
+    post:
+      description: Clears authentication cookies to log out the user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logged out successfully
+          schema: {}
+      summary: Logout user
+      tags:
+      - Auth
+  /mark-read:
+    post:
+      consumes:
+      - application/json
+      description: Marks all unread messages in a private chat as read for the specified
+        user.
+      parameters:
+      - description: Chat ID and User ID
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Messages marked as read
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Mark messages as read
+      tags:
+      - Chat
+  /messages:
+    get:
+      description: Retrieves messages from a private chat by chat ID.
+      parameters:
+      - description: Chat ID
+        in: query
+        name: chat_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Messages retrieved
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get chat messages
+      tags:
+      - Chat
+  /my-profile:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the profile of the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response with user profile
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get my profile
+      tags:
+      - Users
+  /notifications:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of notifications for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of notifications
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.Notification'
+              type: array
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to fetch notifications
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get notifications
+      tags:
+      - Notifications
+  /notifications/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Marks a notification as read by its ID
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Notification marked as read
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Notification not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to mark notification as read
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Mark notification as read
+      tags:
+      - Notifications
+  /profile:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a user profile based on the provided SID
+      parameters:
+      - description: User SID
+        in: query
+        name: sid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response with user profile
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request (missing sid)
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get user profile
+      tags:
+      - Users
+    put:
+      consumes:
+      - multipart/form-data
+      description: Updates the profile details of the authenticated user
+      parameters:
+      - description: First Name
+        in: formData
+        name: first_name
+        type: string
+      - description: Last Name
+        in: formData
+        name: last_name
+        type: string
+      - description: Username
+        in: formData
+        name: username
+        type: string
+      - description: Website URL
+        in: formData
+        name: website
+        type: string
+      - description: User Email
+        in: formData
+        name: email
+        type: string
+      - description: School Email
+        in: formData
+        name: school_email
+        type: string
+      - description: Biography
+        in: formData
+        name: biography
+        type: string
+      - description: State
+        in: formData
+        name: state
+        type: string
+      - description: City
+        in: formData
+        name: city
+        type: string
+      - description: Country
+        in: formData
+        name: country
+        type: string
+      - description: ZIP Code
+        in: formData
+        name: zipcode
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input format
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to update profile
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update profile
+      tags:
+      - Users
+  /project/{sid}:
+    get:
+      description: Fetches details of a specific project using its ShortID (SID)
+      parameters:
+      - description: Project Short ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Project details retrieved successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Project SID is required
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Project not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to fetch project
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get project details
+      tags:
+      - Project Dashboard
+  /project/{sid}/applications:
+    get:
+      description: Fetch applications and related questions for a project post
+      parameters:
+      - description: Project Post ID
+        in: path
+        name: post_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Applications and related questions
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid post ID
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to fetch data
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get project applications
+      tags:
+      - Project Dashboard
+  /project/{sid}/members:
+    get:
+      description: Fetches the list of members in a project
+      parameters:
+      - description: Project Short ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of project members
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Project not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to fetch project members
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get project members
+      tags:
+      - Project Dashboard
+  /project/{sid}/members/{userID}:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the role of a specific project member
+      parameters:
+      - description: Project Short ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      - description: User ID of the member
+        in: path
+        name: userID
+        required: true
+        type: integer
+      - description: Role update request
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Member role updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Project not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to update role
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update project member role
+      tags:
+      - Project Dashboard
+  /project/{sid}/members/{userID}/permissions:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the permission settings of a project member
+      parameters:
+      - description: Project Short ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      - description: User ID of the member
+        in: path
+        name: userID
+        required: true
+        type: integer
+      - description: Permissions update request
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: boolean
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Permissions updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Project or member not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to update permissions
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update project member permissions
+      tags:
+      - Project Dashboard
+  /project/{sid}/milestones:
+    get:
+      description: Fetches all milestones for a given project
+      parameters:
+      - description: Project Short ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Milestones retrieved successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Project SID is required
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Project not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to fetch milestones
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get project milestones
+      tags:
+      - Project Dashboard
+  /project/{sid}/resources:
+    get:
+      description: Fetches all resources for a given project
+      parameters:
+      - description: Project Short ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Resources retrieved successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Project SID is required
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Project not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to fetch resources
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get project resources
+      tags:
+      - Project Dashboard
+  /project/{sid}/workspaces:
+    get:
+      description: Fetches all workspaces for a given project
+      parameters:
+      - description: Project Short ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Workspaces retrieved successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Project SID is required
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Project not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to fetch workspaces
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get project workspaces
+      tags:
+      - Project Dashboard
+  /projects/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Handles project creation for authenticated users
+      parameters:
+      - description: Project Title
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: Project Description
+        in: formData
+        name: description
+        type: string
+      - description: Project Type
+        in: formData
+        name: project_type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Project created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to create project
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new project
+      tags:
+      - Projects
+  /projects/project-applications:
+    post:
+      consumes:
+      - application/json
+      description: Submits an application for a project post
+      parameters:
+      - description: Application request data
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ProjectApplicationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Application submitted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to submit application
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Submit project application
+      tags:
+      - Projects
+  /projects/project-post/{shortId}:
+    get:
+      consumes:
+      - application/json
+      description: Fetch a project post using its unique short ID
+      parameters:
+      - description: Project Post Short ID
+        in: path
+        name: shortId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Project post data
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Project post not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a project post
+      tags:
+      - Projects
+  /projects/project-posts:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a paginated list of project posts
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Number of results per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of project posts
+          schema:
+            $ref: '#/definitions/controllers.PaginatedProjectsResponse'
+        "500":
+          description: Failed to fetch project posts
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get project posts
+      tags:
+      - Projects
+  /projects/project-posts/{postId}/save:
+    post:
+      consumes:
+      - application/json
+      description: Saves or removes a project post from the saved list of the user
+      parameters:
+      - description: Project Post ID
+        in: path
+        name: postId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Save action completed successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid post ID
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to save project post
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Save a project post
+      tags:
+      - Projects
+  /refresh-token:
+    post:
+      consumes:
+      - application/json
+      description: Provides a new access token using a valid refresh token
+      parameters:
+      - description: Refresh token
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New access token
+          schema:
+            $ref: '#/definitions/models.LoginResponse'
+        "400":
+          description: Invalid request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      summary: Refresh access token
+      tags:
+      - Auth
+  /send-reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Sends a password reset email to the user
+      parameters:
+      - description: User Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reset password email sent successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Email is required
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Send password reset email
+      tags:
+      - Auth
+  /send-verification-email:
+    post:
+      consumes:
+      - application/json
+      description: Sends a verification email to the user's email address
+      parameters:
+      - description: User Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Verification email sent successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Email is required
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Send email verification
+      tags:
+      - Auth
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user account with the provided details
+      parameters:
+      - description: User data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User created successfully
+          schema: {}
+        "400":
+          description: Invalid input
+          schema: {}
+      summary: Register a new user
+      tags:
+      - Auth
+  /unread-count:
+    get:
+      description: Retrieves the count of unread messages in a private chat for a
+        user.
+      parameters:
+      - description: Chat ID
+        in: query
+        name: chat_id
+        required: true
+        type: integer
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Unread message count
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get unread message count
+      tags:
+      - Chat
+  /update-password:
+    post:
+      consumes:
+      - application/json
+      description: Updates the user's password using a reset token
+      parameters:
+      - description: Token and new password
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password updated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update password
+      tags:
+      - Auth
+  /verify:
+    get:
+      consumes:
+      - application/json
+      description: Verifies a user's email using the provided token
+      parameters:
+      - description: Verification Token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Email verified successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Token is required
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Verify email
+      tags:
+      - Auth
+  /ws:
+    get:
+      description: Establishes a WebSocket connection for real-time chat, notifications,
+        and contact requests
+      parameters:
+      - description: JWT Token for authentication
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "101":
+          description: WebSocket connection established
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to upgrade connection
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: WebSocket Connection
+      tags:
+      - WebSocket
+swagger: "2.0"

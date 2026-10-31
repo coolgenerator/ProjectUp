@@ -1,0 +1,31 @@
+{
+  "title": "Construye Tu Proyecto",
+  "subtitle": "Comienza con una plantilla o crea desde cero",
+  "templates": "Plantillas de Proyecto",
+  "fromScratch": "Comenzar Desde Cero",
+  "useTemplate": "Usar Esta Plantilla",
+  "customizeTemplate": "Personalizar Plantilla",
+  "projectPlanning": "Planificación de Proyecto",
+  "createMindmap": "Crear Mapa Mental",
+  "defineGoals": "Definir Objetivos",
+  "setMilestones": "Establecer Hitos",
+  "techStack": "Stack Tecnológico",
+  "difficulty": "Dificultad",
+  "estimatedTime": "Tiempo Estimado",
+  "features": "Características",
+  "beginner": "Principiante",
+  "intermediate": "Intermedio",
+  "advanced": "Avanzado",
+  "categories": {
+    "web": "Desarrollo Web",
+    "mobile": "Desarrollo Móvil",
+    "ai": "IA y Aprendizaje Automático",
+    "game": "Desarrollo de Juegos",
+    "data": "Ciencia de Datos",
+    "blockchain": "Blockchain",
+    "iot": "IoT",
+    "cloud": "Computación en la Nube",
+    "security": "Ciberseguridad",
+    "design": "Diseño y UI/UX"
+  }
+}

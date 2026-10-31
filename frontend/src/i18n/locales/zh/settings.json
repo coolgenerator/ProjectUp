@@ -1,0 +1,214 @@
+{
+  "title": "设置",
+  "subtitle": "管理您的偏好设置",
+  "saveButton": "保存设置",
+  "saveSuccessMessage": "设置已成功保存！",
+  "tabs": {
+    "general": "常规",
+    "profile": "个人资料与账户",
+    "account": "账户",
+    "notifications": "通知",
+    "security": "安全",
+    "aiSettings": "AI 设置",
+    "socialMedia": "社交媒体",
+    "appearance": "外观",
+    "preferences": "偏好设置",
+    "modalWindows": "弹窗设置",
+    "applicationBehavior": "应用行为",
+    "performance": "性能"
+  },
+  "account": {
+    "title": "账户设置",
+    "updateUsername": "更新用户名",
+    "username": "用户名",
+    "checkingAvailability": "检查可用性...",
+    "usernameAvailable": "用户名可用",
+    "usernameTaken": "用户名已被占用",
+    "usernameError": "用户名只能包含字母、数字和下划线",
+    "usernameMinLength": "用户名至少需要3个字符",
+    "usernameHint": "用户名只能包含字母、数字和下划线。",
+    "updating": "更新中...",
+    "updateUsernameButton": "更新用户名",
+    "updateEmail": "更新邮箱",
+    "currentEmail": "当前邮箱",
+    "newEmail": "新邮箱",
+    "emailInUse": "邮箱已被使用",
+    "invalidEmailFormat": "邮箱格式无效",
+    "emailRequired": "邮箱为必填项",
+    "checkingEmail": "检查邮箱可用性...",
+    "emailVerificationNote": "注意：您需要验证新的邮箱地址才能生效。",
+    "sendingVerification": "发送验证邮件...",
+    "updateEmailButton": "更新邮箱",
+    "usernameUpdateSuccess": "用户名更新成功",
+    "emailUpdateSuccess": "邮箱更新请求已发送。请查收邮件进行验证。",
+    "updateFailed": "更新失败",
+    "deleteAccount": "删除账户"
+  },
+  "security": {
+    "title": "安全设置",
+    "changePassword": "更改密码",
+    "currentPassword": "当前密码",
+    "newPassword": "新密码",
+    "confirmNewPassword": "确认新密码",
+    "passwordMismatch": "新密码不匹配",
+    "passwordMinLength": "密码必须至少8个字符",
+    "passwordHint": "密码必须至少8个字符长。",
+    "changingPassword": "更改中...",
+    "changePasswordButton": "更改密码",
+    "passwordUpdateSuccess": "密码更新成功",
+    "passwordUpdateFailed": "密码更新失败",
+    "twoFactorAuth": "双因素认证",
+    "enable2FA": "启用双因素认证",
+    "disable2FA": "禁用双因素认证",
+    "sessions": "活动会话",
+    "viewSessions": "查看所有会话",
+    "logoutAll": "登出所有设备",
+    "loginHistory": "登录历史",
+    "viewHistory": "查看登录历史"
+  },
+  "aiSettings": {
+    "title": "AI API 配置",
+    "description": "配置您的AI服务API密钥。这些密钥将被安全存储并用于AI功能。",
+    "openaiKey": "OpenAI API 密钥",
+    "anthropicKey": "Anthropic API 密钥",
+    "googleAiKey": "Google AI API 密钥",
+    "saveApiKeys": "保存 API 密钥",
+    "apiKeysSaved": "API 密钥已保存"
+  },
+  "socialMedia": {
+    "title": "社交媒体连接",
+    "description": "连接您的社交媒体账户以导入内容并同步您的活动。",
+    "youtube": "YouTube",
+    "reddit": "Reddit",
+    "bilibili": "哔哩哔哩",
+    "xiaohongshu": "小红书",
+    "connect": "连接",
+    "disconnect": "断开连接",
+    "connected": "已连接",
+    "notConnected": "未连接"
+  },
+  "language": {
+    "title": "语言偏好",
+    "description": "选择您的界面语言",
+    "updating": "正在更新语言设置...",
+    "options": {
+      "english": "英语",
+      "chinese": "中文"
+    }
+  },
+  "displayName": {
+    "title": "显示名称",
+    "updateSuccess": "显示名称偏好设置更新成功",
+    "options": {
+      "firstName": "名字",
+      "preferredName": "首选名称",
+      "username": "用户名",
+      "fullName": "全名"
+    }
+  },
+  "profile": {
+    "title": "个人资料和账户信息",
+    "subtitle": "管理您的个人资料设置和账户详细信息"
+  },
+  "notifications": {
+    "title": "通知",
+    "subtitle": "管理您如何接收通知",
+    "deliveryMethods": "通知推送方式",
+    "deliveryMethodsDesc": "选择您希望如何接收通知",
+    "notificationTypes": "通知内容类型",
+    "notificationTypesDesc": "选择您希望接收哪些活动的通知",
+    "quickTip": "小贴士：",
+    "quickTipDesc": "您可以使用上方的推送方式自定义通知接收方式，并在下方选择您想要接收通知的活动类型。",
+    "inApp": {
+      "title": "应用内通知",
+      "description": "在应用程序界面内显示通知"
+    },
+    "email": {
+      "title": "邮件通知",
+      "description": "通过邮件接收通知到您的注册邮箱"
+    },
+    "push": {
+      "title": "推送通知",
+      "description": "即使应用关闭也能收到浏览器推送通知"
+    },
+    "projectUpdates": {
+      "title": "项目更新",
+      "description": "当您关注的项目有更新或新的里程碑时"
+    },
+    "comments": {
+      "title": "评论",
+      "description": "当有人评论您的帖子或回复您的评论时"
+    },
+    "messages": {
+      "title": "私信",
+      "description": "当您收到其他用户的新私信时"
+    }
+  },
+  "privacy": {
+    "title": "账户隐私",
+    "options": {
+      "public": "公开",
+      "private": "私密",
+      "friendsOnly": "仅好友"
+    },
+    "profileVisibility": "个人资料可见性",
+    "dataPrivacy": "数据隐私",
+    "blockedUsers": "黑名单用户"
+  },
+  "appearance": {
+    "title": "外观",
+    "theme": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "auto": "跟随系统",
+    "accentColor": "强调色",
+    "fontSize": "字体大小",
+    "small": "小",
+    "medium": "中",
+    "large": "大",
+    "animations": "动画",
+    "reducedMotion": "减少动画",
+    "colorScheme": "选择您偏好的配色方案",
+    "currentTheme": "当前主题：",
+    "lightMode": "浅色模式",
+    "darkMode": "深色模式",
+    "themePersistence": "您的主题偏好设置会自动保存，并在不同会话间保持一致。"
+  },
+  "theme": {
+    "title": "主题",
+    "options": {
+      "light": "浅色",
+      "dark": "深色",
+      "auto": "跟随系统"
+    }
+  },
+  "modals": {
+    "title": "弹窗设置",
+    "autoClose": "操作后自动关闭弹窗",
+    "enableAnimations": "启用弹窗动画",
+    "description": "控制应用程序中弹窗的行为"
+  },
+  "behavior": {
+    "title": "应用行为",
+    "autoRefresh": "自动刷新内容",
+    "confirmActions": "破坏性操作前确认"
+  },
+  "performance": {
+    "title": "性能",
+    "enableAnimations": "启用动画",
+    "prefetchData": "预取数据以加快加载速度",
+    "description": "根据您的设备性能调整设置"
+  },
+  "sidebar": {
+    "account": "账户",
+    "profile": "个人资料",
+    "privacy": "隐私",
+    "notifications": "通知",
+    "appearance": "外观",
+    "language": "语言",
+    "security": "安全",
+    "billing": "账单",
+    "applications": "应用",
+    "developer": "开发者"
+  }
+}

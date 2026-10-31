@@ -1,0 +1,135 @@
+{
+  "hero": {
+    "badge": "AI team-building",
+    "titleLine1": "Turn an idea into a project,",
+    "titleLine2": "then find teammates who show up",
+    "body": "Write down an idea. The AI only asks questions and never thinks for you, so you work out what to build and who is missing. Then it suggests just a few people from your school or circle, each with why they fit and what the risk is.",
+    "ctaGuest": "Start with an idea",
+    "ctaMember": "Continue my idea",
+    "browse": "See who's recruiting",
+    "typewriter": {
+      "kicker": "PROJECTUP · RECRUITING",
+      "lead": "Still looking for a",
+      "tail": ".",
+      "chipsLabel": "Switch the missing role",
+      "roles": ["frontend dev", "UX designer", "clinician", "data analyst"]
+    }
+  },
+  "pain": {
+    "kicker": "Why teaming up is hard",
+    "title": "Finding people is easy. Finding reliable ones isn't.",
+    "items": [
+      { "title": "No one outside your field", "body": "A project needs engineering, design and business, but your network stops at your own major. Posting and group chats come down to luck." },
+      { "title": "Interested, but not committed", "body": "Saying you're interested costs nothing. People vanishing halfway through is the most common way small teams fail." },
+      { "title": "Lots of information, hard to decide", "body": "Even with profiles and chat logs in front of you, it's hard to tell who fits and who will follow through." }
+    ]
+  },
+  "how": {
+    "kicker": "How it works",
+    "title": "From a one-line idea to a team ready to start",
+    "steps": [
+      { "title": "The AI asks, you think", "body": "Three key questions per round, answered in your own words. The AI points out gaps but doesn't think for you." },
+      { "title": "Shape it into a project", "body": "Get a vision, blockers, a two-week plan and role cards for who's missing, plus a kickoff prompt you can hand to other AI tools." },
+      { "title": "A few good matches", "body": "Only a handful of people from your school or circle, each with why they fit and the main risk." }
+    ],
+    "demo": {
+      "kicker": "How it works",
+      "title": "Three steps from idea to teammate",
+      "tablistLabel": "Steps",
+      "tabs": ["Ask", "Shape", "Match"],
+      "docHeading": "Round 1 · Who is it for?",
+      "docStatus": "You're answering",
+      "cursor": "You",
+      "planLabel": "Project draft · next two weeks",
+      "weekdays": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      "plan": ["Interviews", "Role cards", "Scope", "Prototype", "Meet doctors", "Review"],
+      "matchLabel": "Top candidate · match score",
+      "score": "{{n}}/100",
+      "scoreNote": "Each with a reason and a risk"
+    }
+  },
+  "preview": {
+    "kicker": "What a match looks like",
+    "title": "Every suggestion explains why, and what could go wrong",
+    "body": "No endless feed. You get a few people or projects at a time, each flagged with the one risk that matters most, such as \"can only give 4 hours a week, below the 6 the role needs\". You decide faster instead of drowning in information.",
+    "hint": "Try the tabs to see what each side sees.",
+    "ariaLabel": "Match preview",
+    "bestMatch": "Best",
+    "tabs": [
+      {
+        "label": "Founder",
+        "rows": [
+          ["Hao Sun · Clinical coordinator", "Reads radiology images · Risk: only 4 hrs/week", "85"],
+          ["Yi Chen · Frontend dev", "React 4/5, built full-stack apps · Risk: no DICOM experience", "75"],
+          ["Wei Zhang · Frontend dev", "Full-stack, can handle deploys · Risk: no medical background", "70"]
+        ]
+      },
+      {
+        "label": "Seeker",
+        "rows": [
+          ["Paper speed-reader", "Frontend engineer · ~10 hrs/week · Risk: no PDF rendering yet", "90"],
+          ["AI tutor for rural schools", "Frontend engineer · ~8 hrs/week · Risk: new to rural education", "85"],
+          ["Chronic-care follow-up bot", "Full-stack dev · ~10 hrs/week · Risk: light database experience", "80"]
+        ]
+      },
+      {
+        "label": "Applying",
+        "rows": [
+          ["Pick a specific role", "Frontend dev · the project needs ~8 hrs/week", "1"],
+          ["Commit your hours", "10 hrs/week · up to 3 open applications", "2"],
+          ["Two-week trial first", "Finish a small task, then both sides confirm", "3"]
+        ]
+      }
+    ]
+  },
+  "trust": {
+    "kicker": "Why it's more reliable",
+    "title": "Turn \"interested\" into \"committed\"",
+    "body": "Applications state how many hours a week you can give, and you can only have 3 open at once. Every new member starts with a two-week trial. What you finish is recorded and becomes your track record for the next team.",
+    "cardsKicker": "Six mechanisms",
+    "cardsTitle": "Teams that stick together",
+    "cardsDescription": "Scroll to see how we cut down on people who agree to join and then vanish.",
+    "cardsCta": "Start a team",
+    "items": [
+      ["Committed hours", "Pledge weekly hours when applying"],
+      ["Application cap", "Up to 3 open applications"],
+      ["Two-week trial", "A small task before joining"],
+      ["Portable record", "Finished work builds your reputation"],
+      ["Layered sharing", "Core ideas only for accepted members"],
+      ["Verified campus", "School email verification"]
+    ]
+  },
+  "faq": {
+    "kicker": "FAQ",
+    "title": "Questions you might have",
+    "items": [
+      {
+        "question": "How is this different from posting in a group chat?",
+        "answer": "A post only helps you find people. We help you find reliable ones: the AI breaks your needs into roles, every suggestion comes with a reason and a risk, applicants commit hours, and there's a trial period.",
+        "linkLabel": "See who's recruiting"
+      },
+      {
+        "question": "Does the AI decide for me?",
+        "answer": "No. The AI only asks questions and gathers evidence; who to pick and what to do is up to you. It suggests just a few people at a time so you're never buried.",
+        "linkLabel": "Try the idea workbench"
+      },
+      {
+        "question": "Could someone take my idea?",
+        "answer": "Public posts only show the direction and the roles you need. The core idea is visible only to accepted applicants, and every edit is timestamped.",
+        "linkLabel": "Post a project"
+      },
+      {
+        "question": "Where can I use it?",
+        "answer": "During the beta we're piloting with a few schools and research groups. Sign up with your school email to join.",
+        "linkLabel": "Sign up free"
+      }
+    ]
+  },
+  "final": {
+    "title": "Your next great project may be one teammate away",
+    "body": "Spend five minutes thinking your idea through. Matching does the rest.",
+    "ctaGuest": "Get started free",
+    "ctaMember": "Open the workbench",
+    "browse": "Browse projects"
+  }
+}

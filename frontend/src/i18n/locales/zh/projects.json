@@ -1,0 +1,233 @@
+{
+  "title": "探索项目",
+  "subtitle": "发现并加入令人兴奋的项目",
+  "createProject": "创建新项目",
+  "filters": {
+    "all": "全部",
+    "active": "进行中",
+    "recruiting": "招募中",
+    "completed": "已完成",
+    "myProjects": "我的项目"
+  },
+  "search": {
+    "placeholder": "搜索项目...",
+    "byName": "按名称",
+    "bySkills": "按技能",
+    "byTopic": "按主题"
+  },
+  "card": {
+    "owner": "项目负责人",
+    "members": "成员",
+    "skills": "所需技能",
+    "deadline": "截止日期",
+    "status": "状态",
+    "viewDetails": "查看详情",
+    "apply": "申请加入",
+    "applied": "已申请",
+    "joined": "已加入"
+  },
+  "create": {
+    "title": "创建新项目",
+    "step1": {
+      "title": "基本信息",
+      "projectName": "项目名称",
+      "projectNamePlaceholder": "给你的项目起个名字",
+      "description": "项目描述",
+      "descriptionPlaceholder": "描述你的项目想法和目标",
+      "category": "项目类别",
+      "selectCategory": "选择类别",
+      "visibility": "项目可见性",
+      "public": "公开 - 任何人都可以查看和申请",
+      "private": "私密 - 仅限邀请"
+    },
+    "step2": {
+      "title": "项目详情",
+      "duration": "预计时长",
+      "teamSize": "团队规模",
+      "requiredSkills": "所需技能",
+      "addSkill": "添加技能",
+      "goals": "项目目标",
+      "addGoal": "添加目标",
+      "repository": "代码仓库",
+      "repositoryPlaceholder": "GitHub仓库链接（可选）"
+    },
+    "step3": {
+      "title": "团队设置",
+      "roles": "团队角色",
+      "addRole": "添加角色",
+      "roleName": "角色名称",
+      "roleDescription": "角色描述",
+      "roleCount": "需要人数",
+      "applicationQuestions": "申请问题",
+      "addQuestion": "添加问题",
+      "questionPlaceholder": "你想问申请者什么？"
+    },
+    "buttons": {
+      "back": "上一步",
+      "next": "下一步",
+      "create": "创建项目",
+      "cancel": "取消",
+      "saveDraft": "保存草稿"
+    }
+  },
+  "details": {
+    "overview": "概览",
+    "team": "团队",
+    "progress": "进度",
+    "resources": "资源",
+    "discussions": "讨论",
+    "settings": "设置",
+    "about": "关于项目",
+    "timeline": "时间线",
+    "milestones": "里程碑",
+    "tasks": "任务",
+    "joinRequest": "加入请求",
+    "leaveProject": "离开项目",
+    "editProject": "编辑项目",
+    "deleteProject": "删除项目"
+  },
+  "loadingProjects": "加载项目中...",
+  "filterProjects": "筛选项目",
+  "searchPlaceholder": "搜索主题、课程或项目...",
+  "selectType": "选择类型",
+  "research": "研究",
+  "schoolWork": "学校作业",
+  "personalProject": "个人项目",
+  "others": "其他",
+  "topics": "主题",
+  "dateRange": "日期范围",
+  "in7Days": "7天内",
+  "in30Days": "30天内",
+  "inOneYear": "一年内",
+  "allTime": "所有时间",
+  "applyFilters": "应用筛选",
+  "applying": "应用中...",
+  "clearFilters": "清除筛选",
+  "exploreProjects": "探索项目",
+  "createAProject": "创建项目",
+  "askAI": "询问 AI",
+  "createWithAI": "使用 AI 创建项目",
+  "aiProjectAssistant": "AI 项目助手",
+  "noMoreProjects": "没有更多项目可显示",
+  "noProjectsFound": "未找到项目",
+  "beTheFirst": "成为第一个创建令人兴奋的项目并找到合作者的人！",
+  "createYourFirstProject": "创建您的第一个项目",
+  "intro": {
+    "hero": {
+      "title": "探索协作项目",
+      "description": "加入一个充满创造者、创新者和学习者的活跃社区。发现激动人心的项目，与有才华的合作者建立联系，共同将想法变为现实。",
+      "showcaseAlt": "项目协作演示"
+    },
+    "features": {
+      "discoverCollaborators": {
+        "title": "发现合作者",
+        "description": "找到具有互补技能和共同兴趣的团队成员，将您的想法变为现实。"
+      },
+      "exploreProjects": {
+        "title": "探索多样化项目",
+        "description": "浏览研究、学校作业、个人项目等各类项目，找到您的完美匹配。"
+      },
+      "seamlessCommunication": {
+        "title": "无缝沟通",
+        "description": "通过集成的消息传递和协作工具与项目创建者和团队成员建立联系。"
+      },
+      "trackProgress": {
+        "title": "跟踪进度",
+        "description": "通过实时进度跟踪，及时了解项目里程碑、截止日期和成就。"
+      },
+      "showcaseWork": {
+        "title": "展示您的作品",
+        "description": "通过与社区分享您的项目和贡献来建立您的作品集。"
+      },
+      "aiAssistance": {
+        "title": "AI 智能辅助",
+        "description": "从我们的 AI 助手获得智能项目规划和创意支持，开启您的旅程。"
+      }
+    },
+    "cta": {
+      "title": "准备开始协作了吗？",
+      "description": "加入数千名创造者和创新者，共同构建未来。",
+      "getStarted": "免费开始",
+      "signIn": "登录"
+    }
+  },
+  "myProjects": {
+    "title": "我的项目",
+    "createProject": "创建项目",
+    "tabs": {
+      "all": "所有项目",
+      "activeOwned": "我的活跃项目",
+      "activeJoined": "已加入的活跃项目",
+      "archived": "已归档项目",
+      "completed": "已完成项目"
+    },
+    "sections": {
+      "owned": "您拥有的项目",
+      "joined": "您加入的项目"
+    },
+    "emptyStates": {
+      "noProjects": {
+        "title": "还没有项目",
+        "description": "开始创建您的第一个项目。使用AI辅助帮助您规划和构建想法。",
+        "action": "创建您的第一个项目",
+        "secondaryAction": "浏览项目"
+      },
+      "noActiveOwned": {
+        "title": "没有活跃项目",
+        "description": "您没有拥有的活跃项目。开始一个新项目与他人协作。",
+        "action": "创建新项目"
+      },
+      "noActiveJoined": {
+        "title": "没有加入的项目",
+        "description": "您还没有加入任何活跃项目。浏览可用项目以找到符合您兴趣的项目。",
+        "action": "浏览项目"
+      },
+      "noArchived": {
+        "title": "没有归档项目",
+        "description": "您没有任何已归档的项目。您归档的项目将显示在这里。"
+      },
+      "noCompleted": {
+        "title": "没有已完成项目",
+        "description": "您还没有完成任何项目。继续进行您的活跃项目，完成后将显示在这里。",
+        "action": "查看活跃项目"
+      }
+    },
+    "errors": {
+      "fetchFailed": "获取项目失败"
+    }
+  },
+  "dashboard": {
+    "title": "项目控制面板",
+    "sections": {
+      "overview": "概览",
+      "ideaForest": "创意森林",
+      "tasks": "任务管理",
+      "milestones": "里程碑",
+      "resources": "资源",
+      "workTools": "工作工具",
+      "meetings": "会议",
+      "teamMembers": "团队成员",
+      "projectSettings": "项目设置"
+    },
+    "buttons": {
+      "editProject": "编辑项目",
+      "managePosts": "管理帖子",
+      "saveChanges": "保存更改",
+      "saving": "保存中...",
+      "cancel": "取消"
+    },
+    "visibility": {
+      "public": "公开",
+      "private": "私密",
+      "local": "本地",
+      "organization": "组织",
+      "unlisted": "未列出",
+      "unlistedPublished": "未列出（已发布）"
+    },
+    "applications": {
+      "title": "申请",
+      "noApplications": "暂无申请",
+      "emptyMessage": "当用户申请您的项目时，申请将显示在这里。"
+    }
+  }
+}

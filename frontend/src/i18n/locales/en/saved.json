@@ -1,0 +1,16 @@
+{
+  "title": "Saved Items",
+  "tabs": {
+    "all": "All Items",
+    "general": "Daily",
+    "project": "Projects"
+  },
+  "empty": {
+    "noItems": "You have no saved items.",
+    "noGeneral": "No saved daily posts found.",
+    "noProject": "No saved projects found."
+  },
+  "errors": {
+    "fetchFailed": "Failed to fetch saved items"
+  }
+}

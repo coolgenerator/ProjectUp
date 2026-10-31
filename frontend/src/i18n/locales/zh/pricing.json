@@ -1,0 +1,285 @@
+{
+  "title": "选择你的方案",
+  "subtitle": "选择最适合你的方案。所有方案都包含核心功能，帮你把项目做成。",
+  "monthly": "按月",
+  "annual": "按年",
+  "save": "按年付省 20%",
+  "regularPricing": "标准",
+  "studentPricingLabel": "学生",
+  "eduRequired": "需 .edu 邮箱",
+  "studentDiscountAvailable": "可享学生折扣",
+  "mostPopular": "最受欢迎",
+  "bestValue": "最超值",
+  "currentPlan": "当前方案",
+  "selectPlan": "选择方案",
+  "upgrade": "升级",
+  "downgrade": "降级",
+  "signUpToSubscribe": "注册后订阅",
+  "signUpFree": "免费注册",
+  "getStarted": "开始使用",
+  "cancellingAtPeriodEnd": "（将于本期结束时取消）",
+  "perMonth": "/月",
+  "perYear": "/年",
+  "billedAnnually": "按年计费",
+  "billedAnnuallyAs": "按年计费，共 ${{amount}}",
+  "features": "功能",
+  "free": "免费",
+  "customPricing": "定制价格",
+  "individualPlans": "个人方案",
+  "individualPlansDesc": "适合学生、研究者和知识工作者",
+  "teamPlans": "团队与实验室方案",
+  "teamPlansDesc": "为需要扩展规模的团队和组织打造",
+  "studentPricing": "学生：${{price}}/月",
+  "saveAmount": "每年省 ${{amount}}",
+  "havePromoCode": "有优惠码？",
+  "enterPromoCode": "输入优惠码",
+  "codeAppliedAtCheckout": "✓ 优惠码将在结账时生效",
+  "annualBenefitsTitle": "按年付的好处",
+  "savingsBenefit": "省 20%",
+  "savingsBenefitDesc": "按年付相当于免费多用 2 个月",
+  "priceLockBenefit": "锁定价格",
+  "priceLockBenefitDesc": "全年保持当前价格不变",
+  "prioritySupportBenefit": "优先支持",
+  "prioritySupportBenefitDesc": "按年付用户享受优先支持",
+  "footerNote": "所有价格以美元计，不含适用税费。",
+  "needHelp": "不知道选哪个？",
+  "contactTeam": "联系我们",
+  "freeTrial": "14 天免费试用",
+  "priceUnits": {
+    "perUser": "每人",
+    "perUserPlusSetup": "每人，另付 $499 部署费",
+    "custom": "定制价格"
+  },
+  "studentDiscounts": {
+    "title": "学生折扣",
+    "subtitle": "需要有效的 .edu 邮箱",
+    "starterDiscount": "按月 8 折，按年再减 15%",
+    "advancedDiscount": "按月 75 折，按年再减 15%",
+    "proDiscount": "按月 75 折，按年再减 15%"
+  },
+  "clickToExpand": "[点击展开]",
+  "upCredits": {
+    "title": "什么是 UP 积分？",
+    "description": "ProjectUp 上的所有 AI 功能都消耗 UP 积分",
+    "conversion": "1 UP 积分 = 100,000 tokens",
+    "conversionDetail": "（约 75 页内容的分析量）",
+    "feature1": "文档分析与总结",
+    "feature2": "AI 生成笔记",
+    "feature3": "智能项目助手",
+    "feature4": "队友匹配，每个推荐都附理由和风险",
+    "feature5": "智能搜索与推荐"
+  },
+  "understandingCredits": {
+    "title": "了解 UP 积分",
+    "whatAre": {
+      "question": "UP 积分是什么？",
+      "intro": "ProjectUp 上的所有 AI 功能都消耗 UP 积分："
+    },
+    "monthlyVsBonus": {
+      "question": "月度积分与额外积分",
+      "monthly": {
+        "title": "月度 UP 积分（方案内含）",
+        "refresh": "每个计费周期刷新",
+        "noRollover": "不结转到下个月",
+        "bestFor": "适合日常使用"
+      },
+      "bonus": {
+        "title": "额外 UP 积分（单独购买）",
+        "neverExpire": "永不过期",
+        "useAnytime": "随时可用，取消订阅后也能用",
+        "stack": "可与月度积分叠加",
+        "perfect": "适合偶尔的大量使用"
+      },
+      "priority": "使用顺序：",
+      "priorityDesc": "先用月度积分，再用额外积分。"
+    },
+    "howMany": {
+      "question": "我需要多少积分？",
+      "typicalUsage": "常见用量参考：",
+      "example1": "分析一份 20 页的 PDF：约 0.3 积分",
+      "example2": "为一个空缺角色匹配队友：约 0.5 积分",
+      "example3": "AI 项目助手（1 小时）：约 2-5 积分",
+      "example4": "和 AI 教练一起把想法打磨成项目：约 3-8 积分",
+      "mostStudents": "大多数学生每月用 20-50 积分",
+      "powerUsers": "重度用户通常每月需要 80-150 积分"
+    }
+  },
+  "purchaseCredits": {
+    "title": "购买额外积分",
+    "subtitle": "随时购买积分，补充每月额度",
+    "purchase": "购买",
+    "customVolumes": "需要更大用量？",
+    "contactSales": "联系销售定制用量",
+    "packCredits": "{{count}} 积分",
+    "perCredit": "每积分 ${{price}}"
+  },
+  "plans": {
+    "free": {
+      "name": "基础版",
+      "description": "适合入门使用",
+      "features": [
+        "浏览并申请加入招募中的项目",
+        "创建论文笔记",
+        "0 UP 积分",
+        "30MB 存储空间",
+        "社区支持"
+      ],
+      "buttonText": "开始使用"
+    },
+    "starter": {
+      "name": "入门版",
+      "description": "把你的第一个想法变成项目",
+      "features": [
+        "只提问、不替你做决定的 AI 想法教练",
+        "每月 10 UP 积分",
+        "100MB 存储空间",
+        "每月 1 个项目",
+        "IdeaTree 使用权限",
+        "项目协作",
+        "论文 AI 助手",
+        "社区支持"
+      ],
+      "buttonText": "选择入门版"
+    },
+    "advanced": {
+      "name": "进阶版",
+      "description": "适合正在组队的学生和研究者",
+      "features": [
+        "为你的空缺角色推荐合适队友",
+        "每月 50 UP 积分",
+        "500MB 存储空间",
+        "每月 5 个项目",
+        "包含入门版全部功能",
+        "高级工作流与工具",
+        "团队会议日程",
+        "优先支持",
+        "版本管理"
+      ],
+      "buttonText": "选择进阶版"
+    },
+    "pro": {
+      "name": "专业版",
+      "description": "适合重度用户和专业人士",
+      "features": [
+        "为你所有项目推荐队友",
+        "每月 80 UP 积分",
+        "1GB 存储空间",
+        "不限项目数",
+        "包含进阶版全部功能",
+        "自定义集成",
+        "高级数据分析",
+        "API 访问",
+        "优先支持"
+      ],
+      "buttonText": "选择专业版"
+    },
+    "teamShared": {
+      "name": "团队共享版",
+      "description": "适合中小型团队（3-10 人）",
+      "features": [
+        "至少 3 人",
+        "每人每月 80 UP 积分",
+        "每人享有专业版全部功能",
+        "共享社区服务器",
+        "团队管理后台",
+        "团队共享资源",
+        "团队协作空间",
+        "管理员权限控制",
+        "团队数据分析",
+        "专家市场使用权（收取 10% 服务费）"
+      ],
+      "buttonText": "选择团队共享版"
+    },
+    "teamIsolated": {
+      "name": "团队独立版",
+      "description": "适合需要独立基础设施的实验室和组织",
+      "features": [
+        "至少 5 人",
+        "每人每月 120 UP 积分",
+        "包含团队共享版全部功能",
+        "独立专属服务器",
+        "自定义域名（yourlab.projectup.me）",
+        "私有社区实例",
+        "为你的组织定制的 AI 助手",
+        "白标选项",
+        "高级安全与 SSO 单点登录",
+        "专属客户经理",
+        "定制培训与上手指导",
+        "一次性部署费：$499"
+      ],
+      "buttonText": "选择团队独立版"
+    },
+    "enterprise": {
+      "name": "企业版",
+      "description": "适合大型组织（10 人以上）",
+      "features": [
+        "包含团队独立版全部功能",
+        "不限团队成员数",
+        "不限文件存储",
+        "定制合同与 SLA",
+        "7×24 电话和邮件支持",
+        "高级安全与合规",
+        "定制功能开发",
+        "专属基础设施",
+        "UP 积分批量折扣"
+      ],
+      "buttonText": "联系销售"
+    }
+  },
+  "security": "由 Stripe 提供安全支付",
+  "faq": {
+    "title": "常见问题",
+    "upCreditsRunOut": {
+      "question": "UP 积分用完了怎么办？",
+      "answer": "你可以随时购买额外 UP 积分，或升级到更高的方案。你的内容不会丢失。"
+    },
+    "upCreditsRollover": {
+      "question": "没用完的 UP 积分会结转吗？",
+      "answer": "不会，UP 积分每月刷新。如果需要更灵活，可以单独购买积分。"
+    },
+    "changePlans": {
+      "question": "可以随时更换方案吗？",
+      "answer": "可以，随时升级或降级，费用会自动按比例计算。"
+    },
+    "teamIsolatedSetup": {
+      "question": "团队独立版的 $499 部署费包含什么？",
+      "answer": "服务器部署、自定义域名配置、环境搭建、初始 AI 助手定制，以及一次团队上手指导。"
+    },
+    "deploymentTime": {
+      "question": "团队独立版部署需要多久？",
+      "answer": "通常在付款和初次沟通后 3-5 个工作日完成。"
+    },
+    "teamCreditsShared": {
+      "question": "团队方案的 UP 积分是共享的吗？",
+      "answer": "不是，每位团队成员都有自己的月度 UP 积分额度。"
+    },
+    "freeTrial": {
+      "question": "有免费试用吗？",
+      "answer": "有！所有付费方案都提供 14 天免费试用，开始试用无需绑定信用卡。"
+    },
+    "paymentMethods": {
+      "question": "支持哪些支付方式？",
+      "answer": "支持所有主流信用卡和 PayPal，企业版还支持银行转账。"
+    },
+    "billing": {
+      "question": "如何计费？",
+      "answer": "根据你选择的方案按月或按年计费。所有付款都通过 Stripe 安全处理。"
+    },
+    "changeCancel": {
+      "question": "可以更换或取消方案吗？",
+      "answer": "可以，你可以随时升级、降级或取消订阅，变更会在下一个计费周期生效。"
+    },
+    "security": {
+      "question": "我的支付信息安全吗？",
+      "answer": "非常安全。我们使用 Stripe 处理付款，它符合 PCI 标准并采用行业标准加密。"
+    },
+    "refunds": {
+      "question": "可以退款吗？",
+      "answer": "所有付费方案都提供 30 天无理由退款。如果不满意，请联系客服。"
+    },
+    "switchBilling": {
+      "question": "可以在按月和按年计费之间切换吗？",
+      "answer": "可以。切换到按年计费后，会立即享受折扣价。"
+    }
+  }
+}

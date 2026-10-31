@@ -1,0 +1,208 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  GO_VERSION: '1.21'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Cache Go modules
+      uses: actions/cache@v4
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Run tests
+      run: go test -v ./...
+
+    - name: Run go vet
+      run: go vet ./...
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Cache Go modules
+      uses: actions/cache@v4
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Build
+      run: GOOS=linux GOARCH=amd64 GIN_MODE=release go build -o server main.go
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: server-binary
+        path: server
+        retention-days: 7
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    environment:
+      name: production
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: server-binary
+
+    # Deploy to EC2 via SSH
+    - name: Deploy to EC2
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_BACKEND_SSH_PRIVATE_KEY }}
+        HOST: ${{ secrets.EC2_BACKEND_HOST }}
+        USER: ${{ secrets.EC2_BACKEND_USER }}
+        DEPLOY_PATH: ${{ secrets.EC2_BACKEND_DEPLOY_PATH }}
+        SERVICE_NAME: ${{ secrets.EC2_BACKEND_SERVICE_NAME }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+
+        # Create deployment directory with correct ownership and permissions
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          sudo mkdir -p $DEPLOY_PATH && \
+          sudo chown -R $USER:$USER $DEPLOY_PATH && \
+          sudo chmod -R 755 $DEPLOY_PATH"
+
+        # Stop the service before deploying
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          sudo systemctl stop $SERVICE_NAME || true"
+
+        # Copy the binary to the deployment path
+        scp -i private_key.pem -o StrictHostKeyChecking=no server $USER@$HOST:$DEPLOY_PATH/server
+
+        # Set executable permissions
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          chmod +x $DEPLOY_PATH/server"
+
+        # Copy .env file if it exists in GitHub secrets
+        if [ ! -z "${{ secrets.BACKEND_ENV_FILE }}" ]; then
+          echo "📝 Deploying .env file from GitHub secrets..."
+          echo "${{ secrets.BACKEND_ENV_FILE }}" > .env.production
+          scp -i private_key.pem -o StrictHostKeyChecking=no .env.production $USER@$HOST:$DEPLOY_PATH/.env
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+            sudo chown $USER:$USER $DEPLOY_PATH/.env && \
+            sudo chmod 600 $DEPLOY_PATH/.env"
+          rm -f .env.production
+          echo "✅ .env file deployed successfully"
+        else
+          echo "ℹ️  No .env file in GitHub secrets - service will run without it"
+          echo "   Set BACKEND_ENV_FILE secret to deploy .env in future"
+        fi
+
+        # Deploy systemd service file
+        scp -i private_key.pem -o StrictHostKeyChecking=no backend.service $USER@$HOST:/tmp/backend.service
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          sudo mv /tmp/backend.service /etc/systemd/system/$SERVICE_NAME.service && \
+          sudo systemctl daemon-reload"
+
+        # Start the service
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          sudo systemctl enable $SERVICE_NAME && \
+          sudo systemctl restart $SERVICE_NAME"
+
+        # Check service status
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "\
+          sudo systemctl status $SERVICE_NAME --no-pager"
+
+        rm -f private_key.pem
+
+    # Option 2: Deploy to ECS (uncomment if using ECS)
+    # - name: Login to Amazon ECR
+    #   id: login-ecr
+    #   uses: aws-actions/amazon-ecr-login@v2
+
+    # - name: Build, tag, and push image to Amazon ECR
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+    #     IMAGE_TAG: ${{ github.sha }}
+    #   run: |
+    #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+    #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    # - name: Deploy to ECS
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: task-definition.json
+    #     service: ${{ secrets.ECS_SERVICE }}
+    #     cluster: ${{ secrets.ECS_CLUSTER }}
+    #     wait-for-service-stability: true
+
+  generate-docs:
+    name: Generate API Documentation
+    runs-on: ubuntu-latest
+    needs: test
+    # Make this job optional - don't block the pipeline if it fails
+    continue-on-error: true
+    # Only run on develop branch or manual trigger
+    if: github.ref == 'refs/heads/develop' || github.event_name == 'workflow_dispatch'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Install swag
+      run: go install github.com/swaggo/swag/cmd/swag@latest
+
+    - name: Generate Swagger docs
+      continue-on-error: true
+      run: swag init --parseDependency --parseInternal -g main.go
+
+    - name: Upload docs artifact
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: swagger-docs
+        path: docs/
+        retention-days: 7

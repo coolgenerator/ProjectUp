@@ -1,0 +1,72 @@
+.simple-image {
+    position: relative;
+    padding: 10px 0;
+}
+
+.simple-image img {
+    max-width: 100%;
+    vertical-align: bottom;
+}
+
+.simple-image--withBorder img {
+    border: 1px solid #e8e8eb;
+    border-radius: 3px;
+}
+
+.simple-image--withBackground {
+    background: #eff2f5;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.simple-image--stretched img {
+    max-width: 100%;
+    width: 100%;
+}
+
+.simple-image__caption {
+    margin-top: 8px;
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #444;
+    background-color: #f8f8f8;
+    min-height: 22px;
+}
+
+.simple-image__caption:empty:before {
+    content: attr(data-placeholder);
+    color: #999;
+}
+
+.simple-image__change-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(46, 110, 180, 0.85);
+    border-radius: 3px;
+    padding: 6px 8px;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    opacity: 0;
+}
+
+.simple-image:hover .simple-image__change-button {
+    opacity: 1;
+}
+
+.simple-image__change-button:hover {
+    background: rgb(46, 110, 180);
+}
+
+.simple-image input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e8e8eb;
+    border-radius: 3px;
+    outline: none;
+    font-size: 14px;
+}

@@ -1,0 +1,642 @@
+/* Enhanced Editor.js styles for Notion-like experience */
+
+/* Editor.js container */
+.editor-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 0;
+}
+
+/* Enhanced container styles */
+.enhanced-editor-container {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+.enhanced-editor-container .codex-editor {
+    padding: 0;
+}
+
+.editorjs-container {
+    min-height: 300px;
+    background-color: #fff;
+    border-radius: 4px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    transition: all 0.2s ease;
+}
+
+/* Improve undo/redo behavior */
+.editorjs-container .ce-block {
+    position: relative;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Visual indicator for the block being edited - helps with undo/redo awareness */
+.editorjs-container .ce-block--focused {
+    background-color: rgba(59, 130, 246, 0.05);
+    border-radius: 4px;
+}
+
+/* Add a subtle animation for blocks being added/removed to make undo/redo more visible */
+@keyframes blockChange {
+    0% {
+        opacity: 0.5;
+        transform: translateY(-5px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.editorjs-container .ce-block--added {
+    animation: blockChange 0.3s ease forwards;
+}
+
+.editorjs-container .ce-paragraph:focus {
+    outline: none !important;
+    background-color: rgba(59, 130, 246, 0.05);
+    border-radius: 4px;
+}
+
+.editable-editor {
+    cursor: text;
+    border: 1px solid transparent;
+}
+
+.editable-editor:hover {
+    border-color: #e2e8f0;
+}
+
+.readonly-editor {
+    cursor: default;
+    opacity: 0.9;
+    background-color: #fcfcfc;
+}
+
+.readonly-editor .ce-toolbar__plus,
+.readonly-editor .ce-toolbar__settings-btn,
+.readonly-editor .ce-toolbar,
+.readonly-editor .ce-inline-toolbar {
+    display: none !important;
+}
+
+/* Database content specific styles */
+.editorjs-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.editorjs-container table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    text-align: left;
+}
+
+.editorjs-container table th,
+.editorjs-container table td {
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
+}
+
+.editorjs-container table tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+/* Position inline toolbar to the left */
+.ce-inline-toolbar {
+    margin-top: 0;
+    left: -70px !important;
+    transform: none !important;
+    top: 0 !important;
+}
+
+/* Ensure inline toolbar is visible */
+.ce-inline-toolbar--showed {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Modified: Move blocks to the right to create space for icons on the left */
+.ce-block {
+    margin-left: 40px;
+    /* Space for toolbar icons */
+    padding: 5px 0;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+/* Drag and drop styling */
+.ce-block--selected {
+    background-color: rgba(59, 130, 246, 0.08);
+    border-radius: 4px;
+}
+
+.ce-block--drop-target {
+    box-shadow: 0 0 0 2px #5e94ff !important;
+    border-radius: 4px;
+}
+
+.ce-block--dragging {
+    opacity: 0.7 !important;
+    background-color: rgba(94, 148, 255, 0.15) !important;
+    border-radius: 4px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+    cursor: grabbing !important;
+}
+
+/* Make toolbar actions always visible */
+.ce-block:hover .ce-toolbar__actions {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Modified: Position the drag handle to the left side of content */
+.ce-toolbar__actions {
+    cursor: grab;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    position: absolute !important;
+    left: -35px !important;
+    top: 5px !important;
+    transform: none !important;
+}
+
+.ce-toolbar__actions:hover {
+    opacity: 1;
+}
+
+/* Modified: Position plus button closer to content */
+.ce-toolbar__plus {
+    left: -35px !important;
+    top: 5px !important;
+}
+
+/* Loading indicator */
+.editor-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 5;
+}
+
+.loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(59, 130, 246, 0.2);
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Editor.js content area */
+.ce-block__content {
+    max-width: 800px !important;
+    margin: 0 auto;
+}
+
+/* Editor.js toolbar */
+.ce-toolbar__content {
+    max-width: calc(100% - 80px) !important;
+    margin: 0 auto !important;
+}
+
+/* Editor.js inline tools */
+.ce-inline-toolbar {
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e2e8f0;
+}
+
+.ce-inline-tool {
+    color: #4b5563;
+}
+
+.ce-inline-tool--active {
+    color: #3b82f6;
+}
+
+/* Editor.js block tools */
+.ce-conversion-toolbar {
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e2e8f0;
+}
+
+.ce-conversion-tool {
+    color: #4b5563;
+}
+
+.ce-conversion-tool--focused {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+/* Editor.js headers */
+.ce-header {
+    padding: 0;
+    margin: 1em 0 0.5em;
+}
+
+h1.ce-header {
+    font-size: 1.8em;
+    font-weight: 700;
+}
+
+h2.ce-header {
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+h3.ce-header {
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+h4.ce-header {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+h5.ce-header {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+h6.ce-header {
+    font-size: 1em;
+    font-weight: 600;
+}
+
+/* Editor.js paragraph */
+.ce-paragraph {
+    line-height: 1.6;
+    padding: 0.5em 0;
+    min-height: 22px;
+    padding-right: 2px;
+}
+
+/* Editor.js lists */
+.cdx-list {
+    margin: 0;
+    padding-left: 40px;
+}
+
+.cdx-list__item {
+    padding: 3px 0;
+}
+
+/* Modified: Adjust checklist item spacing and alignment */
+.cdx-checklist__item {
+    display: flex;
+    align-items: flex-start;
+    margin: 0.5em 0;
+    position: relative;
+    padding-left: 10px;
+    /* Add padding for checkbox */
+}
+
+.cdx-checklist__item-checkbox {
+    flex-shrink: 0;
+    margin-right: 8px;
+    /* Reduced space between checkbox and text */
+    margin-top: 5px;
+    position: absolute;
+    left: -18px;
+    /* Position checkbox to the left */
+}
+
+.cdx-checklist__item-text {
+    flex-grow: 1;
+}
+
+.cdx-checklist__item--checked .cdx-checklist__item-text {
+    text-decoration: line-through;
+    color: #9ca3af;
+}
+
+/* Editor.js code */
+.ce-code {
+    background-color: #f9fafb;
+    border-radius: 4px;
+    padding: 10px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+/* Editor.js delimiter */
+.ce-delimiter {
+    line-height: 1.6;
+    width: 100%;
+    text-align: center;
+}
+
+/* Editor.js quote */
+.cdx-quote {
+    border-left: 3px solid #3b82f6;
+    margin-left: 0;
+    padding-left: 20px;
+    font-style: italic;
+}
+
+/* Editor.js table */
+.tc-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tc-table__cell {
+    border: 1px solid #e2e8f0;
+    padding: 8px;
+}
+
+.tc-table__wrap {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+}
+
+/* Editor.js embed */
+.embed-tool {
+    margin: 10px 0;
+}
+
+/* Make sure all editor elements are visible */
+.codex-editor__redactor {
+    padding-bottom: 100px !important;
+}
+
+/* Read-only styles */
+.codex-editor--readonly .ce-toolbar,
+.codex-editor--readonly .ce-block--selected .ce-block__content {
+    background-color: transparent;
+}
+
+/* Ensure the editor doesn't get hidden */
+.codex-editor {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+/* Improve visibility of selected blocks */
+.ce-block--selected .ce-block__content {
+    background-color: rgba(59, 130, 246, 0.05) !important;
+}
+
+/* Make sure toolbar buttons are clickable */
+.ce-toolbar__actions {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Placeholder */
+.ce-paragraph[data-placeholder]:empty::before {
+    color: #9ca3af;
+}
+
+/* Drag indicator */
+.dragger-animated {
+    transition: all 0.15s ease-out;
+}
+
+/* Special styling for specific block types */
+
+/* Image blocks */
+.image-tool {
+    margin: 10px 0;
+}
+
+.image-tool__image {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.image-tool__caption {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.9em;
+    margin-top: 8px;
+}
+
+/* Marker tool */
+.cdx-marker {
+    background: rgba(245, 235, 111, 0.29);
+    padding: 3px 0;
+}
+
+/* Slash command indicator and behaviors */
+.ce-paragraph:empty::after {
+    content: 'Type / for commands...';
+    color: #a0aec0;
+    font-style: italic;
+    opacity: 0.6;
+    pointer-events: none;
+    position: absolute;
+}
+
+/* Make toolbar more visible when slash is typed */
+.ce-toolbar--opened {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 100 !important;
+}
+
+/* Add animation for tools popup */
+.ce-toolbox {
+    animation: toolbox-appear 0.2s ease;
+}
+
+@keyframes toolbox-appear {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Improve tool button styles */
+.ce-toolbox__button {
+    transition: all 0.2s ease;
+}
+
+.ce-toolbox__button:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.ce-toolbox__button--active {
+    color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Add focus styles for editable blocks to make active block more visible */
+.ce-block--focused {
+    background-color: rgba(59, 130, 246, 0.05);
+    border-radius: 4px;
+}
+
+/* Make the plus button more visible when hovered */
+.ce-toolbar__plus:hover {
+    background-color: #3b82f6 !important;
+    color: white !important;
+}
+
+/* Style for slash command hint */
+.slash-command-hint {
+    position: absolute;
+    top: 0;
+    left: -20px;
+    color: #a0aec0;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.ce-block:hover .slash-command-hint {
+    opacity: 0.7;
+}
+
+/* Ensure cursor is visible at end of blocks */
+.ce-paragraph:focus::after {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    vertical-align: text-bottom;
+}
+
+/* Make sure block settings don't interfere with Enter key */
+.ce-toolbar__settings-btn {
+    pointer-events: auto !important;
+}
+
+/* Improved slash command handling */
+.ce-toolbar {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 10 !important;
+    transition: transform 0.2s ease;
+}
+
+/* Always show the plus button (for slash commands) */
+.ce-toolbar__plus {
+    opacity: 0.8 !important;
+    visibility: visible !important;
+    z-index: 2 !important;
+}
+
+/* Ensure the toolbar is always visible above content */
+.ce-toolbar__content {
+    z-index: 4 !important;
+}
+
+/* Ensure the toolbox is nicely formatted */
+.ce-toolbox {
+    animation: toolbox-appear 0.2s ease;
+    background: white !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 6px !important;
+    z-index: 11 !important;
+}
+
+.ce-toolbox--opened {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.ce-inline-toolbar--showed {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.ce-conversion-toolbar--showed {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Force toolbar display when slash is active */
+.ce-paragraph:focus:has(span):after {
+    content: '';
+    display: inline;
+}
+
+/* Make tooltip appear when slash is active */
+.ce-toolbox__button[data-tool]::before {
+    content: attr(data-tool);
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    font-size: 10px;
+    color: #6b7280;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.ce-toolbox__button[data-tool]:hover::before {
+    opacity: 1;
+}
+
+/* Make sure inline toolbar remains visible */
+.ce-inline-toolbar {
+    z-index: 12 !important;
+    opacity: 1 !important;
+}
+
+/* Special styling for slash commands */
+.ce-toolbox__button[data-tool]:hover::before {
+    content: 'Press / + ' attr(data-tool);
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background: #334155;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0.9;
+    margin-bottom: 5px;
+    pointer-events: none;
+}
+
+/* Adjust container spacing to eliminate double spacing */
+.block-content-container {
+    padding-top: 0.75rem !important;
+}
+
+/* On mobile, use even tighter spacing */
+@media (max-width: 768px) {
+    .block-content-container {
+        padding: 0.5rem !important;
+    }
+}

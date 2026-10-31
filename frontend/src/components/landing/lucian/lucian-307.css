@@ -1,0 +1,19 @@
+/* Lucian UX/UI Prompt #307 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#307 */
+.u307{position:relative;width:340px;height:272px;display:flex;flex-direction:column;padding:24px 22px 18px;border-radius:28px;background:var(--ux-surface);box-shadow:0 0 0 1px var(--ux-line),0 30px 60px -36px var(--ux-shadow-strong);overflow:hidden;--c:var(--ux-accent)}
+.u307::after{content:"";position:absolute;right:-60px;top:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 26%,transparent),transparent 70%);transition:background .6s var(--ux-ease);pointer-events:none}
+.u307-k{position:relative;margin:0;font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:var(--ux-ink-3)}
+.u307-line{position:relative;margin:16px 0 0;min-height:100px;font-size:31px;line-height:1.24;font-weight:820;letter-spacing:-.045em}
+.u307-a{display:block;color:var(--ux-ink-2)}
+.u307-b{display:inline;white-space:nowrap}
+.u307-w{position:relative;color:var(--ux-ink);background:linear-gradient(var(--c),var(--c)) 0 100%/100% .14em no-repeat;padding-bottom:.04em;transition:background-size .3s var(--ux-ease)}
+.u307-w:empty{padding:0}
+.u307-caret{display:inline-block;width:3px;height:.95em;margin:0 2px 0 3px;vertical-align:-.1em;border-radius:2px;background:var(--c);animation:u307-blink 1s steps(1) infinite;transition:background-color .4s}
+.u307.is-typing .u307-caret{animation:none}
+@keyframes u307-blink{50%{opacity:0}}
+.u307-tail{color:var(--ux-ink)}
+.u307-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.u307-chips{position:relative;margin-top:auto;display:flex;flex-wrap:wrap;gap:6px}
+.u307-chip{height:34px;padding:0 13px;border:0;border-radius:999px;background:var(--ux-surface-2);font-size:13px;font-weight:700;color:var(--ux-ink-2);box-shadow:inset 0 0 0 1px var(--ux-line);transition:background-color .3s,color .3s,box-shadow .3s,transform .35s var(--ux-spring)}
+.u307-chip:hover{color:var(--ux-ink)}
+.u307-chip:active{transform:scale(.93)}
+.u307-chip[aria-pressed="true"]{background:var(--k);color:#fff;box-shadow:none}

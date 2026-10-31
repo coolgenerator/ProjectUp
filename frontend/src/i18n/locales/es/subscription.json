@@ -1,0 +1,52 @@
+{
+  "title": "Suscripción y Facturación",
+  "tabs": {
+    "overview": "Resumen",
+    "payment": "Métodos de Pago",
+    "history": "Historial de Facturación"
+  },
+  "currentPlan": {
+    "title": "Plan Actual",
+    "plan": "Plan",
+    "status": "Estado",
+    "currentPeriod": "Período Actual",
+    "noSubscription": "Sin suscripción activa",
+    "cancelNotice": "Tu suscripción terminará el",
+    "upgradePlan": "Actualizar Plan",
+    "changePlan": "Cambiar Plan",
+    "cancelSubscription": "Cancelar Suscripción",
+    "reactivate": "Reactivar Suscripción"
+  },
+  "paymentMethods": {
+    "title": "Métodos de Pago",
+    "addMethod": "Agregar Método de Pago",
+    "noMethods": "No hay métodos de pago registrados",
+    "expires": "Expira",
+    "default": "Predeterminado"
+  },
+  "billingHistory": {
+    "title": "Historial de Facturación",
+    "date": "Fecha",
+    "description": "Descripción",
+    "amount": "Monto",
+    "status": "Estado",
+    "invoice": "Factura",
+    "download": "Descargar",
+    "noHistory": "No hay historial de pagos disponible",
+    "subscriptionPayment": "Pago de suscripción"
+  },
+  "success": {
+    "title": "¡Pago Exitoso!",
+    "welcome": "Bienvenido a ProjectUp",
+    "whatNext": "¿Qué sigue?",
+    "accountUpgraded": "Tu cuenta ha sido actualizada",
+    "accessFeatures": "Ahora tienes acceso a todas las características premium",
+    "receiptSent": "Se ha enviado un recibo a tu correo electrónico",
+    "goToProjects": "Ir a Proyectos",
+    "viewAccount": "Ver Configuración de Cuenta",
+    "needHelp": "¿Necesitas ayuda?",
+    "contactSupport": "Contactar Soporte"
+  },
+  "confirmCancel": "¿Estás seguro de que quieres cancelar tu suscripción? Conservarás el acceso hasta el final de tu período de facturación.",
+  "processing": "Procesando..."
+}

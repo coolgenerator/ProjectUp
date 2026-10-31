@@ -1,0 +1,31 @@
+[Unit]
+Description=AI Agent Server
+After=network.target
+
+[Service]
+Type=exec
+User=aiagent
+Group=aiagent
+WorkingDirectory=/opt/ai-agent
+Environment="PATH=/opt/ai-agent/venv/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/opt/ai-agent/venv/bin/python /opt/ai-agent/main.py
+Restart=always
+RestartSec=10
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ai-agent/logs /opt/ai-agent/data
+
+# Resource limits
+LimitNOFILE=65536
+MemoryLimit=2G
+
+# Logging
+StandardOutput=append:/opt/ai-agent/logs/ai-agent.log
+StandardError=append:/opt/ai-agent/logs/ai-agent-error.log
+
+[Install]
+WantedBy=multi-user.target
