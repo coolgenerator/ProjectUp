@@ -53,6 +53,14 @@
     "firstWeek": "第一周：",
     "progress": "思考覆盖：{{n}}/6 个维度",
     "progressHint": "多回答几轮，覆盖更多角度再成型。",
+    "lenses": {
+      "firstPrinciples": "本质/第一性原理",
+      "usersAndScenarios": "目标用户与场景",
+      "whyNow": "为什么是现在",
+      "minimumValidation": "最小验证",
+      "assumptionsAndRisks": "关键假设与风险",
+      "partnersNeeded": "需要什么样的伙伴"
+    },
     "editHint": "点击任意部分即可修改；点 ↻ 让 AI 只重写这一部分。",
     "edit": "修改",
     "done": "完成",

@@ -10,7 +10,7 @@ AI helps you break a fuzzy idea into concrete roles, then recommends the few peo
 
 **Built for**: student projects, cross-disciplinary research collaborations, competition and hackathon teams, and early-stage startups looking for co-founders.
 
-![ProjectUp landing page](docs/images/readme/landing.png)
+![ProjectUp landing page](docs/images/readme/en/landing.png)
 
 ---
 
@@ -46,13 +46,13 @@ So ProjectUp isn't trying to have a smarter matching algorithm. It does two thin
 
 After you write a one-line idea, AI asks 3 questions per round from different angles (target users and scenarios, minimum validation, key assumptions and risks…). You must answer each question in your own words to continue, and you can go one more round so AI digs deeper based on your answers. Drafts save automatically.
 
-![Idea workspace: AI follow-up questions](docs/images/readme/idea-questions.png)
+![Idea workspace: AI follow-up questions](docs/images/readme/en/idea-questions.png)
 
 ### ② Shape it: from idea to project and role cards
 
 Once it's clear, click "Shape this into a project" to generate the vision, the problem to solve, target users, current blockers, a plan for the next two weeks, and role cards for **who's still missing**. Each role card lists the skills needed, roughly how many hours a week, and what to do in the first week after joining. You can edit any section directly, or have AI rewrite just that section.
 
-![Shaped project brief and role cards](docs/images/readme/idea-brief.png)
+![Shaped project brief and role cards](docs/images/readme/en/idea-brief.png)
 
 ### ③ Two-way, gap-based recommendations: match the gap, not the similarity
 
@@ -61,11 +61,11 @@ Once a project is public, the system searches role by role against the role card
 - **Ranking**: an LLM scores on "can they do this specific role, do they have enough weekly time, are their interests relevant". Whether weekly hours are sufficient is computed by the backend before being passed to the model, so the model doesn't compare numbers wrong;
 - **Few but good**: each role gets only a handful of recommendations, each with **why they fit** and **the main risk** (e.g. "can only give 4 hours a week").
 
-![Candidates recommended to the founder](docs/images/readme/candidates.png)
+![Candidates recommended to the founder](docs/images/readme/en/candidates.png)
 
 People looking for a team see the reverse on the "Recruiting projects" page: which role on which project suits you best, also with reasons and risks.
 
-![Projects recommended to you](docs/images/readme/recommended-projects.png)
+![Projects recommended to you](docs/images/readme/en/recommended-projects.png)
 
 ### ④ Apply with commitment
 
@@ -74,7 +74,7 @@ An application is no longer just "I'd like to join":
 - **You must write a "first-step proposal"**: what you plan to deliver in your first week. The founder's suggested first-week task is shown on the page for reference;
 - Each person can have at most 3 pending applications at a time, so expressing interest has a cost.
 
-![Applying with commitment](docs/images/readme/apply.png)
+![Applying with commitment](docs/images/readme/en/apply.png)
 
 ### ⑤ Screen and trial: the application board
 
@@ -84,7 +84,7 @@ Founders handle every application on one board: New → In conversation → On t
 - Moving someone to "On trial" requires a trial task and a due date, and the applicant is notified;
 - If an application sits unhandled for 48 hours, the founder gets a reminder.
 
-![Application board with AI quick read](docs/images/readme/review-board.png)
+![Application board with AI quick read](docs/images/readme/en/review-board.png)
 
 ### ⑥ Kick off and keep going: keep the team together
 
@@ -121,8 +121,10 @@ Requirements: Docker, Go, Node.js, `psql`, and an [OpenRouter](https://openroute
 
 ```bash
 cp demo/openrouter.env.example demo/openrouter.env   # add your OPENROUTER_API_KEY
-./demo/start.sh                                      # first run creates tables and loads sample data
+DEMO_LANG=en ./demo/start.sh                         # first run creates tables and loads English sample data
 ```
+
+Without `DEMO_LANG=en` the sample people and projects are in Chinese. The English data lives in its own database, so you can keep both.
 
 Open http://localhost:5173 and sign in with a demo account (password for both is `demo1234`):
 

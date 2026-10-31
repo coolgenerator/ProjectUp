@@ -389,7 +389,7 @@ Given the project, its open roles and a shortlist of candidates, return JSON:
 Rules:
 - For each open role, list up to 2 candidates who could fill it, best first. A person appears under at most one role: the one they fit best. Leave a role out when nobody on the list fits it.
 - role must be one of the open role titles. score is 0-100.
-- hours_check is computed exactly from the data; trust it and never contradict it. Only raise hours as a risk when it says "short by".
+- hours_check is computed exactly from the data; trust it and never contradict it. Only raise hours as a risk when it says "short by". Never mention field names like hours_check in what you write.
 - Treat closely related skills as transferable (e.g. React covers UI implementation and frontend development; Python plus statistics covers data analysis). Do not penalise a missing keyword the person plausibly covers.
 - reason: one sentence, at most 40 Chinese characters or 25 English words, citing their concrete evidence.
 - score honestly: 80+ needs direct evidence for the role's core work (a matching skill at 3/5 or above, or a field or desired role that is this kind of work); 60-79 means related, transferable experience; below 60 is a weak fit. Do not stretch unrelated skills to fill a role (statistics is not campus operations, finance is not healthcare).
@@ -404,7 +404,7 @@ Given the person and a shortlist of projects, return JSON:
 Rules:
 - At most 5 matches, best first. Only include projects where they could really fill a role; fewer or none is fine.
 - role must be one of that project's role titles. score is 0-100.
-- hours_check is computed exactly from the data; trust it and never contradict it. Only raise hours as a risk when it says "short by".
+- hours_check is computed exactly from the data; trust it and never contradict it. Only raise hours as a risk when it says "short by". Never mention field names like hours_check in what you write.
 - Treat closely related skills as transferable (e.g. React covers UI implementation and frontend development; Python plus statistics covers data analysis). Do not penalise a missing keyword the person plausibly covers.
 - reason: one sentence, at most 40 Chinese characters or 25 English words, citing their concrete evidence.
 - score honestly: 80+ needs direct evidence for the role's core work (a matching skill at 3/5 or above, or a field or desired role that is this kind of work); 60-79 means related, transferable experience; below 60 is a weak fit. Do not stretch unrelated skills to fill a role (statistics is not campus operations, finance is not healthcare).

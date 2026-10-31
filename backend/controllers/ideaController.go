@@ -86,11 +86,13 @@ Return JSON:
  "agent_prompt": ""}
 
 Rules:
+- title: at most 12 Chinese characters or 6 English words.
 - one_liner: at most 15 Chinese characters or 10 English words.
-- blockers: 2-3 current sticking points. next_steps: 3 concrete steps for the next two weeks.
+- vision, problem, target_users: each one or two sentences, at most 60 Chinese characters or 40 English words.
+- blockers: 2-3 current sticking points. next_steps: 3 concrete steps for the next two weeks. Each item is one short sentence, at most 30 Chinese characters or 20 English words.
 - topics: 3-5 short tags.
 - roles: 2-3 teammates the founder still needs to fill the gaps in their own skills (listed as "Founder skills"; do not ask for skills the founder already has). Cover different kinds of work, e.g. building, design/research, domain expertise, operations.
-- Each role's skills are 3-5 concrete, learnable abilities (tools, methods, domain knowledge), never connections, titles or credentials. hours_per_week is a realistic weekly commitment for a student or researcher (usually 4-12).
+- Each role's description is one short sentence. Each role's skills are 3-5 concrete, learnable abilities (tools, methods, domain knowledge), never connections, titles or credentials. hours_per_week is a realistic weekly commitment for a student or researcher (usually 4-12).
 - Each role's first_week is one concrete task a new teammate in that role could finish in their first week, tied to next_steps (one short sentence).
 - agent_prompt: a ready-to-paste prompt the founder can give another AI agent to start building the first step.
 - ` + noInventedFacts + ` next_steps may set targets (e.g. "interview 5 doctors"), since those are plans, not claims.

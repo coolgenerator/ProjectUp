@@ -24,6 +24,8 @@
 
    想清空重来：`./demo/start.sh --reset`
 
+   英文示例数据：`DEMO_LANG=en ./demo/start.sh`。人物和项目与中文版一一对应，存在单独的数据库 `projectup_demo_en`（Redis 用 1 号库），不会影响中文演示数据。英文 README 的截图就是用这套数据截的。
+
 3. 打开 http://localhost:5173
 
 本地数据库跑在 Docker 里（Postgres 5433、Redis 6380），**不会连接 `backend/.env` 里配置的 AWS RDS**。`demo/demo.env` 会在启动前覆盖数据库和 Redis 的连接配置。

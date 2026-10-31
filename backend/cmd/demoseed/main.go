@@ -4,6 +4,7 @@
 //	go run ./cmd/demoseed          # seed if the demo accounts don't exist yet
 //	go run ./cmd/demoseed --reset  # wipe demo data and seed again
 //	go run ./cmd/demoseed --mock-for someone@example.com  # mock data for one account
+//	go run ./cmd/demoseed --lang en  # English people and projects (data_en.go)
 package main
 
 import (
@@ -184,6 +185,15 @@ var demoCovers = map[string]string{
 	"学生理财模拟器":    "photo-1554224155-6726b3ff858f",    // Kelly Sikkema (@kellysikkema)
 	"学习拖延干预实验":   "photo-1598981457915-aea220950616", // Jeswin Thomas (@jeswinthomas)
 	"眼底照片糖网筛查":   "photo-1757386320806-e3f03c9f41e8", // @judy_beth_morris_idaho
+
+	"Campus Textbook Exchange":                "photo-1495446815901-a7297e633e8d",
+	"Paper Speed-Reader":                      "photo-1491309055486-24ae511c15c7",
+	"Chronic Care Follow-up Helper":           "photo-1631815587646-b85a1bb027e1",
+	"Dorm Energy Monitor":                     "photo-1556401615-c909c3d67480",
+	"AI Teaching Assistant for Rural Schools": "photo-1759143101324-d375443f1955",
+	"Student Money Simulator":                 "photo-1554224155-6726b3ff858f",
+	"Procrastination Intervention Study":      "photo-1598981457915-aea220950616",
+	"Diabetic Retinopathy Screening":          "photo-1757386320806-e3f03c9f41e8",
 }
 
 // coverFor returns the cover URL for a demo project title, or nil.
@@ -238,7 +248,17 @@ var communityPosts = []communityPost{
 func main() {
 	reset := flag.Bool("reset", false, "delete existing demo data before seeding")
 	mockFor := flag.String("mock-for", "", "email of an existing account to fill with mock data (see mock.go)")
+	lang := flag.String("lang", "zh", "demo data language: zh or en")
 	flag.Parse()
+
+	switch *lang {
+	case "zh":
+	case "en":
+		people, projects, communityPosts = peopleEN, projectsEN, communityPostsEN
+		demoLanguage, demoTimezone = "English", "America/New_York"
+	default:
+		log.Fatalf("unknown --lang %q (use zh or en)", *lang)
+	}
 
 	host := os.Getenv("PG_HOST")
 	if host != "localhost" && host != "127.0.0.1" {
@@ -290,7 +310,10 @@ func main() {
 	fmt.Printf("Demo logins (password %s):\n  founder%s  (发起人)\n  seeker%s   (求组队)\n", demoPassword, demoEmailDomain, demoEmailDomain)
 }
 
-var demoTimezone = "Asia/Shanghai"
+var (
+	demoLanguage = "中文"
+	demoTimezone = "Asia/Shanghai"
+)
 
 func seedPerson(p person, passwordHash string) uint {
 	email := p.key + demoEmailDomain
@@ -301,9 +324,12 @@ func seedPerson(p person, passwordHash string) uint {
 	}
 	must(database.DB.Create(&user).Error, "create user "+p.key)
 
-	// The app renders "<preferred> <last>"; keep the full Chinese name in the
+	// The app renders "<preferred> <last>"; keep the full name in the
 	// preferred name and leave the last name empty so it isn't repeated.
 	first := string([]rune(p.name)[1:])
+	if fields := strings.Fields(p.name); len(fields) > 1 {
+		first = fields[0]
+	}
 	hours := p.hours
 	avatar := demoAvatarURL
 	profile := models.Profile{
@@ -315,7 +341,7 @@ func seedPerson(p person, passwordHash string) uint {
 		Field:         &p.field,
 		School:        &p.school,
 		Biography:     &p.bio,
-		Language:      "中文",
+		Language:      demoLanguage,
 		HoursPerWeek:  &hours,
 		Timezone:      &demoTimezone,
 	}

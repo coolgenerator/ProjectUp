@@ -9,9 +9,22 @@
       "autoPort": false
     },
     {
+      "name": "demo-en",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "DEMO_LANG=en exec bash demo/start.sh --reset"],
+      "port": 5173,
+      "autoPort": false
+    },
+    {
       "name": "demo-backend",
       "runtimeExecutable": "bash",
       "runtimeArgs": ["-c", "source demo/demo.env && source demo/openrouter.env && cd backend && go run ."],
+      "port": 8080
+    },
+    {
+      "name": "demo-en-backend",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "source demo/demo.env && source demo/openrouter.env && export PG_DATABASE=projectup_demo_en REDIS_DB=1 && cd backend && PORT=8080 go run ."],
       "port": 8080
     },
     {

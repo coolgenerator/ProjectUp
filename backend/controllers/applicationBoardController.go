@@ -337,7 +337,7 @@ const applicationSummaryPrompt = `You help a busy project founder triage applica
 Rules:
 - summary: one sentence on who this person is and what they propose to do first.
 - fit: the strongest concrete match between them and the role (skills, hours, the first-step proposal).
-- For weekly hours, use hours_check exactly as given; never recompute or guess the role's hours.
+- For weekly hours, use hours_check exactly as given; never recompute or guess the role's hours. Write for the founder in plain words; never mention field names like hours_check.
 - risk: the single biggest concern (e.g. hours below the role's need, vague first step, missing key skill). Say "none obvious" only if there truly is none.
 - Each field at most 40 Chinese characters or 25 English words. Base everything on the given data; never invent experience.`
 

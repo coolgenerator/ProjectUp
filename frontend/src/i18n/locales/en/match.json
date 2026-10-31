@@ -53,6 +53,14 @@
     "firstWeek": "First week: ",
     "progress": "Thinking covered: {{n}}/6 lenses",
     "progressHint": "Answer more rounds to cover more angles before shaping it.",
+    "lenses": {
+      "firstPrinciples": "First principles",
+      "usersAndScenarios": "Target users and scenarios",
+      "whyNow": "Why now",
+      "minimumValidation": "Minimum validation",
+      "assumptionsAndRisks": "Key assumptions and risks",
+      "partnersNeeded": "Partners needed"
+    },
     "editHint": "Click any section to edit it. Use ↻ to let AI rewrite just that part.",
     "edit": "Edit",
     "done": "Done",

@@ -52,6 +52,16 @@ type ListField = "blockers" | "next_steps";
 const MIN_ANSWER_LENGTH = 4;
 // The coach picks from six lenses; covering more of them before shaping gives a sturdier brief.
 const LENS_COUNT = 6;
+// The coach always names lenses with these Chinese labels (see ideaCoachPrompt
+// in the backend); map them to translation keys for display.
+const LENS_KEYS: Record<string, string> = {
+    "本质/第一性原理": "firstPrinciples",
+    "目标用户与场景": "usersAndScenarios",
+    "为什么是现在": "whyNow",
+    "最小验证": "minimumValidation",
+    "关键假设与风险": "assumptionsAndRisks",
+    "需要什么样的伙伴": "partnersNeeded",
+};
 
 async function postJSON<T>(url: string, body: unknown): Promise<T> {
     const response = await fetchWithAuth(url, { method: "POST", body: JSON.stringify(body) });
@@ -431,7 +441,7 @@ const IdeaWorkbench: React.FC = () => {
                                 <div className="mt-4 space-y-5">
                                     {current.map((q, i) => (
                                         <div key={i}>
-                                            <Badge tone="indigo">{q.lens}</Badge>
+                                            <Badge tone="indigo">{LENS_KEYS[q.lens] ? t(`match.ideas.lenses.${LENS_KEYS[q.lens]}`) : q.lens}</Badge>
                                             <p className="mt-1.5 font-medium text-gray-900">{q.question}</p>
                                             <TextArea
                                                 className="min-h-[80px]"

@@ -2,6 +2,7 @@
 # Starts the ProjectUp matching demo: local Postgres/Redis, Go backend, Vite frontend.
 #   ./demo/start.sh          start everything (seeds demo data on first run)
 #   ./demo/start.sh --reset  wipe and reseed demo data first
+#   DEMO_LANG=en ./demo/start.sh   English demo data, in its own database
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -14,17 +15,25 @@ fi
 
 source "$DEMO/demo.env"
 source "$DEMO/openrouter.env"
+DEMO_LANG="${DEMO_LANG:-zh}"
+if [ "$DEMO_LANG" = en ]; then
+  export PG_DATABASE=projectup_demo_en
+  export DATABASE_URL=postgresql://projectup:projectup@localhost:5433/$PG_DATABASE
+  export REDIS_DB=1 REDIS_URL=redis://localhost:6380/1   # keep match caches apart from the Chinese demo
+fi
 
 docker compose -f "$DEMO/docker-compose.yml" up -d
 until docker compose -f "$DEMO/docker-compose.yml" exec -T postgres pg_isready -U projectup >/dev/null 2>&1; do sleep 1; done
+PGPASSWORD=projectup psql -h localhost -p 5433 -U projectup postgres -tAc "select 1 from pg_database where datname = '$PG_DATABASE'" | grep -q 1 ||
+  PGPASSWORD=projectup psql -h localhost -p 5433 -U projectup postgres -qc "CREATE DATABASE $PG_DATABASE"
 
 cd "$ROOT/backend"
-if ! PGPASSWORD=projectup psql -h localhost -p 5433 -U projectup projectup_demo -tAc "select 1 from users limit 1" >/dev/null 2>&1; then
+if ! PGPASSWORD=projectup psql -h localhost -p 5433 -U projectup "$PG_DATABASE" -tAc "select 1 from users limit 1" >/dev/null 2>&1; then
   echo "Creating tables..."
   go run migrate/migrate.go >/dev/null 2>&1 || true
 fi
 # Columns added for the demo (the migrate script can't alter existing tables)
-PGPASSWORD=projectup psql -h localhost -p 5433 -U projectup projectup_demo -q -c \
+PGPASSWORD=projectup psql -h localhost -p 5433 -U projectup "$PG_DATABASE" -q -c \
   "ALTER TABLE profiles ADD COLUMN IF NOT EXISTS hours_per_week bigint;
    ALTER TABLE project_application ADD COLUMN IF NOT EXISTS role varchar(100),
      ADD COLUMN IF NOT EXISTS hours_per_week bigint DEFAULT 0,
@@ -67,7 +76,7 @@ PGPASSWORD=projectup psql -h localhost -p 5433 -U projectup projectup_demo -q -c
        brief_updated_at = COALESCE(updated_at, created_at),
        onboarding_metadata = jsonb_set(onboarding_metadata - 'brief', '{agent_prompt}', COALESCE(onboarding_metadata->'brief'->'agent_prompt', '\"\"'))
      WHERE brief IS NULL AND onboarding_metadata->>'source' = 'idea_workbench' AND onboarding_metadata ? 'brief';"
-go run ./cmd/demoseed ${1:-} 2>&1 | grep -vE 'record not found|^[[:space:]]*$' || true
+go run ./cmd/demoseed --lang "$DEMO_LANG" ${1:-} 2>&1 | grep -vE 'record not found|^[[:space:]]*$' || true
 
 mkdir -p "$DEMO/logs"
 # Pin the port: an inherited PORT (e.g. from a preview launcher) would move the backend off 8080
